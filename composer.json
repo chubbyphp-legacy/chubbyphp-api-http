@@ -1,0 +1,32 @@
+{
+    "name": "chubbyphp/chubbyphp-api-http",
+    "description": "Chubbyphp Api Http",
+    "keywords": ["chubbyphp", "slim", "api", "http"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dominik Zogg",
+            "email": "dominik.zogg@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "~7.0",
+        "chubbyphp/chubbyphp-deserialization": "~1.1@beta",
+        "chubbyphp/chubbyphp-serialization": "~1.0@beta",
+        "psr/http-message": "~1.0",
+        "willdurand/negotiation": "^2.3"
+    },
+    "require-dev": {
+        "ext-dom": "*",
+        "phpunit/phpunit": "~5.5",
+        "doctrine/inflector": "~1.1"
+    },
+    "autoload": {
+        "psr-4": { "Chubbyphp\\ApiHttp\\": "src/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
