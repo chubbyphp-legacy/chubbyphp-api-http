@@ -61,7 +61,7 @@ final class ResponseManager implements ResponseManagerInterface
     {
         $response = $this->responseFactory->createResponse($code);
 
-        if (null === $object) {
+        if (200 === $code && null === $object) {
             return $response->withStatus(204);
         }
 
