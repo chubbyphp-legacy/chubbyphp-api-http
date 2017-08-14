@@ -29,7 +29,7 @@ final class ApiHttpProvider implements ServiceProviderInterface
             return new ContentNegotiator();
         };
 
-        $container['api-http.request.manager'] = function () use ($container) {
+        $container['api-http.response.manager'] = function () use ($container) {
             return new ResponseManager(
                 $container['api-http.request.manager'],
                 $container['api-http.response.factory'],
