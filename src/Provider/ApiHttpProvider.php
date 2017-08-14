@@ -8,8 +8,9 @@ use Chubbyphp\ApiHttp\Manager\RequestManager;
 use Chubbyphp\ApiHttp\Manager\ResponseManager;
 use Negotiation\Negotiator as ContentNegotiator;
 use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 
-final class ApiHttpProvider
+final class ApiHttpProvider implements ServiceProviderInterface
 {
     /**
      * @param Container $container
