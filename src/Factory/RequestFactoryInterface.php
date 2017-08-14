@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\ApiHttp;
+namespace Chubbyphp\ApiHttp\Factory;
 
 use Psr\Http\Message\ResponseInterface as Response;
 

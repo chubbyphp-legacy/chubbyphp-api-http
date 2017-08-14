@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\ApiHttp;
+namespace Chubbyphp\ApiHttp\Manager;
 
+use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface;
 use Chubbyphp\Serialization\SerializerInterface;
 use Chubbyphp\Serialization\TransformerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;

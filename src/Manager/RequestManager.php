@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\ApiHttp;
+namespace Chubbyphp\ApiHttp\Manager;
 
 use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Deserialization\Transformer\TransformerException;
