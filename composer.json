@@ -17,9 +17,9 @@
         "willdurand/negotiation": "^2.3"
     },
     "require-dev": {
-        "ext-dom": "*",
         "phpunit/phpunit": "~5.5",
-        "doctrine/inflector": "~1.1"
+        "pimple/pimple": "~3.0",
+        "slim/http": "^0.2"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\ApiHttp\\": "src/" }

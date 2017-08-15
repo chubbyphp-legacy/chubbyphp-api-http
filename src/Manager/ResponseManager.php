@@ -57,7 +57,7 @@ final class ResponseManager implements ResponseManagerInterface
      *
      * @return Response
      */
-    public function createResponse(Request $request, int $code, $object = null): Response
+    public function createResponse(Request $request, int $code = 200, $object = null): Response
     {
         $response = $this->responseFactory->createResponse($code);
 
