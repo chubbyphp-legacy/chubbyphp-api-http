@@ -8,7 +8,8 @@ use Chubbyphp\ApiHttp\Manager\ResponseManager;
 use Chubbyphp\Serialization\SerializerInterface;
 use Chubbyphp\Serialization\TransformerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * @covers \Chubbyphp\ApiHttp\Manager\ResponseManager
@@ -97,7 +98,7 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
 
         $responseFactory->expects(self::any())->method('createResponse')->willReturnCallback(
             function (int $code = 200) {
-                return new Response($code);
+                return $this->getResponse($code, $this->getBody());
             }
         );
 
@@ -155,5 +156,82 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         return $request;
+    }
+
+    /**
+     * @param int             $code
+     * @param StreamInterface $body
+     *
+     * @return Response
+     */
+    private function getResponse(int $code, StreamInterface $body): Response
+    {
+        /** @var Response|\PHPUnit_Framework_MockObject_MockObject $response */
+        $response = $this->getMockBuilder(Response::class)
+            ->setMethods(['withStatus', 'getStatusCode', 'withHeader', 'getBody'])
+            ->getMockForAbstractClass();
+
+        $response->__code = $code;
+        $response->__headers = [];
+        $response->__body = $body;
+
+        $response->expects(self::any())->method('getStatusCode')->willReturnCallback(
+            function () use ($response) {
+                return $response->__code;
+            }
+        );
+
+        $response->expects(self::any())->method('withStatus')->willReturnCallback(
+            function ($code) use ($response) {
+                $response->__code = $code;
+
+                return $response;
+            }
+        );
+
+        $response->expects(self::any())->method('withHeader')->willReturnCallback(
+            function ($name, $value) use ($response) {
+                $response->__headers[$name] = $value;
+
+                return $response;
+            }
+        );
+
+        $response->expects(self::any())->method('getBody')->willReturnCallback(
+            function () use ($response) {
+                return $response->__body;
+            }
+        );
+
+        return $response;
+    }
+
+    /**
+     * @return StreamInterface
+     */
+    private function getBody(): StreamInterface
+    {
+        /** @var StreamInterface|\PHPUnit_Framework_MockObject_MockObject $body */
+        $body = $this->getMockBuilder(StreamInterface::class)
+            ->setMethods(['write', '__toString'])
+            ->getMockForAbstractClass();
+
+        $body->__content = '';
+
+        $body->expects(self::any())->method('write')->willReturnCallback(
+            function ($string) use ($body) {
+                $body->__content = $string;
+
+                return strlen($string);
+            }
+        );
+
+        $body->expects(self::any())->method('__toString')->willReturnCallback(
+            function () use ($body) {
+                return $body->__content;
+            }
+        );
+
+        return $body;
     }
 }
