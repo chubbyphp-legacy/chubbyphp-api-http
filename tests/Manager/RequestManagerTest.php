@@ -45,6 +45,20 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         self::assertNull($requestManager->getAccept($request));
     }
 
+    public function testGetAcceptWithoutHeaderButWithDefault()
+    {
+        $requestManager = new RequestManager(
+            $this->getContentNegotiator(),
+            $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
+            $this->getTransformer()
+        );
+        $request = $this->getRequest();
+
+        self::assertSame('application/json', $requestManager->getAccept($request, 'application/json'));
+    }
+
     public function testGetAcceptWithoutBest()
     {
         $requestManager = new RequestManager(
@@ -105,6 +119,21 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         self::assertNull($requestManager->getAcceptLanguage($request));
     }
 
+    public function testGetAcceptLanguageWithoutHeaderButWithDefault()
+    {
+        $requestManager = new RequestManager(
+            $this->getContentNegotiator(),
+            $this->getDeserializer(),
+            $this->getLanguageNegotiator($this->getLanguage('en')),
+            ['de', 'en'],
+            $this->getTransformer()
+        );
+
+        $request = $this->getRequest();
+
+        self::assertSame('en', $requestManager->getAcceptLanguage($request, 'en'));
+    }
+
     public function testGetAcceptLanguageWithoutBest()
     {
         $requestManager = new RequestManager(
@@ -163,6 +192,21 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         $request = $this->getRequest();
 
         self::assertNull($requestManager->getContentType($request));
+    }
+
+    public function testGetContentTypeWithoutHeaderButWithDefault()
+    {
+        $requestManager = new RequestManager(
+            $this->getContentNegotiator(),
+            $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
+            $this->getTransformer()
+        );
+
+        $request = $this->getRequest();
+
+        self::assertSame('application/json', $requestManager->getContentType($request, 'application/json'));
     }
 
     public function testGetContentTypeWithoutBest()

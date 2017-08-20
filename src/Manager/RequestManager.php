@@ -81,7 +81,7 @@ final class RequestManager implements RequestManagerInterface
     public function getAcceptLanguage(Request $request, string $default = null)
     {
         if (!$request->hasHeader('Accept-Language')) {
-            return null;
+            return $default;
         }
 
         /** @var AcceptLanguage $best */
@@ -118,7 +118,7 @@ final class RequestManager implements RequestManagerInterface
     private function negotiateContentType(Request $request, string $headerName, string $default = null)
     {
         if (!$request->hasHeader($headerName)) {
-            return null;
+            return $default;
         }
 
         /** @var ContentAccept $best */
