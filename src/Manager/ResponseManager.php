@@ -51,21 +51,26 @@ final class ResponseManager implements ResponseManagerInterface
     }
 
     /**
-     * @param Request $request
-     * @param int     $code
-     * @param object  $object
+     * @param Request     $request
+     * @param int         $code
+     * @param object      $object
+     * @param string|null $defaultAccept
      *
      * @return Response
      */
-    public function createResponse(Request $request, int $code = 200, $object = null): Response
-    {
+    public function createResponse(
+        Request $request,
+        int $code = 200,
+        $object = null,
+        string $defaultAccept = null
+    ): Response {
         $response = $this->responseFactory->createResponse($code);
 
         if (200 === $code && null === $object) {
             return $response->withStatus(204);
         }
 
-        if (null === $accept = $this->requestManager->getAccept($request)) {
+        if (null === $accept = $this->requestManager->getAccept($request, $defaultAccept)) {
             return $response->withStatus(406);
         }
 

@@ -62,21 +62,23 @@ final class RequestManager implements RequestManagerInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request     $request
+     * @param string|null $default
      *
      * @return string|null
      */
-    public function getAccept(Request $request)
+    public function getAccept(Request $request, string $default = null)
     {
-        return $this->negotiateContentType($request, 'Accept');
+        return $this->negotiateContentType($request, 'Accept', $default);
     }
 
     /**
-     * @param Request $request
+     * @param Request     $request
+     * @param string|null $default
      *
      * @return string|null
      */
-    public function getAcceptLanguage(Request $request)
+    public function getAcceptLanguage(Request $request, string $default = null)
     {
         if (!$request->hasHeader('Accept-Language')) {
             return null;
@@ -89,29 +91,31 @@ final class RequestManager implements RequestManagerInterface
         );
 
         if (null === $best) {
-            return null;
+            return $default;
         }
 
         return $best->getNormalizedValue();
     }
 
     /**
-     * @param Request $request
+     * @param Request     $request
+     * @param string|null $default
      *
      * @return string|null
      */
-    public function getContentType(Request $request)
+    public function getContentType(Request $request, string $default = null)
     {
-        return $this->negotiateContentType($request, 'Content-Type');
+        return $this->negotiateContentType($request, 'Content-Type', $default);
     }
 
     /**
-     * @param Request $request
-     * @param string  $headerName
+     * @param Request     $request
+     * @param string      $headerName
+     * @param string|null $default
      *
      * @return null|string
      */
-    private function negotiateContentType(Request $request, string $headerName)
+    private function negotiateContentType(Request $request, string $headerName, string $default = null)
     {
         if (!$request->hasHeader($headerName)) {
             return null;
@@ -124,7 +128,7 @@ final class RequestManager implements RequestManagerInterface
         );
 
         if (null === $best) {
-            return null;
+            return $default;
         }
 
         return $best->getNormalizedValue();
@@ -133,12 +137,13 @@ final class RequestManager implements RequestManagerInterface
     /**
      * @param Request       $request
      * @param object|string $object
+     * @param string|null   $defaultContentType
      *
      * @return object|null
      */
-    public function getDataFromRequestBody(Request $request, $object)
+    public function getDataFromRequestBody(Request $request, $object, string $defaultContentType = null)
     {
-        if (null === $contentType = $this->getContentType($request)) {
+        if (null === $contentType = $this->getContentType($request, $defaultContentType)) {
             return null;
         }
 

@@ -60,6 +60,21 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         self::assertNull($requestManager->getAccept($request));
     }
 
+    public function testGetAcceptWithoutBestButWithDefault()
+    {
+        $requestManager = new RequestManager(
+            $this->getContentNegotiator(),
+            $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
+            $this->getTransformer()
+        );
+
+        $request = $this->getRequest(['headers' => ['Accept' => 'application/json']]);
+
+        self::assertSame('application/json', $requestManager->getAccept($request, 'application/json'));
+    }
+
     public function testGetAcceptLanguage()
     {
         $requestManager = new RequestManager(
@@ -105,6 +120,21 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         self::assertNull($requestManager->getAcceptLanguage($request));
     }
 
+    public function testGetAcceptLanguageWithoutBestButWithDefault()
+    {
+        $requestManager = new RequestManager(
+            $this->getContentNegotiator(),
+            $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
+            $this->getTransformer()
+        );
+
+        $request = $this->getRequest(['headers' => ['Accept-Language' => 'en']]);
+
+        self::assertSame('en', $requestManager->getAcceptLanguage($request, 'en'));
+    }
+
     public function testGetContentType()
     {
         $requestManager = new RequestManager(
@@ -148,6 +178,21 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         $request = $this->getRequest(['headers' => ['Content-Type' => 'application/json']]);
 
         self::assertNull($requestManager->getContentType($request));
+    }
+
+    public function testGetContentTypeWithoutBestButWithDefault()
+    {
+        $requestManager = new RequestManager(
+            $this->getContentNegotiator(),
+            $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
+            $this->getTransformer()
+        );
+
+        $request = $this->getRequest(['headers' => ['Content-Type' => 'application/json']]);
+
+        self::assertSame('application/json', $requestManager->getContentType($request, 'application/json'));
     }
 
     public function testGetDataFromRequestBody()

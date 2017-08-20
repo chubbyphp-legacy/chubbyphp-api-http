@@ -47,6 +47,24 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
         self::assertSame(406, $response->getStatusCode());
     }
 
+    public function testCreateResponseWithoutAcceptButWithDefault()
+    {
+        $responseHandler = new ResponseManager(
+            $this->getRequestManager(),
+            $this->getResponseFactory(),
+            $this->getSerializer(),
+            $this->getTransform()
+        );
+
+        $object = new \stdClass();
+        $object->key = 'value';
+
+        $response = $responseHandler->createResponse($this->getRequest(), 200, $object, 'application/json');
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame('{"key":"value"}', (string) $response->getBody());
+    }
+
     public function testCreateResponse()
     {
         $responseHandler = new ResponseManager(
@@ -66,11 +84,11 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string|null $accept
+     * @param string|null $acceptContent
      *
      * @return RequestManagerInterface
      */
-    private function getRequestManager(string $accept = null): RequestManagerInterface
+    private function getRequestManager(string $acceptContent = null): RequestManagerInterface
     {
         /** @var RequestManagerInterface|\PHPUnit_Framework_MockObject_MockObject $responseManager */
         $responseManager = $this->getMockBuilder(RequestManagerInterface::class)
@@ -78,8 +96,8 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $responseManager->expects(self::any())->method('getAccept')->willReturnCallback(
-            function () use ($accept) {
-                return $accept;
+            function (Request $request, string $defaultContentType = null) use ($acceptContent) {
+                return $acceptContent ?: $defaultContentType;
             }
         );
 

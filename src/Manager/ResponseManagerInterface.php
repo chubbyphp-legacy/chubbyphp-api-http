@@ -10,11 +10,17 @@ use Psr\Http\Message\ResponseInterface as Response;
 interface ResponseManagerInterface
 {
     /**
-     * @param Request $request
-     * @param int     $code
-     * @param object  $object
+     * @param Request     $request
+     * @param int         $code
+     * @param object      $object
+     * @param string|null $defaultAccept
      *
      * @return Response
      */
-    public function createResponse(Request $request, int $code, $object = null): Response;
+    public function createResponse(
+        Request $request,
+        int $code = 200,
+        $object = null,
+        string $defaultAccept = null
+    ): Response;
 }

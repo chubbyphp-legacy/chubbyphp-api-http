@@ -9,33 +9,37 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 interface RequestManagerInterface
 {
     /**
-     * @param Request $request
+     * @param Request     $request
+     * @param string|null $default
      *
      * @return string|null
      */
-    public function getAccept(Request $request);
+    public function getAccept(Request $request, string $default = null);
 
     /**
-     * @param Request $request
+     * @param Request     $request
+     * @param string|null $default
      *
      * @return string|null
      */
-    public function getAcceptLanguage(Request $request);
+    public function getAcceptLanguage(Request $request, string $default = null);
 
     /**
-     * @param Request $request
+     * @param Request     $request
+     * @param string|null $default
      *
      * @return string|null
      */
-    public function getContentType(Request $request);
+    public function getContentType(Request $request, string $default = null);
 
     /**
      * @param Request       $request
      * @param object|string $object
+     * @param string|null   $defaultContentType
      *
-     * @return object
+     * @return object|null
      */
-    public function getDataFromRequestBody(Request $request, $object);
+    public function getDataFromRequestBody(Request $request, $object, string $defaultContentType = null);
 
     /**
      * @param Request       $request
