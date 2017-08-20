@@ -8,6 +8,8 @@ use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Deserialization\Transformer\TransformerException;
 use Chubbyphp\Deserialization\TransformerInterface;
 use Negotiation\Accept as ContentAccept;
+use Negotiation\AcceptLanguage;
+use Negotiation\LanguageNegotiator;
 use Negotiation\Negotiator as ContentNegotiator;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -24,6 +26,16 @@ final class RequestManager implements RequestManagerInterface
     private $deserializer;
 
     /**
+     * @var LanguageNegotiator
+     */
+    private $languageNegotiator;
+
+    /**
+     * @var array
+     */
+    private $languages;
+
+    /**
      * @var TransformerInterface
      */
     private $transformer;
@@ -31,15 +43,21 @@ final class RequestManager implements RequestManagerInterface
     /**
      * @param ContentNegotiator     $contentNegotiator
      * @param DeserializerInterface $deserializer
+     * @param LanguageNegotiator    $languageNegotiator
+     * @param array                 $languages
      * @param TransformerInterface  $transformer
      */
     public function __construct(
         ContentNegotiator $contentNegotiator,
         DeserializerInterface $deserializer,
+        LanguageNegotiator $languageNegotiator,
+        array $languages,
         TransformerInterface $transformer
     ) {
         $this->contentNegotiator = $contentNegotiator;
         $this->deserializer = $deserializer;
+        $this->languageNegotiator = $languageNegotiator;
+        $this->languages = $languages;
         $this->transformer = $transformer;
     }
 
@@ -50,7 +68,31 @@ final class RequestManager implements RequestManagerInterface
      */
     public function getAccept(Request $request)
     {
-        return $this->negotiate($request, 'Accept');
+        return $this->negotiateContentType($request, 'Accept');
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return string|null
+     */
+    public function getAcceptLanguage(Request $request)
+    {
+        if (!$request->hasHeader('Accept-Language')) {
+            return null;
+        }
+
+        /** @var AcceptLanguage $best */
+        $best = $this->languageNegotiator->getBest(
+            $request->getHeaderLine('Accept-Language'),
+            $this->languages
+        );
+
+        if (null === $best) {
+            return null;
+        }
+
+        return $best->getNormalizedValue();
     }
 
     /**
@@ -60,7 +102,7 @@ final class RequestManager implements RequestManagerInterface
      */
     public function getContentType(Request $request)
     {
-        return $this->negotiate($request, 'Content-Type');
+        return $this->negotiateContentType($request, 'Content-Type');
     }
 
     /**
@@ -69,7 +111,7 @@ final class RequestManager implements RequestManagerInterface
      *
      * @return null|string
      */
-    private function negotiate(Request $request, string $headerName)
+    private function negotiateContentType(Request $request, string $headerName)
     {
         if (!$request->hasHeader($headerName)) {
             return null;

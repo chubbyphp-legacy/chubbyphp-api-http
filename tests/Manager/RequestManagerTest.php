@@ -6,7 +6,9 @@ use Chubbyphp\ApiHttp\Manager\RequestManager;
 use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Deserialization\Transformer\TransformerException;
 use Chubbyphp\Deserialization\TransformerInterface;
-use Negotiation\Accept as ContentAccept;
+use Negotiation\Accept as AcceptContent;
+use Negotiation\AcceptLanguage;
+use Negotiation\LanguageNegotiator;
 use Negotiation\Negotiator as ContentNegotiator;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -20,9 +22,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         $requestManager = new RequestManager(
             $this->getContentNegotiator($this->getContent('application/json')),
             $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
             $this->getTransformer()
         );
-
         $request = $this->getRequest(['headers' => ['Accept' => 'application/json']]);
 
         self::assertSame('application/json', $requestManager->getAccept($request));
@@ -33,9 +36,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         $requestManager = new RequestManager(
             $this->getContentNegotiator(),
             $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
             $this->getTransformer()
         );
-
         $request = $this->getRequest();
 
         self::assertNull($requestManager->getAccept($request));
@@ -46,6 +50,8 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         $requestManager = new RequestManager(
             $this->getContentNegotiator(),
             $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -54,11 +60,58 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         self::assertNull($requestManager->getAccept($request));
     }
 
+    public function testGetAcceptLanguage()
+    {
+        $requestManager = new RequestManager(
+            $this->getContentNegotiator(),
+            $this->getDeserializer(),
+            $this->getLanguageNegotiator($this->getLanguage('en')),
+            ['de', 'en'],
+            $this->getTransformer()
+        );
+
+        $request = $this->getRequest(['headers' => ['Accept-Language' => 'en']]);
+
+        self::assertSame('en', $requestManager->getAcceptLanguage($request));
+    }
+
+    public function testGetAcceptLanguageWithoutHeader()
+    {
+        $requestManager = new RequestManager(
+            $this->getContentNegotiator(),
+            $this->getDeserializer(),
+            $this->getLanguageNegotiator($this->getLanguage('en')),
+            ['de', 'en'],
+            $this->getTransformer()
+        );
+
+        $request = $this->getRequest();
+
+        self::assertNull($requestManager->getAcceptLanguage($request));
+    }
+
+    public function testGetAcceptLanguageWithoutBest()
+    {
+        $requestManager = new RequestManager(
+            $this->getContentNegotiator(),
+            $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
+            $this->getTransformer()
+        );
+
+        $request = $this->getRequest(['headers' => ['Accept-Language' => 'en']]);
+
+        self::assertNull($requestManager->getAcceptLanguage($request));
+    }
+
     public function testGetContentType()
     {
         $requestManager = new RequestManager(
             $this->getContentNegotiator($this->getContent('application/json')),
             $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -72,6 +125,8 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         $requestManager = new RequestManager(
             $this->getContentNegotiator(),
             $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -85,6 +140,8 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         $requestManager = new RequestManager(
             $this->getContentNegotiator(),
             $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -98,6 +155,8 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         $requestManager = new RequestManager(
             $this->getContentNegotiator($this->getContent('application/json')),
             $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -114,6 +173,8 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         $requestManager = new RequestManager(
             $this->getContentNegotiator($this->getContent('application/json')),
             $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
             $this->getTransformer(TransformerException::create('content'))
         );
 
@@ -127,6 +188,8 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         $requestManager = new RequestManager(
             $this->getContentNegotiator($this->getContent('application/json')),
             $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
             $this->getTransformer(TransformerException::create('content'))
         );
 
@@ -140,6 +203,8 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         $requestManager = new RequestManager(
             $this->getContentNegotiator(),
             $this->getDeserializer(),
+            $this->getLanguageNegotiator(),
+            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -152,11 +217,11 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param ContentAccept|null $best
+     * @param AcceptContent|null $best
      *
      * @return ContentNegotiator
      */
-    private function getContentNegotiator(ContentAccept $best = null): ContentNegotiator
+    private function getContentNegotiator(AcceptContent $best = null): ContentNegotiator
     {
         /** @var ContentNegotiator|\PHPUnit_Framework_MockObject_MockObject $contentNegotiator */
         $contentNegotiator = $this->getMockBuilder(ContentNegotiator::class)
@@ -173,13 +238,44 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param AcceptLanguage|null $best
+     *
+     * @return LanguageNegotiator
+     */
+    private function getLanguageNegotiator(AcceptLanguage $best = null): LanguageNegotiator
+    {
+        /** @var LanguageNegotiator|\PHPUnit_Framework_MockObject_MockObject $languageNegotiator */
+        $languageNegotiator = $this->getMockBuilder(LanguageNegotiator::class)
+            ->setMethods(['getBest'])
+            ->getMock();
+
+        $languageNegotiator->expects(self::any())->method('getBest')->willReturnCallback(
+            function () use ($best) {
+                return $best;
+            }
+        );
+
+        return $languageNegotiator;
+    }
+
+    /**
      * @param string $normalizeValue
      *
-     * @return ContentAccept
+     * @return AcceptContent
      */
-    private function getContent(string $normalizeValue): ContentAccept
+    private function getContent(string $normalizeValue): AcceptContent
     {
-        return new ContentAccept($normalizeValue);
+        return new AcceptContent($normalizeValue);
+    }
+
+    /**
+     * @param string $normalizeValue
+     *
+     * @return AcceptLanguage
+     */
+    private function getLanguage(string $normalizeValue): AcceptLanguage
+    {
+        return new AcceptLanguage($normalizeValue);
     }
 
     /**

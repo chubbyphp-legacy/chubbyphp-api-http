@@ -20,6 +20,13 @@ interface RequestManagerInterface
      *
      * @return string|null
      */
+    public function getAcceptLanguage(Request $request);
+
+    /**
+     * @param Request $request
+     *
+     * @return string|null
+     */
     public function getContentType(Request $request);
 
     /**

@@ -44,14 +44,16 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 $contentNegotiator = ...; // ContentNegotiator
 $deserializer = ...; // DeserializerInterface
+$languages = ['de', 'en']
 $transformer = ...; // TransformerInterface
 
-$requestManager = new RequestManager($contentNegotiator, $deserializer, $transformer);
+$requestManager = new RequestManager($contentNegotiator, $deserializer, $languageNegotiator, $languages, $transformer);
 
 $request = ...; // Request
 $object = new Model;
 
 $requestManager->getAccept($request); // application/json
+$requestManager->getAcceptLanguage($request); // en
 $requestManager->getContentType($request); // application/json
 $requestManager->getDataFromRequestBody($request, $object); // deserialize data from body to $object
 $requestManager->getDataFromRequestQuery($request, $object); // deserialize query from body to $object

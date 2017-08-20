@@ -74,7 +74,7 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var RequestManagerInterface|\PHPUnit_Framework_MockObject_MockObject $responseManager */
         $responseManager = $this->getMockBuilder(RequestManagerInterface::class)
-            ->setMethods(['getAccept', 'getContentType', 'getDataFromRequestBody', 'getDataFromRequestQuery'])
+            ->setMethods(['getAccept', 'getAcceptLanguage', 'getContentType', 'getDataFromRequestBody', 'getDataFromRequestQuery'])
             ->getMock();
 
         $responseManager->expects(self::any())->method('getAccept')->willReturnCallback(
