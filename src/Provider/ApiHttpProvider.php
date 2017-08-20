@@ -23,7 +23,7 @@ final class ApiHttpProvider implements ServiceProviderInterface
                 $container['api-http.request.contentNegotiator'],
                 $container['deserializer'],
                 $container['api-http.request.languageNegotiator'],
-                $container['api-http.request.acceptLanguages'],
+                $container['api-http.request.languages'],
                 $container['deserializer.transformer']
             );
         };
@@ -36,7 +36,7 @@ final class ApiHttpProvider implements ServiceProviderInterface
             return new LanguageNegotiator();
         };
 
-        $container['api-http.request.acceptLanguages'] = function () {
+        $container['api-http.request.languages'] = function () {
             return [];
         };
 

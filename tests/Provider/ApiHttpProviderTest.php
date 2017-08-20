@@ -29,13 +29,13 @@ final class ApiHttpProviderTest extends \PHPUnit_Framework_TestCase
 
         self::assertTrue(isset($container['api-http.request.manager']));
         self::assertTrue(isset($container['api-http.request.contentNegotiator']));
-        self::assertTrue(isset($container['api-http.request.acceptLanguages']));
+        self::assertTrue(isset($container['api-http.request.languages']));
         self::assertTrue(isset($container['api-http.response.manager']));
         self::assertTrue(isset($container['api-http.response.factory']));
 
         self::assertInstanceOf(RequestManager::class, $container['api-http.request.manager']);
         self::assertInstanceOf(ContentNegotiator::class, $container['api-http.request.contentNegotiator']);
-        self::assertEquals([], $container['api-http.request.acceptLanguages']);
+        self::assertEquals([], $container['api-http.request.languages']);
         self::assertInstanceOf(ResponseManager::class, $container['api-http.response.manager']);
         self::assertInstanceOf(ResponseFactoryInterface::class, $container['api-http.response.factory']);
     }
