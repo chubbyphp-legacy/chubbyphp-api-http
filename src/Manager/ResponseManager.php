@@ -66,8 +66,12 @@ final class ResponseManager implements ResponseManagerInterface
     ): Response {
         $response = $this->responseFactory->createResponse($code);
 
-        if (200 === $code && null === $object) {
-            return $response->withStatus(204);
+        if (null === $object) {
+            if (200 === $code) {
+                return $response->withStatus(204);
+            }
+
+            return $response;
         }
 
         if (null === $accept = $this->requestManager->getAccept($request, $defaultAccept)) {

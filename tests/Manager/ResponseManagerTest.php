@@ -30,6 +30,20 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
         self::assertSame(204, $response->getStatusCode());
     }
 
+    public function testCreateErrorResponse()
+    {
+        $responseHandler = new ResponseManager(
+            $this->getRequestManager(),
+            $this->getResponseFactory(),
+            $this->getSerializer(),
+            $this->getTransform()
+        );
+
+        $response = $responseHandler->createResponse($this->getRequest(), 415);
+
+        self::assertSame(415, $response->getStatusCode());
+    }
+
     public function testCreateResponseWithoutAccept()
     {
         $responseHandler = new ResponseManager(
