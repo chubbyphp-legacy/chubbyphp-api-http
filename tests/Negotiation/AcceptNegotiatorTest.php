@@ -13,8 +13,8 @@ final class AcceptNegotiatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getToNegotiateHeaders
      *
-     * @param string       $header
-     * @param array        $supported
+     * @param string               $header
+     * @param array                $supported
      * @param NegotiatedValue|null $expectedAccept
      */
     public function testNegotiate(string $header, array $supported, NegotiatedValue $expectedAccept = null)
@@ -60,5 +60,3 @@ final class AcceptNegotiatorTest extends \PHPUnit_Framework_TestCase
         ];
     }
 }
-
-
