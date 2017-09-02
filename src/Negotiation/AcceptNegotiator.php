@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Negotiation;
 
-final class ContentNegotiator implements ContentNegotiatorInterface
+final class AcceptNegotiator implements NegotiatorInterface
 {
     /**
      * @param string $header
-     * @param array  $supportedContentTypes
+     * @param array  $supported
      *
-     * @return Content|null
+     * @return NegotiatedValue|null
      */
-    public function negotiate(string $header, array $supportedContentTypes)
+    public function negotiate(string $header, array $supported)
     {
         $aggregatedValues = $this->aggregatedValues($header);
 
-        return $this->compareAgainstSupportedTypes($aggregatedValues, $supportedContentTypes);
+        return $this->compareAgainstSupportedTypes($aggregatedValues, $supported);
     }
 
     /**
@@ -52,20 +52,31 @@ final class ContentNegotiator implements ContentNegotiatorInterface
 
     /**
      * @param array $aggregatedValues
-     * @param array $supportedContentTypes
+     * @param array $supported
      *
-     * @return Content|null
+     * @return NegotiatedValue|null
      */
-    private function compareAgainstSupportedTypes(array $aggregatedValues, array $supportedContentTypes)
+    private function compareAgainstSupportedTypes(array $aggregatedValues, array $supported)
     {
         foreach ($aggregatedValues as $contentType => $attributes) {
             list($type, $subType) = explode('/', $contentType);
-            $typePattern = '*' !== $type ? preg_quote($type) : '[^\/]+';
+            if ('*' === $type) {
+                if ('*' !== $subType) {
+                    continue;
+                }
+
+                foreach ($supported as $supportedContentType) {
+                    return new NegotiatedValue($supportedContentType, $attributes);
+                }
+
+                continue;
+            }
+
             $subTypePattern = '*' !== $subType ? preg_quote($subType) : '[^\/]+';
 
-            foreach ($supportedContentTypes as $supportedContentType) {
-                if (1 === preg_match('/^'.$typePattern.'\/'.$subTypePattern.'$/', $supportedContentType)) {
-                    return new Content($supportedContentType, $attributes);
+            foreach ($supported as $supportedContentType) {
+                if (1 === preg_match('/^'.preg_quote($type).'\/'.$subTypePattern.'$/', $supportedContentType)) {
+                    return new NegotiatedValue($supportedContentType, $attributes);
                 }
             }
         }

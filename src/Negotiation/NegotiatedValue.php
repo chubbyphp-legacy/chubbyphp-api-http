@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Negotiation;
 
-final class Content
+final class NegotiatedValue
 {
     /**
      * @var string
      */
-    private $contentType;
+    private $value;
 
     /**
      * @var array
@@ -17,12 +17,12 @@ final class Content
     private $attributes;
 
     /**
-     * @param string $contentType
+     * @param string $value
      * @param array  $attributes
      */
-    public function __construct(string $contentType, array $attributes)
+    public function __construct(string $value, array $attributes = [])
     {
-        $this->contentType = $contentType;
+        $this->value = $value;
         $this->attributes = $attributes;
     }
 
@@ -31,7 +31,7 @@ final class Content
      */
     public function getContentType(): string
     {
-        return $this->contentType;
+        return $this->value;
     }
 
     /**
