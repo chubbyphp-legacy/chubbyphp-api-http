@@ -17,6 +17,10 @@ final class AcceptNegotiator implements NegotiatorInterface
      */
     public function negotiate(string $header, array $supported)
     {
+        if ([] === $supported) {
+            return null;
+        }
+
         $aggregatedValues = $this->aggregatedValues($header);
 
         return $this->compareAgainstSupportedTypes($aggregatedValues, $supported);
@@ -61,10 +65,6 @@ final class AcceptNegotiator implements NegotiatorInterface
      */
     private function compareAgainstSupportedTypes(array $aggregatedValues, array $supportedMimeTypes)
     {
-        if ([] === $supportedMimeTypes) {
-            return null;
-        }
-
         foreach ($aggregatedValues as $mimeType => $attributes) {
             if ('*/*' === $mimeType) {
                 return new NegotiatedValue(reset($supportedMimeTypes), $attributes);
