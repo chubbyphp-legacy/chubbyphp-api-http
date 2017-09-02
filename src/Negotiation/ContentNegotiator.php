@@ -14,6 +14,18 @@ final class ContentNegotiator implements ContentNegotiatorInterface
      */
     public function negotiate(string $header, array $supportedContentTypes)
     {
+        $aggregatedValues = $this->aggregatedValues($header);
+
+        return $this->compareAgainstSupportedTypes($aggregatedValues, $supportedContentTypes);
+    }
+
+    /**
+     * @param string $header
+     *
+     * @return array
+     */
+    private function aggregatedValues(string $header): array
+    {
         $values = [];
         foreach (explode(',', $header) as $headerValue) {
             $headerValueParts = explode(';', $headerValue);
@@ -35,7 +47,18 @@ final class ContentNegotiator implements ContentNegotiatorInterface
             return $b['q'] <=> $a['q'];
         });
 
-        foreach ($values as $contentType => $attributes) {
+        return $values;
+    }
+
+    /**
+     * @param array $aggregatedValues
+     * @param array $supportedContentTypes
+     *
+     * @return Content|null
+     */
+    private function compareAgainstSupportedTypes(array $aggregatedValues, array $supportedContentTypes)
+    {
+        foreach ($aggregatedValues as $contentType => $attributes) {
             list($type, $subType) = explode('/', $contentType);
             $typePattern = '*' !== $type ? preg_quote($type) : '[^\/]+';
             $subTypePattern = '*' !== $subType ? preg_quote($subType) : '[^\/]+';

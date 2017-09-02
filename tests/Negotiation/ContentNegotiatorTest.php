@@ -52,6 +52,11 @@ final class ContentNegotiatorTest extends \PHPUnit_Framework_TestCase
                 'supported' => ['application/xml', 'application/json'],
                 'expectedContent' => new Content('application/xml', ['q' => '1.0']),
             ],
+            [
+                'header' => 'application/*, application/json;q=0.5',
+                'supported' => ['text/html'],
+                'expectedContent' => null,
+            ],
         ];
     }
 }
