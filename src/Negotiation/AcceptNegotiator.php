@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Negotiation;
 
+/**
+ * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
+ */
 final class AcceptNegotiator implements NegotiatorInterface
 {
     /**
@@ -29,7 +32,7 @@ final class AcceptNegotiator implements NegotiatorInterface
         $values = [];
         foreach (explode(',', $header) as $headerValue) {
             $headerValueParts = explode(';', $headerValue);
-            $contentType = trim(array_shift($headerValueParts));
+            $mimeType = trim(array_shift($headerValueParts));
             $attributes = [];
             foreach ($headerValueParts as $attribute) {
                 list($attributeKey, $attributeValue) = explode('=', $attribute);
@@ -40,7 +43,7 @@ final class AcceptNegotiator implements NegotiatorInterface
                 $attributes['q'] = '1.0';
             }
 
-            $values[$contentType] = $attributes;
+            $values[$mimeType] = $attributes;
         }
 
         uasort($values, function (array $a, array $b) {
@@ -52,31 +55,32 @@ final class AcceptNegotiator implements NegotiatorInterface
 
     /**
      * @param array $aggregatedValues
-     * @param array $supported
+     * @param array $supportedMimeTypes
      *
      * @return NegotiatedValue|null
      */
-    private function compareAgainstSupportedTypes(array $aggregatedValues, array $supported)
+    private function compareAgainstSupportedTypes(array $aggregatedValues, array $supportedMimeTypes)
     {
-        foreach ($aggregatedValues as $contentType => $attributes) {
-            list($type, $subType) = explode('/', $contentType);
-            if ('*' === $type) {
-                if ('*' !== $subType) {
-                    continue;
-                }
+        if ([] === $supportedMimeTypes) {
+            return null;
+        }
 
-                foreach ($supported as $supportedContentType) {
-                    return new NegotiatedValue($supportedContentType, $attributes);
-                }
+        foreach ($aggregatedValues as $mimeType => $attributes) {
+            if ('*/*' === $mimeType) {
+                return new NegotiatedValue(reset($supportedMimeTypes), $attributes);
+            }
 
+            list($type, $subType) = explode('/', $mimeType);
+
+            if ('*' === $type && '*' !== $subType) { // skip invalid value
                 continue;
             }
 
-            $subTypePattern = '*' !== $subType ? preg_quote($subType) : '[^\/]+';
+            $subTypePattern = $subType !== '*' ? preg_quote($subType) : '.+';
 
-            foreach ($supported as $supportedContentType) {
-                if (1 === preg_match('/^'.preg_quote($type).'\/'.$subTypePattern.'$/', $supportedContentType)) {
-                    return new NegotiatedValue($supportedContentType, $attributes);
+            foreach ($supportedMimeTypes as $supportedMimeType) {
+                if (1 === preg_match('/^'.preg_quote($type).'\/'.$subTypePattern.'$/', $supportedMimeType)) {
+                    return new NegotiatedValue($supportedMimeType, $attributes);
                 }
             }
         }
