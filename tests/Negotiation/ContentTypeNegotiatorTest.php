@@ -29,12 +29,12 @@ final class ContentTypeNegotiatorTest extends \PHPUnit_Framework_TestCase
      * @dataProvider getToNegotiateHeaders
      *
      * @param Request              $request
-     * @param array                $supportedMimeTypes
+     * @param array                $supportedMediaTypes
      * @param NegotiatedValue|null $expectedContentType
      */
-    public function testNegotiate(Request $request, array $supportedMimeTypes, NegotiatedValue $expectedContentType = null)
+    public function testNegotiate(Request $request, array $supportedMediaTypes, NegotiatedValue $expectedContentType = null)
     {
-        $negotiator = new ContentTypeNegotiator($supportedMimeTypes);
+        $negotiator = new ContentTypeNegotiator($supportedMediaTypes);
 
         self::assertEquals($expectedContentType, $negotiator->negotiate($request));
     }
@@ -44,17 +44,17 @@ final class ContentTypeNegotiatorTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'request' => $this->getRequest('application/xml; charset=UTF-8'),
-                'supportedMimeTypes' => ['application/json', 'application/xml', 'application/x-yaml'],
+                'supportedMediaTypes' => ['application/json', 'application/xml', 'application/x-yaml'],
                 'expectedContentType' => new NegotiatedValue('application/xml', ['charset' => 'UTF-8']),
             ],
             [
                 'request' => $this->getRequest('application/xml; charset=UTF-8'),
-                'supportedMimeTypes' => ['application/json'],
+                'supportedMediaTypes' => ['application/json'],
                 'expectedContentType' => null,
             ],
             [
                 'request' => $this->getRequest('application/xml; charset=UTF-8,'), // invalid format
-                'supportedMimeTypes' => ['application/json', 'application/xml', 'application/x-yaml'],
+                'supportedMediaTypes' => ['application/json', 'application/xml', 'application/x-yaml'],
                 'expectedContentType' => null,
             ],
         ];

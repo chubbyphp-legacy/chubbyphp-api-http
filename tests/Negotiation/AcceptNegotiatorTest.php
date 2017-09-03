@@ -29,12 +29,12 @@ final class AcceptNegotiatorTest extends \PHPUnit_Framework_TestCase
      * @dataProvider getToNegotiateHeaders
      *
      * @param Request              $request
-     * @param array                $supportedMimeTypes
+     * @param array                $supportedMediaTypes
      * @param NegotiatedValue|null $expectedAccept
      */
-    public function testNegotiate(Request $request, array $supportedMimeTypes, NegotiatedValue $expectedAccept = null)
+    public function testNegotiate(Request $request, array $supportedMediaTypes, NegotiatedValue $expectedAccept = null)
     {
-        $negotiator = new AcceptNegotiator($supportedMimeTypes);
+        $negotiator = new AcceptNegotiator($supportedMediaTypes);
 
         self::assertEquals($expectedAccept, $negotiator->negotiate($request));
     }
@@ -44,32 +44,32 @@ final class AcceptNegotiatorTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'request' => $this->getRequest('text/html,   application/xhtml+xml,application/xml; q=0.9,*/*;q =0.8'),
-                'supportedMimeTypes' => ['application/json', 'application/xml', 'application/x-yaml'],
+                'supportedMediaTypes' => ['application/json', 'application/xml', 'application/x-yaml'],
                 'expectedAccept' => new NegotiatedValue('application/xml', ['q' => '0.9']),
             ],
             [
                 'request' => $this->getRequest('text/html,application/xhtml+xml ,application/xml; q=0.9 ,*/*;  q= 0.8'),
-                'supportedMimeTypes' => ['application/json'],
+                'supportedMediaTypes' => ['application/json'],
                 'expectedAccept' => new NegotiatedValue('application/json', ['q' => '0.8']),
             ],
             [
                 'request' => $this->getRequest('*/json, */xml'), // cause */value is not a valid mime
-                'supportedMimeTypes' => ['application/xml'],
+                'supportedMediaTypes' => ['application/xml'],
                 'expectedAccept' => null,
             ],
             [
                 'request' => $this->getRequest('application/*;q=0.5, application/json'),
-                'supportedMimeTypes' => ['application/xml', 'application/json'],
+                'supportedMediaTypes' => ['application/xml', 'application/json'],
                 'expectedAccept' => new NegotiatedValue('application/json', ['q' => '1.0']),
             ],
             [
                 'request' => $this->getRequest('application/*, application/json;q=0.5'),
-                'supportedMimeTypes' => ['application/xml', 'application/json'],
+                'supportedMediaTypes' => ['application/xml', 'application/json'],
                 'expectedAccept' => new NegotiatedValue('application/xml', ['q' => '1.0']),
             ],
             [
                 'request' => $this->getRequest('application/*, application/json;q=0.5'),
-                'supportedMimeTypes' => ['text/html'],
+                'supportedMediaTypes' => ['text/html'],
                 'expectedAccept' => null,
             ],
         ];

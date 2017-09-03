@@ -14,14 +14,14 @@ final class ContentTypeNegotiator implements NegotiatorInterface
     /**
      * @var array
      */
-    private $supportedMimeTypes;
+    private $supportedMediaTypes;
 
     /**
-     * @param array $supportedMimeTypes
+     * @param array $supportedMediaTypes
      */
-    public function __construct(array $supportedMimeTypes)
+    public function __construct(array $supportedMediaTypes)
     {
-        $this->supportedMimeTypes = $supportedMimeTypes;
+        $this->supportedMediaTypes = $supportedMediaTypes;
     }
 
     /**
@@ -31,7 +31,7 @@ final class ContentTypeNegotiator implements NegotiatorInterface
      */
     public function negotiate(Request $request)
     {
-        if ([] === $this->supportedMimeTypes) {
+        if ([] === $this->supportedMediaTypes) {
             return null;
         }
 
@@ -39,7 +39,7 @@ final class ContentTypeNegotiator implements NegotiatorInterface
             return null;
         }
 
-        return $this->compareAgainstSupportedTypes($request->getHeaderLine('Content-Type'));
+        return $this->compareAgainstSupportedMediaTypes($request->getHeaderLine('Content-Type'));
     }
 
     /**
@@ -47,22 +47,22 @@ final class ContentTypeNegotiator implements NegotiatorInterface
      *
      * @return NegotiatedValue|null
      */
-    private function compareAgainstSupportedTypes(string $header)
+    private function compareAgainstSupportedMediaTypes(string $header)
     {
         if (false !== strpos($header, ',')) {
             return null;
         }
 
         $headerValueParts = explode(';', $header);
-        $mimeType = trim(array_shift($headerValueParts));
+        $mediaType = trim(array_shift($headerValueParts));
         $attributes = [];
         foreach ($headerValueParts as $attribute) {
             list($attributeKey, $attributeValue) = explode('=', $attribute);
             $attributes[trim($attributeKey)] = trim($attributeValue);
         }
 
-        if (in_array($mimeType, $this->supportedMimeTypes, true)) {
-            return new NegotiatedValue($mimeType, $attributes);
+        if (in_array($mediaType, $this->supportedMediaTypes, true)) {
+            return new NegotiatedValue($mediaType, $attributes);
         }
 
         return null;

@@ -29,7 +29,7 @@ final class NegotiatedValue
     /**
      * @return string
      */
-    public function getContentType(): string
+    public function getValue(): string
     {
         return $this->value;
     }

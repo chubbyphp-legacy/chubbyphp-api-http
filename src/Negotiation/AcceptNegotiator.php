@@ -14,14 +14,14 @@ final class AcceptNegotiator implements NegotiatorInterface
     /**
      * @var array
      */
-    private $supportedMimeTypes;
+    private $supportedMediaTypes;
 
     /**
-     * @param array $supportedMimeTypes
+     * @param array $supportedMediaTypes
      */
-    public function __construct(array $supportedMimeTypes)
+    public function __construct(array $supportedMediaTypes)
     {
-        $this->supportedMimeTypes = $supportedMimeTypes;
+        $this->supportedMediaTypes = $supportedMediaTypes;
     }
 
     /**
@@ -31,7 +31,7 @@ final class AcceptNegotiator implements NegotiatorInterface
      */
     public function negotiate(Request $request)
     {
-        if ([] === $this->supportedMimeTypes) {
+        if ([] === $this->supportedMediaTypes) {
             return null;
         }
 
@@ -41,7 +41,7 @@ final class AcceptNegotiator implements NegotiatorInterface
 
         $aggregatedValues = $this->aggregatedValues($request->getHeaderLine('Accept'));
 
-        return $this->compareAgainstSupportedTypes($aggregatedValues);
+        return $this->compareAgainstSupportedMediaTypes($aggregatedValues);
     }
 
     /**
@@ -54,7 +54,7 @@ final class AcceptNegotiator implements NegotiatorInterface
         $values = [];
         foreach (explode(',', $header) as $headerValue) {
             $headerValueParts = explode(';', $headerValue);
-            $mimeType = trim(array_shift($headerValueParts));
+            $mediaType = trim(array_shift($headerValueParts));
             $attributes = [];
             foreach ($headerValueParts as $attribute) {
                 list($attributeKey, $attributeValue) = explode('=', $attribute);
@@ -65,7 +65,7 @@ final class AcceptNegotiator implements NegotiatorInterface
                 $attributes['q'] = '1.0';
             }
 
-            $values[$mimeType] = $attributes;
+            $values[$mediaType] = $attributes;
         }
 
         uasort($values, function (array $a, array $b) {
@@ -80,14 +80,14 @@ final class AcceptNegotiator implements NegotiatorInterface
      *
      * @return NegotiatedValue|null
      */
-    private function compareAgainstSupportedTypes(array $aggregatedValues)
+    private function compareAgainstSupportedMediaTypes(array $aggregatedValues)
     {
-        foreach ($aggregatedValues as $mimeType => $attributes) {
-            if ('*/*' === $mimeType) {
-                return new NegotiatedValue(reset($this->supportedMimeTypes), $attributes);
+        foreach ($aggregatedValues as $mediaType => $attributes) {
+            if ('*/*' === $mediaType) {
+                return new NegotiatedValue(reset($this->supportedMediaTypes), $attributes);
             }
 
-            list($type, $subType) = explode('/', $mimeType);
+            list($type, $subType) = explode('/', $mediaType);
 
             if ('*' === $type && '*' !== $subType) { // skip invalid value
                 continue;
@@ -95,9 +95,9 @@ final class AcceptNegotiator implements NegotiatorInterface
 
             $subTypePattern = $subType !== '*' ? preg_quote($subType) : '.+';
 
-            foreach ($this->supportedMimeTypes as $supportedMimeType) {
-                if (1 === preg_match('/^'.preg_quote($type).'\/'.$subTypePattern.'$/', $supportedMimeType)) {
-                    return new NegotiatedValue($supportedMimeType, $attributes);
+            foreach ($this->supportedMediaTypes as $supportedMediaType) {
+                if (1 === preg_match('/^'.preg_quote($type).'\/'.$subTypePattern.'$/', $supportedMediaType)) {
+                    return new NegotiatedValue($supportedMediaType, $attributes);
                 }
             }
         }
