@@ -6,10 +6,10 @@ use Chubbyphp\ApiHttp\Manager\RequestManager;
 use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Deserialization\Transformer\TransformerException;
 use Chubbyphp\Deserialization\TransformerInterface;
-use Negotiation\Accept as AcceptContent;
-use Negotiation\AcceptLanguage;
-use Negotiation\LanguageNegotiator;
-use Negotiation\Negotiator as ContentNegotiator;
+use Chubbyphp\Negotiation\AcceptLanguageNegotiatorInterface;
+use Chubbyphp\Negotiation\AcceptNegotiatorInterface;
+use Chubbyphp\Negotiation\ContentTypeNegotiatorInterface;
+use Chubbyphp\Negotiation\NegotiatedValue;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
@@ -20,12 +20,13 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetAccept()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator($this->getContent('application/json')),
+            $this->getAcceptNegotiator(['application/json']),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator([]),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer()
         );
+
         $request = $this->getRequest(['headers' => ['Accept' => 'application/json']]);
 
         self::assertSame('application/json', $requestManager->getAccept($request));
@@ -34,12 +35,13 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetAcceptWithoutHeader()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator([]),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer()
         );
+
         $request = $this->getRequest();
 
         self::assertNull($requestManager->getAccept($request));
@@ -48,12 +50,13 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetAcceptWithoutHeaderButWithDefault()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator([]),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer()
         );
+
         $request = $this->getRequest();
 
         self::assertSame('application/json', $requestManager->getAccept($request, 'application/json'));
@@ -62,10 +65,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetAcceptWithoutBest()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator([]),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -77,10 +80,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetAcceptWithoutBestButWithDefault()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator([]),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -92,10 +95,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetAcceptLanguage()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator(['de', 'en']),
+            $this->getContentTypeNegotiator([]),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator($this->getLanguage('en')),
-            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -107,10 +110,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetAcceptLanguageWithoutHeader()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator(['de', 'en']),
+            $this->getContentTypeNegotiator([]),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator($this->getLanguage('en')),
-            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -122,13 +125,12 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetAcceptLanguageWithoutHeaderButWithDefault()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator(['de', 'en']),
+            $this->getContentTypeNegotiator([]),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator($this->getLanguage('en')),
-            ['de', 'en'],
             $this->getTransformer()
         );
-
         $request = $this->getRequest();
 
         self::assertSame('en', $requestManager->getAcceptLanguage($request, 'en'));
@@ -137,10 +139,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetAcceptLanguageWithoutBest()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator([]),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -152,10 +154,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetAcceptLanguageWithoutBestButWithDefault()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator([]),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -167,10 +169,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetContentType()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator($this->getContent('application/json')),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator(['application/json']),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -182,10 +184,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetContentTypeWithoutHeader()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator(['application/json']),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -197,10 +199,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetContentTypeWithoutHeaderButWithDefault()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator(['application/json']),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -212,10 +214,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetContentTypeWithoutBest()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator([]),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -227,10 +229,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetContentTypeWithoutBestButWithDefault()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator(['application/json']),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -242,10 +244,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetDataFromRequestBody()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator($this->getContent('application/json')),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator(['application/json']),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer()
         );
 
@@ -260,10 +262,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetDataFromRequestBodyWithoutContentType()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator($this->getContent('application/json')),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator(['application/json']),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer(TransformerException::create('content'))
         );
 
@@ -275,10 +277,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetDataFromRequestBodyWithTransformException()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator($this->getContent('application/json')),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator(['application/json']),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
             $this->getTransformer(TransformerException::create('content'))
         );
 
@@ -290,11 +292,11 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetDataFromRequestQuery()
     {
         $requestManager = new RequestManager(
-            $this->getContentNegotiator(),
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator([]),
             $this->getDeserializer(),
-            $this->getLanguageNegotiator(),
-            ['de', 'en'],
-            $this->getTransformer()
+            $this->getTransformer(TransformerException::create('content'))
         );
 
         $request = $this->getRequest(['queryParams' => ['key' => 'value']]);
@@ -306,65 +308,95 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param AcceptContent|null $best
+     * @param array $supportedMediaTypes
      *
-     * @return ContentNegotiator
+     * @return AcceptNegotiatorInterface
      */
-    private function getContentNegotiator(AcceptContent $best = null): ContentNegotiator
+    private function getAcceptNegotiator(array $supportedMediaTypes = []): AcceptNegotiatorInterface
     {
-        /** @var ContentNegotiator|\PHPUnit_Framework_MockObject_MockObject $contentNegotiator */
-        $contentNegotiator = $this->getMockBuilder(ContentNegotiator::class)
-            ->setMethods(['getBest'])
-            ->getMock();
+        /** @var AcceptNegotiatorInterface|\PHPUnit_Framework_MockObject_MockObject $acceptNegotiator */
+        $acceptNegotiator = $this->getMockBuilder(AcceptNegotiatorInterface::class)
+            ->setMethods(['negotiate'])
+            ->getMockForAbstractClass();
 
-        $contentNegotiator->expects(self::any())->method('getBest')->willReturnCallback(
-            function () use ($best) {
-                return $best;
+        $acceptNegotiator->expects(self::any())->method('negotiate')->willReturnCallback(
+            function (Request $request) use ($supportedMediaTypes) {
+                if (!$request->hasHeader('Accept')) {
+                    return null;
+                }
+
+                $headerLine = $request->getHeaderLine('Accept');
+                if (in_array($headerLine, $supportedMediaTypes, true)) {
+                    return new NegotiatedValue($headerLine);
+                }
+
+                return null;
             }
         );
 
-        return $contentNegotiator;
+        return $acceptNegotiator;
     }
 
     /**
-     * @param AcceptLanguage|null $best
+     * @param array $locales
      *
-     * @return LanguageNegotiator
+     * @return AcceptLanguageNegotiatorInterface
      */
-    private function getLanguageNegotiator(AcceptLanguage $best = null): LanguageNegotiator
+    private function getAcceptLanguageNegotiator(array $locales = []): AcceptLanguageNegotiatorInterface
     {
-        /** @var LanguageNegotiator|\PHPUnit_Framework_MockObject_MockObject $languageNegotiator */
-        $languageNegotiator = $this->getMockBuilder(LanguageNegotiator::class)
-            ->setMethods(['getBest'])
-            ->getMock();
+        /** @var AcceptLanguageNegotiatorInterface|\PHPUnit_Framework_MockObject_MockObject $acceptNegotiator */
+        $acceptNegotiator = $this->getMockBuilder(AcceptLanguageNegotiatorInterface::class)
+            ->setMethods(['negotiate'])
+            ->getMockForAbstractClass();
 
-        $languageNegotiator->expects(self::any())->method('getBest')->willReturnCallback(
-            function () use ($best) {
-                return $best;
+        $acceptNegotiator->expects(self::any())->method('negotiate')->willReturnCallback(
+            function (Request $request) use ($locales) {
+                if (!$request->hasHeader('Accept-Language')) {
+                    return null;
+                }
+
+                $headerLine = $request->getHeaderLine('Accept-Language');
+
+                if (in_array($headerLine, $locales, true)) {
+                    return new NegotiatedValue($headerLine);
+                }
+
+                return null;
             }
         );
 
-        return $languageNegotiator;
+        return $acceptNegotiator;
     }
 
     /**
-     * @param string $normalizeValue
+     * @param array $supportedMediaTypes
      *
-     * @return AcceptContent
+     * @return ContentTypeNegotiatorInterface
      */
-    private function getContent(string $normalizeValue): AcceptContent
+    private function getContentTypeNegotiator(array $supportedMediaTypes = []): ContentTypeNegotiatorInterface
     {
-        return new AcceptContent($normalizeValue);
-    }
+        /** @var ContentTypeNegotiatorInterface|\PHPUnit_Framework_MockObject_MockObject $acceptNegotiator */
+        $acceptNegotiator = $this->getMockBuilder(ContentTypeNegotiatorInterface::class)
+            ->setMethods(['negotiate'])
+            ->getMockForAbstractClass();
 
-    /**
-     * @param string $normalizeValue
-     *
-     * @return AcceptLanguage
-     */
-    private function getLanguage(string $normalizeValue): AcceptLanguage
-    {
-        return new AcceptLanguage($normalizeValue);
+        $acceptNegotiator->expects(self::any())->method('negotiate')->willReturnCallback(
+            function (Request $request) use ($supportedMediaTypes) {
+                if (!$request->hasHeader('Content-Type')) {
+                    return null;
+                }
+
+                $headerLine = $request->getHeaderLine('Content-Type');
+
+                if (in_array($headerLine, $supportedMediaTypes, true)) {
+                    return new NegotiatedValue($headerLine);
+                }
+
+                return null;
+            }
+        );
+
+        return $acceptNegotiator;
     }
 
     /**

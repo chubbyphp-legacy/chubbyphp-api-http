@@ -12,9 +12,9 @@
     "require": {
         "php": "~7.0",
         "chubbyphp/chubbyphp-deserialization": "~1.1",
+        "chubbyphp/chubbyphp-negotiation": "~1.0@dev",
         "chubbyphp/chubbyphp-serialization": "~1.0",
-        "psr/http-message": "~1.0",
-        "willdurand/negotiation": "~2.0"
+        "psr/http-message": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~5.5",

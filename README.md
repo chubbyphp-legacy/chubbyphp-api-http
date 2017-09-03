@@ -14,9 +14,9 @@ A simple http handler implementation for API.
 
  * php: ~7.0
  * chubbyphp/chubbyphp-deserialization: ~1.1
+ * chubbyphp/chubbyphp-negotiation: ~1.0@dev
  * chubbyphp/chubbyphp-serialization: ~1.0
  * psr/http-message: ~1.0
- * willdurand/negotiation: ~2.0
 
 ## Installation
 
@@ -38,16 +38,19 @@ composer require chubbyphp/chubbyphp-api-http "~1.0@beta"
 use Chubbyphp\ApiHttp\Manager\RequestManager;
 use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Deserialization\TransformerInterface;
-use Negotiation\Negotiator as ContentNegotiator;
+use Chubbyphp\Negotiation\AcceptLanguageNegotiator;
+use Chubbyphp\Negotiation\AcceptNegotiator;
+use Chubbyphp\Negotiation\ContentTypeNegotiator;
 use MyProject\Model\Model;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-$contentNegotiator = ...; // ContentNegotiator
+$acceptNegotiator = ...; // AcceptNegotiator
+$acceptLanguageNegotiator = ...; // AcceptLanguageNegotiator
+$contentTypeNegotiator = ...; // ContentTypeNegotiator
 $deserializer = ...; // DeserializerInterface
-$languages = ['de', 'en']
 $transformer = ...; // TransformerInterface
 
-$requestManager = new RequestManager($contentNegotiator, $deserializer, $languageNegotiator, $languages, $transformer);
+$requestManager = new RequestManager($acceptNegotiator, $acceptLanguageNegotiator, $contentTypeNegotiator, $deserializer, $transformer);
 
 $request = ...; // Request
 $object = new Model;

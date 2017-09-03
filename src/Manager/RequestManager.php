@@ -7,18 +7,27 @@ namespace Chubbyphp\ApiHttp\Manager;
 use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Deserialization\Transformer\TransformerException;
 use Chubbyphp\Deserialization\TransformerInterface;
-use Negotiation\Accept as ContentAccept;
-use Negotiation\AcceptLanguage;
-use Negotiation\LanguageNegotiator;
-use Negotiation\Negotiator as ContentNegotiator;
+use Chubbyphp\Negotiation\AcceptLanguageNegotiatorInterface;
+use Chubbyphp\Negotiation\AcceptNegotiatorInterface;
+use Chubbyphp\Negotiation\ContentTypeNegotiatorInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 final class RequestManager implements RequestManagerInterface
 {
     /**
-     * @var ContentNegotiator
+     * @var AcceptNegotiatorInterface
      */
-    private $contentNegotiator;
+    private $acceptNegotiator;
+
+    /**
+     * @var AcceptLanguageNegotiatorInterface
+     */
+    private $acceptLanguageNegotiator;
+
+    /**
+     * @var ContentTypeNegotiatorInterface
+     */
+    private $contentTypeNegotiator;
 
     /**
      * @var DeserializerInterface
@@ -26,38 +35,28 @@ final class RequestManager implements RequestManagerInterface
     private $deserializer;
 
     /**
-     * @var LanguageNegotiator
-     */
-    private $languageNegotiator;
-
-    /**
-     * @var array
-     */
-    private $languages;
-
-    /**
      * @var TransformerInterface
      */
     private $transformer;
 
     /**
-     * @param ContentNegotiator     $contentNegotiator
-     * @param DeserializerInterface $deserializer
-     * @param LanguageNegotiator    $languageNegotiator
-     * @param array                 $languages
-     * @param TransformerInterface  $transformer
+     * @param AcceptNegotiatorInterface         $acceptNegotiator
+     * @param AcceptLanguageNegotiatorInterface $acceptLanguageNegotiator
+     * @param ContentTypeNegotiatorInterface    $contentTypeNegotiator
+     * @param DeserializerInterface             $deserializer
+     * @param TransformerInterface              $transformer
      */
     public function __construct(
-        ContentNegotiator $contentNegotiator,
+        AcceptNegotiatorInterface $acceptNegotiator,
+        AcceptLanguageNegotiatorInterface $acceptLanguageNegotiator,
+        ContentTypeNegotiatorInterface $contentTypeNegotiator,
         DeserializerInterface $deserializer,
-        LanguageNegotiator $languageNegotiator,
-        array $languages,
         TransformerInterface $transformer
     ) {
-        $this->contentNegotiator = $contentNegotiator;
+        $this->acceptNegotiator = $acceptNegotiator;
+        $this->acceptLanguageNegotiator = $acceptLanguageNegotiator;
+        $this->contentTypeNegotiator = $contentTypeNegotiator;
         $this->deserializer = $deserializer;
-        $this->languageNegotiator = $languageNegotiator;
-        $this->languages = $languages;
         $this->transformer = $transformer;
     }
 
@@ -69,7 +68,11 @@ final class RequestManager implements RequestManagerInterface
      */
     public function getAccept(Request $request, string $default = null)
     {
-        return $this->negotiateContentType($request, 'Accept', $default);
+        if (null === $value = $this->acceptNegotiator->negotiate($request)) {
+            return $default;
+        }
+
+        return $value->getValue();
     }
 
     /**
@@ -80,21 +83,11 @@ final class RequestManager implements RequestManagerInterface
      */
     public function getAcceptLanguage(Request $request, string $default = null)
     {
-        if (!$request->hasHeader('Accept-Language')) {
+        if (null === $value = $this->acceptLanguageNegotiator->negotiate($request)) {
             return $default;
         }
 
-        /** @var AcceptLanguage $best */
-        $best = $this->languageNegotiator->getBest(
-            $request->getHeaderLine('Accept-Language'),
-            $this->languages
-        );
-
-        if (null === $best) {
-            return $default;
-        }
-
-        return $best->getNormalizedValue();
+        return $value->getValue();
     }
 
     /**
@@ -105,33 +98,11 @@ final class RequestManager implements RequestManagerInterface
      */
     public function getContentType(Request $request, string $default = null)
     {
-        return $this->negotiateContentType($request, 'Content-Type', $default);
-    }
-
-    /**
-     * @param Request     $request
-     * @param string      $headerName
-     * @param string|null $default
-     *
-     * @return null|string
-     */
-    private function negotiateContentType(Request $request, string $headerName, string $default = null)
-    {
-        if (!$request->hasHeader($headerName)) {
+        if (null === $value = $this->contentTypeNegotiator->negotiate($request)) {
             return $default;
         }
 
-        /** @var ContentAccept $best */
-        $best = $this->contentNegotiator->getBest(
-            $request->getHeaderLine($headerName),
-            $this->transformer->getContentTypes()
-        );
-
-        if (null === $best) {
-            return $default;
-        }
-
-        return $best->getNormalizedValue();
+        return $value->getValue();
     }
 
     /**

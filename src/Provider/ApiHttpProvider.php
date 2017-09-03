@@ -6,8 +6,9 @@ namespace Chubbyphp\ApiHttp\Provider;
 
 use Chubbyphp\ApiHttp\Manager\RequestManager;
 use Chubbyphp\ApiHttp\Manager\ResponseManager;
-use Negotiation\LanguageNegotiator;
-use Negotiation\Negotiator as ContentNegotiator;
+use Chubbyphp\Negotiation\AcceptLanguageNegotiator;
+use Chubbyphp\Negotiation\AcceptNegotiator;
+use Chubbyphp\Negotiation\ContentTypeNegotiator;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -20,23 +21,35 @@ final class ApiHttpProvider implements ServiceProviderInterface
     {
         $container['api-http.request.manager'] = function () use ($container) {
             return new RequestManager(
-                $container['api-http.request.contentNegotiator'],
+                $container['api-http.request.acceptNegotiator'],
+                $container['api-http.request.acceptLanguageNegotiator'],
+                $container['api-http.request.contentTypeNegotiator'],
                 $container['deserializer'],
-                $container['api-http.request.languageNegotiator'],
-                $container['api-http.request.languages'],
                 $container['deserializer.transformer']
             );
         };
 
-        $container['api-http.request.contentNegotiator'] = function () {
-            return new ContentNegotiator();
+        $container['api-http.request.acceptNegotiator'] = function () use ($container) {
+            return new AcceptNegotiator($container['api-http.request.accepted']);
         };
 
-        $container['api-http.request.languageNegotiator'] = function () {
-            return new LanguageNegotiator();
+        $container['api-http.request.acceptLanguageNegotiator'] = function () use ($container) {
+            return new AcceptLanguageNegotiator($container['api-http.request.acceptedLanguages']);
         };
 
-        $container['api-http.request.languages'] = function () {
+        $container['api-http.request.contentTypeNegotiator'] = function () use ($container) {
+            return new ContentTypeNegotiator($container['api-http.request.contentTypes']);
+        };
+
+        $container['api-http.request.accepted'] = function () {
+            return [];
+        };
+
+        $container['api-http.request.acceptedLanguages'] = function () {
+            return [];
+        };
+
+        $container['api-http.request.contentTypes'] = function () {
             return [];
         };
 
