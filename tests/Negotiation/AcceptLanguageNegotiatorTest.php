@@ -62,6 +62,11 @@ final class AcceptLanguageNegotiatorTest extends \PHPUnit_Framework_TestCase
                 'supportedMediaTypes' => ['de'],
                 'expectedAcceptLanguage' => new NegotiatedValue('de', ['q' => '0.3']),
             ],
+            [
+                'request' => $this->getRequest('en; q=0.1, fr; q=0.4, fu; q=0.9, de; q=0.2'),
+                'supportedMediaTypes' => ['de', 'fu', 'en'],
+                'expectedAcceptLanguage' => new NegotiatedValue('fu', ['q' => '0.9']),
+            ],
         ];
     }
 
