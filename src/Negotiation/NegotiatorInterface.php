@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Negotiation;
 
+use Psr\Http\Message\ServerRequestInterface as Request;
+
 interface NegotiatorInterface
 {
     /**
-     * @param string $header
-     * @param array  $supported
+     * @param Request $request
      *
      * @return NegotiatedValue|null
      */
-    public function negotiate(string $header, array $supported);
+    public function negotiate(Request $request);
 }

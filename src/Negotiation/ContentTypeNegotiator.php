@@ -4,33 +4,50 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Negotiation;
 
+use Psr\Http\Message\ServerRequestInterface as Request;
+
 /**
  * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17
  */
 final class ContentTypeNegotiator implements NegotiatorInterface
 {
     /**
-     * @param string $header
-     * @param array  $supported
+     * @var array
+     */
+    private $supportedMimeTypes;
+
+    /**
+     * @param array $supportedMimeTypes
+     */
+    public function __construct(array $supportedMimeTypes)
+    {
+        $this->supportedMimeTypes = $supportedMimeTypes;
+    }
+
+    /**
+     * @param Request $request
      *
      * @return NegotiatedValue|null
      */
-    public function negotiate(string $header, array $supported)
+    public function negotiate(Request $request)
     {
-        if ([] === $supported) {
+        if ([] === $this->supportedMimeTypes) {
             return null;
         }
 
-        return $this->compareAgainstSupportedTypes($header, $supported);
+        if (!$request->hasHeader('Content-Type')) {
+            return null;
+        }
+
+        return $this->compareAgainstSupportedTypes($request->getHeaderLine('Content-Type'));
     }
 
     /**
      * @param string $header
-     * @param array  $supportedMimeTypes
      *
      * @return NegotiatedValue|null
      */
-    private function compareAgainstSupportedTypes(string $header, array $supportedMimeTypes)
+    private function compareAgainstSupportedTypes(string $header)
     {
         if (false !== strpos($header, ',')) {
             return null;
@@ -44,7 +61,7 @@ final class ContentTypeNegotiator implements NegotiatorInterface
             $attributes[trim($attributeKey)] = trim($attributeValue);
         }
 
-        if (in_array($mimeType, $supportedMimeTypes, true)) {
+        if (in_array($mimeType, $this->supportedMimeTypes, true)) {
             return new NegotiatedValue($mimeType, $attributes);
         }
 

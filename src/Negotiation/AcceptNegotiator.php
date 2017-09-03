@@ -4,26 +4,44 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Negotiation;
 
+use Psr\Http\Message\ServerRequestInterface as Request;
+
 /**
  * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
  */
 final class AcceptNegotiator implements NegotiatorInterface
 {
     /**
-     * @param string $header
-     * @param array  $supported
+     * @var array
+     */
+    private $supportedMimeTypes;
+
+    /**
+     * @param array $supportedMimeTypes
+     */
+    public function __construct(array $supportedMimeTypes)
+    {
+        $this->supportedMimeTypes = $supportedMimeTypes;
+    }
+
+    /**
+     * @param Request $request
      *
      * @return NegotiatedValue|null
      */
-    public function negotiate(string $header, array $supported)
+    public function negotiate(Request $request)
     {
-        if ([] === $supported) {
+        if ([] === $this->supportedMimeTypes) {
             return null;
         }
 
-        $aggregatedValues = $this->aggregatedValues($header);
+        if (!$request->hasHeader('Accept')) {
+            return null;
+        }
 
-        return $this->compareAgainstSupportedTypes($aggregatedValues, $supported);
+        $aggregatedValues = $this->aggregatedValues($request->getHeaderLine('Accept'));
+
+        return $this->compareAgainstSupportedTypes($aggregatedValues);
     }
 
     /**
@@ -59,15 +77,14 @@ final class AcceptNegotiator implements NegotiatorInterface
 
     /**
      * @param array $aggregatedValues
-     * @param array $supportedMimeTypes
      *
      * @return NegotiatedValue|null
      */
-    private function compareAgainstSupportedTypes(array $aggregatedValues, array $supportedMimeTypes)
+    private function compareAgainstSupportedTypes(array $aggregatedValues)
     {
         foreach ($aggregatedValues as $mimeType => $attributes) {
             if ('*/*' === $mimeType) {
-                return new NegotiatedValue(reset($supportedMimeTypes), $attributes);
+                return new NegotiatedValue(reset($this->supportedMimeTypes), $attributes);
             }
 
             list($type, $subType) = explode('/', $mimeType);
@@ -78,7 +95,7 @@ final class AcceptNegotiator implements NegotiatorInterface
 
             $subTypePattern = $subType !== '*' ? preg_quote($subType) : '.+';
 
-            foreach ($supportedMimeTypes as $supportedMimeType) {
+            foreach ($this->supportedMimeTypes as $supportedMimeType) {
                 if (1 === preg_match('/^'.preg_quote($type).'\/'.$subTypePattern.'$/', $supportedMimeType)) {
                     return new NegotiatedValue($supportedMimeType, $attributes);
                 }
