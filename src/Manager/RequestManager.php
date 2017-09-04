@@ -108,16 +108,12 @@ final class RequestManager implements RequestManagerInterface
     /**
      * @param Request       $request
      * @param object|string $object
-     * @param string|null   $defaultContentType
+     * @param string        $contentType
      *
      * @return object|null
      */
-    public function getDataFromRequestBody(Request $request, $object, string $defaultContentType = null)
+    public function getDataFromRequestBody(Request $request, $object, string $contentType)
     {
-        if (null === $contentType = $this->getContentType($request, $defaultContentType)) {
-            return null;
-        }
-
         try {
             $data = $this->transformer->transform((string) $request->getBody(), $contentType);
         } catch (TransformerException $e) {

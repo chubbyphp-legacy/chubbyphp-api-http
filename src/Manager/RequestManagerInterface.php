@@ -35,11 +35,11 @@ interface RequestManagerInterface
     /**
      * @param Request       $request
      * @param object|string $object
-     * @param string|null   $defaultContentType
+     * @param string        $contentType
      *
      * @return object|null
      */
-    public function getDataFromRequestBody(Request $request, $object, string $defaultContentType = null);
+    public function getDataFromRequestBody(Request $request, $object, string $contentType);
 
     /**
      * @param Request       $request

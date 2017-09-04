@@ -255,23 +255,8 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
 
         self::assertEquals(
             ['key' => 'value'],
-            (array) $requestManager->getDataFromRequestBody($request, new \stdClass())
+            (array) $requestManager->getDataFromRequestBody($request, new \stdClass(), 'application/json')
         );
-    }
-
-    public function testGetDataFromRequestBodyWithoutContentType()
-    {
-        $requestManager = new RequestManager(
-            $this->getAcceptNegotiator([]),
-            $this->getAcceptLanguageNegotiator([]),
-            $this->getContentTypeNegotiator(['application/json']),
-            $this->getDeserializer(),
-            $this->getTransformer(TransformerException::create('content'))
-        );
-
-        $request = $this->getRequest(['body' => '{"key":"value"}']);
-
-        self::assertNull($requestManager->getDataFromRequestBody($request, new \stdClass()));
     }
 
     public function testGetDataFromRequestBodyWithTransformException()
@@ -286,7 +271,7 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
 
         $request = $this->getRequest(['headers' => ['Content-Type' => 'application/json'], 'body' => '{"key":"value"}']);
 
-        self::assertNull($requestManager->getDataFromRequestBody($request, new \stdClass()));
+        self::assertNull($requestManager->getDataFromRequestBody($request, new \stdClass(), 'application/json'));
     }
 
     public function testGetDataFromRequestQuery()
