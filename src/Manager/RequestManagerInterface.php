@@ -24,7 +24,6 @@ interface RequestManagerInterface
      */
     public function getAcceptLanguage(Request $request, string $default = null);
 
-
     /**
      * @param Request     $request
      * @param string|null $default
