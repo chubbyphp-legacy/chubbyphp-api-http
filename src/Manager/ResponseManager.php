@@ -147,8 +147,8 @@ final class ResponseManager implements ResponseManagerInterface
     {
         return $this->createResponseByError($request, 400, $accept, new Error(
             Error::SCOPE_BODY,
-            'body_not_parsable',
-            'the given body is not parsable with given content-type',
+            'body_not_deserializable',
+            'the given body is not deserializable with given content-type',
             'deserialize',
             [
                 'contentType' => $contentType,
