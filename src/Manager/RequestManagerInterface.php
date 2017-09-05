@@ -24,6 +24,7 @@ interface RequestManagerInterface
      */
     public function getAcceptLanguage(Request $request, string $default = null);
 
+
     /**
      * @param Request     $request
      * @param string|null $default
@@ -48,4 +49,19 @@ interface RequestManagerInterface
      * @return object
      */
     public function getDataFromRequestQuery(Request $request, $object);
+
+    /**
+     * @return string[]
+     */
+    public function getSupportedAccepts(): array;
+
+    /**
+     * @return string[]
+     */
+    public function getSupportedContentTypes(): array;
+
+    /**
+     * @return string[]
+     */
+    public function getSupportedLocales(): array;
 }

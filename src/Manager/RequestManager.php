@@ -139,6 +139,30 @@ final class RequestManager implements RequestManagerInterface
     }
 
     /**
+     * @return string[]
+     */
+    public function getSupportedAccepts(): array
+    {
+        return $this->acceptNegotiator->getSupportedMediaTypes();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSupportedContentTypes(): array
+    {
+        return $this->contentTypeNegotiator->getSupportedMediaTypes();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSupportedLocales(): array
+    {
+        return $this->acceptLanguageNegotiator->getSupportedLocales();
+    }
+
+    /**
      * @param object|string $object
      *
      * @return string
