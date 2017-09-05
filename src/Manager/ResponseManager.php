@@ -54,12 +54,12 @@ final class ResponseManager implements ResponseManagerInterface
     /**
      * @param Request $request
      * @param int     $code
-     * @param object  $object
      * @param string  $accept
+     * @param object|null  $object
      *
      * @return Response
      */
-    public function createResponse(Request $request, int $code, $object, string $accept): Response
+    public function createResponse(Request $request, int $code, string $accept, $object = null): Response
     {
         $response = $this->responseFactory->createResponse($code);
 
@@ -72,6 +72,7 @@ final class ResponseManager implements ResponseManagerInterface
         }
 
         $body = $this->transformer->transform($this->serializer->serialize($request, $object), $accept);
+
         $response = $response->withStatus($code)->withHeader('Content-Type', $accept);
         $response->getBody()->write($body);
 
@@ -81,12 +82,12 @@ final class ResponseManager implements ResponseManagerInterface
     /**
      * @param Request $request
      * @param int     $code
-     * @param Error   $error
      * @param string  $accept
+     * @param Error   $error
      *
      * @return Response
      */
-    public function createResponseByError(Request $request, int $code, Error $error, string $accept): Response
+    public function createResponseByError(Request $request, int $code, string $accept, Error $error): Response
     {
         $response = $this->responseFactory->createResponse($code);
 
@@ -182,20 +183,23 @@ final class ResponseManager implements ResponseManagerInterface
     }
 
     /**
+     * @param Request $request
+     * @param string $accept
      * @param string $type
-     * @param string $contentType
-     * @param string $body
-     *
-     * @return Error
+     * @param array $arguments
+     * @return Response
      */
-    public function createNotReadable(string $type, string $contentType, string $body): Error
-    {
-        return new Error(
-            Error::SCOPE_BODY,
-            'bodynotreadable',
-            'request body not parsable',
-            $type,
-            ['body' => $body, 'contentType' => $contentType]
-         );
+    public function createResourceNotFoundResponse(
+        Request $request,
+        string $accept,
+        string $type,
+        array $arguments
+    ): Response {
+        return $this->createResponseByError($request, 404, new Error(
+            Error::SCOPE_RESOURCE,
+            'resource_not_found',
+            'the wished resource does not exist',
+            $type, $arguments
+        ), $accept);
     }
 }

@@ -13,22 +13,22 @@ interface ResponseManagerInterface
     /**
      * @param Request $request
      * @param int     $code
-     * @param object  $object
      * @param string  $accept
+     * @param object|null  $object
      *
      * @return Response
      */
-    public function createResponse(Request $request, int $code, $object, string $accept): Response;
+    public function createResponse(Request $request, int $code, string $accept, $object = null): Response;
 
     /**
      * @param Request $request
      * @param int     $code
-     * @param Error   $error
      * @param string  $accept
+     * @param Error   $error
      *
      * @return Response
      */
-    public function createResponseByError(Request $request, int $code, Error $error, string $accept): Response;
+    public function createResponseByError(Request $request, int $code, string $accept, Error $error): Response;
 
     /**
      * @param Request $request
@@ -73,5 +73,19 @@ interface ResponseManagerInterface
         string $scope,
         string $type,
         array $errors
+    ): Response;
+
+    /**
+     * @param Request $request
+     * @param string $accept
+     * @param string $type
+     * @param array $arguments
+     * @return Response
+     */
+    public function createResourceNotFoundResponse(
+        Request $request,
+        string $accept,
+        string $type,
+        array $arguments
     ): Response;
 }
