@@ -176,7 +176,7 @@ final class ResponseManager implements ResponseManagerInterface
         return $this->createResponseByError($request, 422, $accept, new Error(
             $scope,
             'validation_error',
-            'there where validation errors while validating the model',
+            'there where validation errors while validating the object',
             $type,
             $errors
         ));
