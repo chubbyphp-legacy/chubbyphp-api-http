@@ -110,7 +110,7 @@ final class ResponseManager implements ResponseManagerInterface
         $response->withHeader('X-Not-Acceptable', sprintf(
             'Accept "%" is not supported, supported are %s',
             $request->getHeaderLine('Accept'),
-            $this->requestManager->getSupportedAccepts()
+            implode(', ', $this->requestManager->getSupportedAccepts())
         ));
 
         return $response;
@@ -124,7 +124,7 @@ final class ResponseManager implements ResponseManagerInterface
      */
     public function createContentTypeNotSupportedResponse(Request $request, string $accept): Response
     {
-        return $this->createResponseByError($request, 415, new Error(
+        return $this->createResponseByError($request, 415, $accept, new Error(
             Error::SCOPE_HEADER,
             'contentype_not_supported',
             'the given content type is not supported',
@@ -133,7 +133,7 @@ final class ResponseManager implements ResponseManagerInterface
                 'contentType' => $request->getHeaderLine('Content-Type'),
                 'supportedContentTypes' => $this->requestManager->getSupportedContentTypes(),
             ]
-        ), $accept);
+        ));
     }
 
     /**
@@ -145,7 +145,7 @@ final class ResponseManager implements ResponseManagerInterface
      */
     public function createBodyNotDeserializableResponse(Request $request, string $accept, string $contentType): Response
     {
-        return $this->createResponseByError($request, 400, new Error(
+        return $this->createResponseByError($request, 400, $accept, new Error(
             Error::SCOPE_BODY,
             'body_not_parsable',
             'the given body is not parsable with given content-type',
@@ -154,7 +154,7 @@ final class ResponseManager implements ResponseManagerInterface
                 'contentType' => $contentType,
                 'body' => (string) $request->getBody(),
             ]
-        ), $accept);
+        ));
     }
 
     /**
@@ -173,13 +173,13 @@ final class ResponseManager implements ResponseManagerInterface
         string $type,
         array $errors
     ): Response {
-        return $this->createResponseByError($request, 422, new Error(
+        return $this->createResponseByError($request, 422, $accept, new Error(
             $scope,
             'validation_error',
             'there where validation errors while validating the model',
             $type,
             $errors
-        ), $accept);
+        ));
     }
 
     /**
@@ -195,11 +195,11 @@ final class ResponseManager implements ResponseManagerInterface
         string $type,
         array $arguments
     ): Response {
-        return $this->createResponseByError($request, 404, new Error(
+        return $this->createResponseByError($request, 404, $accept, new Error(
             Error::SCOPE_RESOURCE,
             'resource_not_found',
             'the wished resource does not exist',
             $type, $arguments
-        ), $accept);
+        ));
     }
 }
