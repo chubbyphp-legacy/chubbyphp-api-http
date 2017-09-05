@@ -107,7 +107,7 @@ final class ResponseManager implements ResponseManagerInterface
     public function createAcceptNotSupportedResponse(Request $request): Response
     {
         $response = $this->responseFactory->createResponse(406);
-        $response->withHeader('X-Not-Acceptable', sprintf(
+        $response = $response->withHeader('X-Not-Acceptable', sprintf(
             'Accept "%" is not supported, supported are %s',
             $request->getHeaderLine('Accept'),
             implode(', ', $this->requestManager->getSupportedAccepts())
