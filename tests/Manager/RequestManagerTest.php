@@ -292,6 +292,54 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetSupportedAccepts()
+    {
+        $requestManager = new RequestManager(
+            $this->getAcceptNegotiator(['application/json']),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator([]),
+            $this->getDeserializer(),
+            $this->getTransformer()
+        );
+
+        self::assertEquals(
+            ['application/json'],
+            $requestManager->getSupportedAccepts()
+        );
+    }
+
+    public function testGetSupportedContentTypes()
+    {
+        $requestManager = new RequestManager(
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator([]),
+            $this->getContentTypeNegotiator(['application/json']),
+            $this->getDeserializer(),
+            $this->getTransformer()
+        );
+
+        self::assertEquals(
+            ['application/json'],
+            $requestManager->getSupportedContentTypes()
+        );
+    }
+
+    public function testGetSupportedLocales()
+    {
+        $requestManager = new RequestManager(
+            $this->getAcceptNegotiator([]),
+            $this->getAcceptLanguageNegotiator(['en']),
+            $this->getContentTypeNegotiator([]),
+            $this->getDeserializer(),
+            $this->getTransformer()
+        );
+
+        self::assertEquals(
+            ['en'],
+            $requestManager->getSupportedLocales()
+        );
+    }
+
     /**
      * @param array $supportedMediaTypes
      *
@@ -301,8 +349,10 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var AcceptNegotiatorInterface|\PHPUnit_Framework_MockObject_MockObject $acceptNegotiator */
         $acceptNegotiator = $this->getMockBuilder(AcceptNegotiatorInterface::class)
-            ->setMethods(['negotiate'])
+            ->setMethods(['getSupportedMediaTypes', 'negotiate'])
             ->getMockForAbstractClass();
+
+        $acceptNegotiator->expects(self::any())->method('getSupportedMediaTypes')->willReturn($supportedMediaTypes);
 
         $acceptNegotiator->expects(self::any())->method('negotiate')->willReturnCallback(
             function (Request $request) use ($supportedMediaTypes) {
@@ -323,26 +373,28 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $locales
+     * @param array $supportedLocales
      *
      * @return AcceptLanguageNegotiatorInterface
      */
-    private function getAcceptLanguageNegotiator(array $locales = []): AcceptLanguageNegotiatorInterface
+    private function getAcceptLanguageNegotiator(array $supportedLocales = []): AcceptLanguageNegotiatorInterface
     {
-        /** @var AcceptLanguageNegotiatorInterface|\PHPUnit_Framework_MockObject_MockObject $acceptNegotiator */
-        $acceptNegotiator = $this->getMockBuilder(AcceptLanguageNegotiatorInterface::class)
-            ->setMethods(['negotiate'])
+        /** @var AcceptLanguageNegotiatorInterface|\PHPUnit_Framework_MockObject_MockObject $acceptLanguageNegotiator */
+        $acceptLanguageNegotiator = $this->getMockBuilder(AcceptLanguageNegotiatorInterface::class)
+            ->setMethods(['getSupportedLocales', 'negotiate'])
             ->getMockForAbstractClass();
 
-        $acceptNegotiator->expects(self::any())->method('negotiate')->willReturnCallback(
-            function (Request $request) use ($locales) {
+        $acceptLanguageNegotiator->expects(self::any())->method('getSupportedLocales')->willReturn($supportedLocales);
+
+        $acceptLanguageNegotiator->expects(self::any())->method('negotiate')->willReturnCallback(
+            function (Request $request) use ($supportedLocales) {
                 if (!$request->hasHeader('Accept-Language')) {
                     return null;
                 }
 
                 $headerLine = $request->getHeaderLine('Accept-Language');
 
-                if (in_array($headerLine, $locales, true)) {
+                if (in_array($headerLine, $supportedLocales, true)) {
                     return new NegotiatedValue($headerLine);
                 }
 
@@ -350,7 +402,7 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        return $acceptNegotiator;
+        return $acceptLanguageNegotiator;
     }
 
     /**
@@ -360,12 +412,14 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
      */
     private function getContentTypeNegotiator(array $supportedMediaTypes = []): ContentTypeNegotiatorInterface
     {
-        /** @var ContentTypeNegotiatorInterface|\PHPUnit_Framework_MockObject_MockObject $acceptNegotiator */
-        $acceptNegotiator = $this->getMockBuilder(ContentTypeNegotiatorInterface::class)
-            ->setMethods(['negotiate'])
+        /** @var ContentTypeNegotiatorInterface|\PHPUnit_Framework_MockObject_MockObject $contentTypeNegotiator */
+        $contentTypeNegotiator = $this->getMockBuilder(ContentTypeNegotiatorInterface::class)
+            ->setMethods(['getSupportedMediaTypes', 'negotiate'])
             ->getMockForAbstractClass();
 
-        $acceptNegotiator->expects(self::any())->method('negotiate')->willReturnCallback(
+        $contentTypeNegotiator->expects(self::any())->method('getSupportedMediaTypes')->willReturn($supportedMediaTypes);
+
+        $contentTypeNegotiator->expects(self::any())->method('negotiate')->willReturnCallback(
             function (Request $request) use ($supportedMediaTypes) {
                 if (!$request->hasHeader('Content-Type')) {
                     return null;
@@ -381,7 +435,7 @@ final class RequestManagerTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        return $acceptNegotiator;
+        return $contentTypeNegotiator;
     }
 
     /**

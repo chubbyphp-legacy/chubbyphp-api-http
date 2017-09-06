@@ -2,6 +2,7 @@
 
 namespace Chubbyphp\Tests\ApiHttp\Manager;
 
+use Chubbyphp\ApiHttp\Error\Error;
 use Chubbyphp\ApiHttp\Error\ErrorInterface;
 use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface;
 use Chubbyphp\ApiHttp\Manager\RequestManagerInterface;
@@ -17,20 +18,6 @@ use Psr\Http\Message\StreamInterface;
  */
 final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCreateEmptyResponse()
-    {
-        $responseHandler = new ResponseManager(
-            $this->getRequestManager(),
-            $this->getResponseFactory(),
-            $this->getSerializer(),
-            $this->getTransform()
-        );
-
-        $response = $responseHandler->createResponse($this->getRequest(), 200, 'application/json');
-
-        self::assertSame(204, $response->getStatusCode());
-    }
-
     public function testCreateResponse()
     {
         $responseHandler = new ResponseManager(
@@ -49,6 +36,34 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
         self::assertSame('{"key":"value"}', (string) $response->getBody());
     }
 
+    public function testCreateEmptyResponse()
+    {
+        $responseHandler = new ResponseManager(
+            $this->getRequestManager(),
+            $this->getResponseFactory(),
+            $this->getSerializer(),
+            $this->getTransform()
+        );
+
+        $response = $responseHandler->createResponse($this->getRequest(), 200, 'application/json');
+
+        self::assertSame(204, $response->getStatusCode());
+    }
+
+    public function testCreateEmptyResponseWithDiffrentStatusCode()
+    {
+        $responseHandler = new ResponseManager(
+            $this->getRequestManager(),
+            $this->getResponseFactory(),
+            $this->getSerializer(),
+            $this->getTransform()
+        );
+
+        $response = $responseHandler->createResponse($this->getRequest(), 201, 'application/json');
+
+        self::assertSame(201, $response->getStatusCode());
+    }
+
     public function testCreateErrorResponse()
     {
         $responseHandler = new ResponseManager(
@@ -60,12 +75,153 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
 
         $response = $responseHandler->createResponseByError(
             $this->getRequest(),
-            403,
+            418,
             'application/json',
-            $this->getError()
+            new Error(Error::SCOPE_RESOURCE, 'you_are_a_teapod')
+        );
+
+        self::assertSame(418, $response->getStatusCode());
+        self::assertSame(
+            '{"scope":"resource","key":"you_are_a_teapod","detail":null,"reference":null,"arguments":[]}',
+            (string) $response->getBody()
+        );
+    }
+
+    public function testCreateBodyNotDeserializableResponse()
+    {
+        $responseHandler = new ResponseManager(
+            $this->getRequestManager([], ['application/json']),
+            $this->getResponseFactory(),
+            $this->getSerializer(),
+            $this->getTransform()
+        );
+
+        $body = $this->getBody();
+        $body->write('{{""}');
+
+        $response = $responseHandler->createBodyNotDeserializableResponse(
+            $this->getRequest([], $body),
+            'application/json',
+            'application/json'
+        );
+
+        self::assertSame(400, $response->getStatusCode());
+        self::assertSame(
+            '{"scope":"body","key":"body_not_deserializable","detail":"the given body is not deserializable with given content-type","reference":"deserialize","arguments":{"contentType":"application\/json","body":"{{\"\"}"}}',
+            (string) $response->getBody()
+        );
+    }
+
+    public function testCreatePermissionDeniedResponse()
+    {
+        $responseHandler = new ResponseManager(
+            $this->getRequestManager([], ['application/json']),
+            $this->getResponseFactory(),
+            $this->getSerializer(),
+            $this->getTransform()
+        );
+
+        $response = $responseHandler->createPermissionDeniedResponse(
+            $this->getRequest(),
+            'application/json',
+            'user',
+            ['id' => 1]
         );
 
         self::assertSame(403, $response->getStatusCode());
+        self::assertSame(
+            '{"scope":"header","key":"permission_denied","detail":"the wished resource does not exist","reference":"user","arguments":{"id":1}}',
+            (string) $response->getBody()
+        );
+    }
+
+    public function testCreateResourceNotFoundResponse()
+    {
+        $responseHandler = new ResponseManager(
+            $this->getRequestManager([], ['application/json']),
+            $this->getResponseFactory(),
+            $this->getSerializer(),
+            $this->getTransform()
+        );
+
+        $response = $responseHandler->createResourceNotFoundResponse(
+            $this->getRequest(),
+            'application/json',
+            'model',
+            ['id' => 1]
+        );
+
+        self::assertSame(404, $response->getStatusCode());
+        self::assertSame(
+            '{"scope":"resource","key":"resource_not_found","detail":"the wished resource does not exist","reference":"model","arguments":{"id":1}}',
+            (string) $response->getBody()
+        );
+    }
+
+    public function testCreateAcceptNotSupportedResponse()
+    {
+        $responseHandler = new ResponseManager(
+            $this->getRequestManager(['application/json']),
+            $this->getResponseFactory(),
+            $this->getSerializer(),
+            $this->getTransform()
+        );
+
+        $response = $responseHandler->createAcceptNotSupportedResponse(
+            $this->getRequest(['Accept' => 'application/php'])
+        );
+
+        self::assertSame(406, $response->getStatusCode());
+        self::assertTrue($response->hasHeader('X-Not-Acceptable'));
+        self::assertSame(
+            'Accept "application/php" is not supported, supported are application/json',
+            $response->getHeaderLine('X-Not-Acceptable')
+        );
+    }
+
+    public function testCreateContentTypeNotSupportedResponse()
+    {
+        $responseHandler = new ResponseManager(
+            $this->getRequestManager([], ['application/json']),
+            $this->getResponseFactory(),
+            $this->getSerializer(),
+            $this->getTransform()
+        );
+
+        $response = $responseHandler->createContentTypeNotSupportedResponse(
+            $this->getRequest(['Content-Type' => 'application/php']),
+            'application/json'
+        );
+
+        self::assertSame(415, $response->getStatusCode());
+        self::assertSame(
+            '{"scope":"header","key":"contentype_not_supported","detail":"the given content type is not supported","reference":"content-type","arguments":{"contentType":"application\/php","supportedContentTypes":["application\/json"]}}',
+            (string) $response->getBody()
+        );
+    }
+
+    public function testCreateValidationErrorResponse()
+    {
+        $responseHandler = new ResponseManager(
+            $this->getRequestManager([], ['application/json']),
+            $this->getResponseFactory(),
+            $this->getSerializer(),
+            $this->getTransform()
+        );
+
+        $response = $responseHandler->createValidationErrorResponse(
+            $this->getRequest(),
+            'application/json',
+            Error::SCOPE_BODY,
+            'model',
+            ['name' => ['not.null']]
+        );
+
+        self::assertSame(422, $response->getStatusCode());
+        self::assertSame(
+            '{"scope":"body","key":"validation_error","detail":"there where validation errors while validating the object","reference":"model","arguments":{"name":["not.null"]}}',
+            (string) $response->getBody()
+        );
     }
 
     /**
@@ -85,7 +241,7 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
                 'getDataFromRequestQuery',
                 'getSupportedAccepts',
                 'getSupportedContentTypes',
-                'getSupportedLocales'
+                'getSupportedLocales',
             ])
             ->getMock();
 
@@ -126,6 +282,16 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
 
         $deserializer->expects(self::any())->method('serialize')->willReturnCallback(
             function (Request $request, $object, string $path = '') {
+                if ($object instanceof ErrorInterface) {
+                    return [
+                        'scope' => $object->getScope(),
+                        'key' => $object->getKey(),
+                        'detail' => $object->getDetail(),
+                        'reference' => $object->getReference(),
+                        'arguments' => $object->getArguments(),
+                    ];
+                }
+
                 return (array) $object;
             }
         );
@@ -155,14 +321,41 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $headers
+     *
      * @return Request
      */
-    private function getRequest(): Request
+    private function getRequest(array $headers = [], StreamInterface $body = null): Request
     {
         /** @var Request|\PHPUnit_Framework_MockObject_MockObject $request */
         $request = $this->getMockBuilder(Request::class)
-            ->setMethods([])
+            ->setMethods(['hasHeader', 'getHeaderLine'])
             ->getMockForAbstractClass();
+
+        $request->__headers = $headers;
+        $request->__body = $body;
+
+        $request->expects(self::any())->method('hasHeader')->willReturnCallback(
+            function ($name) use ($request) {
+                return isset($request->__headers[$name]);
+            }
+        );
+
+        $request->expects(self::any())->method('getHeaderLine')->willReturnCallback(
+            function ($name) use ($request) {
+                return $request->__headers[$name];
+            }
+        );
+
+        $request->expects(self::any())->method('getBody')->willReturnCallback(
+            function () use ($request) {
+                if (null === $request->__body) {
+                    return $this->getBody();
+                }
+
+                return $request->__body;
+            }
+        );
 
         return $request;
     }
@@ -177,7 +370,7 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Response|\PHPUnit_Framework_MockObject_MockObject $response */
         $response = $this->getMockBuilder(Response::class)
-            ->setMethods(['withStatus', 'getStatusCode', 'withHeader', 'getBody'])
+            ->setMethods(['withStatus', 'getStatusCode', 'hasHeader', 'getHeaderLine', 'withHeader', 'getBody'])
             ->getMockForAbstractClass();
 
         $response->__code = $code;
@@ -195,6 +388,18 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
                 $response->__code = $code;
 
                 return $response;
+            }
+        );
+
+        $response->expects(self::any())->method('hasHeader')->willReturnCallback(
+            function ($name) use ($response) {
+                return isset($response->__headers[$name]);
+            }
+        );
+
+        $response->expects(self::any())->method('getHeaderLine')->willReturnCallback(
+            function ($name) use ($response) {
+                return $response->__headers[$name];
             }
         );
 
@@ -243,7 +448,7 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
 
         return $body;
     }
-    
+
     /**
      * @return ErrorInterface
      */

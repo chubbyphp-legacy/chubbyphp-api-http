@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Manager;
 
+use Chubbyphp\ApiHttp\Error\Error;
 use Chubbyphp\ApiHttp\Error\ErrorInterface;
 use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface;
 use Chubbyphp\Serialization\SerializerInterface;
@@ -52,10 +53,10 @@ final class ResponseManager implements ResponseManagerInterface
     }
 
     /**
-     * @param Request $request
-     * @param int     $code
-     * @param string  $accept
-     * @param object|null  $object
+     * @param Request     $request
+     * @param int         $code
+     * @param string      $accept
+     * @param object|null $object
      *
      * @return Response
      */
@@ -80,10 +81,10 @@ final class ResponseManager implements ResponseManagerInterface
     }
 
     /**
-     * @param Request $request
-     * @param int     $code
-     * @param string  $accept
-     * @param ErrorInterface   $error
+     * @param Request        $request
+     * @param int            $code
+     * @param string         $accept
+     * @param ErrorInterface $error
      *
      * @return Response
      */
@@ -97,6 +98,72 @@ final class ResponseManager implements ResponseManagerInterface
         $response->getBody()->write($body);
 
         return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @param string  $accept
+     * @param string  $contentType
+     *
+     * @return Response
+     */
+    public function createBodyNotDeserializableResponse(Request $request, string $accept, string $contentType): Response
+    {
+        return $this->createResponseByError($request, 400, $accept, new Error(
+            Error::SCOPE_BODY,
+            'body_not_deserializable',
+            'the given body is not deserializable with given content-type',
+            'deserialize',
+            [
+                'contentType' => $contentType,
+                'body' => (string) $request->getBody(),
+            ]
+        ));
+    }
+
+    /**
+     * @param Request $request
+     * @param string  $accept
+     * @param string  $type
+     * @param array   $arguments
+     *
+     * @return Response
+     */
+    public function createPermissionDeniedResponse(
+        Request $request,
+        string $accept,
+        string $type,
+        array $arguments
+    ): Response {
+        return $this->createResponseByError($request, 403, $accept, new Error(
+            Error::SCOPE_HEADER,
+            'permission_denied',
+            'the wished resource does not exist',
+            $type,
+            $arguments
+        ));
+    }
+
+    /**
+     * @param Request $request
+     * @param string  $accept
+     * @param string  $type
+     * @param array   $arguments
+     *
+     * @return Response
+     */
+    public function createResourceNotFoundResponse(
+        Request $request,
+        string $accept,
+        string $type,
+        array $arguments
+    ): Response {
+        return $this->createResponseByError($request, 404, $accept, new Error(
+            Error::SCOPE_RESOURCE,
+            'resource_not_found',
+            'the wished resource does not exist',
+            $type, $arguments
+        ));
     }
 
     /**
@@ -139,27 +206,6 @@ final class ResponseManager implements ResponseManagerInterface
     /**
      * @param Request $request
      * @param string  $accept
-     * @param string  $contentType
-     *
-     * @return Response
-     */
-    public function createBodyNotDeserializableResponse(Request $request, string $accept, string $contentType): Response
-    {
-        return $this->createResponseByError($request, 400, $accept, new Error(
-            Error::SCOPE_BODY,
-            'body_not_deserializable',
-            'the given body is not deserializable with given content-type',
-            'deserialize',
-            [
-                'contentType' => $contentType,
-                'body' => (string) $request->getBody(),
-            ]
-        ));
-    }
-
-    /**
-     * @param Request $request
-     * @param string  $accept
      * @param string  $scope
      * @param string  $type
      * @param array   $errors
@@ -179,27 +225,6 @@ final class ResponseManager implements ResponseManagerInterface
             'there where validation errors while validating the object',
             $type,
             $errors
-        ));
-    }
-
-    /**
-     * @param Request $request
-     * @param string $accept
-     * @param string $type
-     * @param array $arguments
-     * @return Response
-     */
-    public function createResourceNotFoundResponse(
-        Request $request,
-        string $accept,
-        string $type,
-        array $arguments
-    ): Response {
-        return $this->createResponseByError($request, 404, $accept, new Error(
-            Error::SCOPE_RESOURCE,
-            'resource_not_found',
-            'the wished resource does not exist',
-            $type, $arguments
         ));
     }
 }
