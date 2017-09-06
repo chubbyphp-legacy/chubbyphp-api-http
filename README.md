@@ -58,8 +58,11 @@ $object = new Model;
 $requestManager->getAccept($request); // application/json
 $requestManager->getAcceptLanguage($request); // en
 $requestManager->getContentType($request); // application/json
-$requestManager->getDataFromRequestBody($request, $object); // deserialize data from body to $object
+$requestManager->getDataFromRequestBody($request, $object, 'application/json'); // deserialize data from body to $object
 $requestManager->getDataFromRequestQuery($request, $object); // deserialize query from body to $object
+$requestManager->getSupportedAccepts(); // ['application/json', 'application/xml']
+$requestManager->getSupportedContentTypes(); // ['application/json', 'application/xml']
+$requestManager->getSupportedLocales(); // ['de', 'en']
 ```
 
 #### ResponseManager
@@ -67,6 +70,7 @@ $requestManager->getDataFromRequestQuery($request, $object); // deserialize quer
 ```php
 <?php
 
+use Chubbyphp\ApiHttp\Error\ErrorInterface;
 use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface;
 use Chubbyphp\ApiHttp\Manager\RequestManager;
 use Chubbyphp\ApiHttp\Manager\ResponseManager;
@@ -85,7 +89,20 @@ $responseManager = new ResponseManager($requestManager, $responseFactory, $seria
 $request = ...; // Request
 $object = new Model;
 
-$responseManager->createResponse($request, 200, $object); // Response
+$responseManager->createResponse($request, 200, 'application/json', $object); // Response
+$responseManager->createResponseByError($request, 400, 'application/json', $error); // Response
+$responseManager->createBodyNotDeserializableResponse($request, 'application/json', 'application/json'); // Response
+$responseManager->createPermissionDeniedResponse($request, 'application/json', 'user', ['id' => 1]); // Response
+$responseManager->createResourceNotFoundResponse($request, 'application/json', 'model', ['id' => 1]); // Response
+$responseManager->createAcceptNotSupportedResponse($request); // Response
+$responseManager->createContentTypeNotSupportedResponse($request, 'application/json'); // Response
+$responseManager->createValidationErrorResponse(
+    $request,
+    'application/json',
+    ErrorInterface::SCOPE_BODY,
+    'model',
+    ['name' => ['not.null']]
+); // Response
 ```
 
 ## Copyright
