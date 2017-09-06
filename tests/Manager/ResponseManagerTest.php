@@ -2,6 +2,7 @@
 
 namespace Chubbyphp\Tests\ApiHttp\Manager;
 
+use Chubbyphp\ApiHttp\Error\ErrorInterface;
 use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface;
 use Chubbyphp\ApiHttp\Manager\RequestManagerInterface;
 use Chubbyphp\ApiHttp\Manager\ResponseManager;
@@ -25,9 +26,27 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
             $this->getTransform()
         );
 
-        $response = $responseHandler->createResponse($this->getRequest());
+        $response = $responseHandler->createResponse($this->getRequest(), 200, 'application/json');
 
         self::assertSame(204, $response->getStatusCode());
+    }
+
+    public function testCreateResponse()
+    {
+        $responseHandler = new ResponseManager(
+            $this->getRequestManager(),
+            $this->getResponseFactory(),
+            $this->getSerializer(),
+            $this->getTransform()
+        );
+
+        $object = new \stdClass();
+        $object->key = 'value';
+
+        $response = $responseHandler->createResponse($this->getRequest(), 200, 'application/json', $object);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame('{"key":"value"}', (string) $response->getBody());
     }
 
     public function testCreateErrorResponse()
@@ -39,81 +58,39 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
             $this->getTransform()
         );
 
-        $response = $responseHandler->createResponse($this->getRequest(), 415);
-
-        self::assertSame(415, $response->getStatusCode());
-    }
-
-    public function testCreateResponseWithoutAccept()
-    {
-        $responseHandler = new ResponseManager(
-            $this->getRequestManager(),
-            $this->getResponseFactory(),
-            $this->getSerializer(),
-            $this->getTransform()
+        $response = $responseHandler->createResponseByError(
+            $this->getRequest(),
+            403,
+            'application/json',
+            $this->getError()
         );
 
-        $object = new \stdClass();
-        $object->key = 'value';
-
-        $response = $responseHandler->createResponse($this->getRequest(), 200, $object);
-
-        self::assertSame(406, $response->getStatusCode());
-    }
-
-    public function testCreateResponseWithoutAcceptButWithDefault()
-    {
-        $responseHandler = new ResponseManager(
-            $this->getRequestManager(),
-            $this->getResponseFactory(),
-            $this->getSerializer(),
-            $this->getTransform()
-        );
-
-        $object = new \stdClass();
-        $object->key = 'value';
-
-        $response = $responseHandler->createResponse($this->getRequest(), 200, $object, 'application/json');
-
-        self::assertSame(200, $response->getStatusCode());
-        self::assertSame('{"key":"value"}', (string) $response->getBody());
-    }
-
-    public function testCreateResponse()
-    {
-        $responseHandler = new ResponseManager(
-            $this->getRequestManager('application/json'),
-            $this->getResponseFactory(),
-            $this->getSerializer(),
-            $this->getTransform()
-        );
-
-        $object = new \stdClass();
-        $object->key = 'value';
-
-        $response = $responseHandler->createResponse($this->getRequest(), 200, $object);
-
-        self::assertSame(200, $response->getStatusCode());
-        self::assertSame('{"key":"value"}', (string) $response->getBody());
+        self::assertSame(403, $response->getStatusCode());
     }
 
     /**
-     * @param string|null $acceptContent
-     *
      * @return RequestManagerInterface
      */
-    private function getRequestManager(string $acceptContent = null): RequestManagerInterface
-    {
+    private function getRequestManager(
+        array $supportedAccepts = [],
+        array $supportedContentTypes = []
+    ): RequestManagerInterface {
         /** @var RequestManagerInterface|\PHPUnit_Framework_MockObject_MockObject $responseManager */
         $responseManager = $this->getMockBuilder(RequestManagerInterface::class)
-            ->setMethods(['getAccept', 'getAcceptLanguage', 'getContentType', 'getDataFromRequestBody', 'getDataFromRequestQuery'])
+            ->setMethods([
+                'getAccept',
+                'getAcceptLanguage',
+                'getContentType',
+                'getDataFromRequestBody',
+                'getDataFromRequestQuery',
+                'getSupportedAccepts',
+                'getSupportedContentTypes',
+                'getSupportedLocales'
+            ])
             ->getMock();
 
-        $responseManager->expects(self::any())->method('getAccept')->willReturnCallback(
-            function (Request $request, string $defaultContentType = null) use ($acceptContent) {
-                return $acceptContent ?: $defaultContentType;
-            }
-        );
+        $responseManager->expects(self::any())->method('getSupportedAccepts')->willReturn($supportedAccepts);
+        $responseManager->expects(self::any())->method('getSupportedContentTypes')->willReturn($supportedContentTypes);
 
         return $responseManager;
     }
@@ -265,5 +242,18 @@ final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         return $body;
+    }
+    
+    /**
+     * @return ErrorInterface
+     */
+    private function getError(): ErrorInterface
+    {
+        /** @var ErrorInterface|\PHPUnit_Framework_MockObject_MockObject $error */
+        $error = $this->getMockBuilder(ErrorInterface::class)
+            ->setMethods(['getScope', 'getKey', 'getDetail', 'getReference', 'getArguments'])
+            ->getMockForAbstractClass();
+
+        return $error;
     }
 }

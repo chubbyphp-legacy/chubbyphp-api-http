@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Manager;
 
-use Chubbyphp\ApiHttp\Error\Error;
+use Chubbyphp\ApiHttp\Error\ErrorInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -24,11 +24,11 @@ interface ResponseManagerInterface
      * @param Request $request
      * @param int     $code
      * @param string  $accept
-     * @param Error   $error
+     * @param ErrorInterface   $error
      *
      * @return Response
      */
-    public function createResponseByError(Request $request, int $code, string $accept, Error $error): Response;
+    public function createResponseByError(Request $request, int $code, string $accept, ErrorInterface $error): Response;
 
     /**
      * @param Request $request

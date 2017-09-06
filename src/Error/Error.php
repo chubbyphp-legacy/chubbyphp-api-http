@@ -4,45 +4,30 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Error;
 
-final class Error
+final class Error implements ErrorInterface
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $scope;
 
-    const SCOPE_METHOD = 'method';
-    const SCOPE_RESOURCE = 'resource';
-    const SCOPE_QUERY = 'query';
-    const SCOPE_HEADER = 'header';
-    const SCOPE_BODY = 'body';
-    const SCOPE_SERVER = 'server';
-
     /**
-     * Identifier.
-     *
      * @var string
      */
     private $key;
 
     /**
-     * Technical error description.
-     *
      * @var string|null
      */
     private $detail;
 
     /**
-     * Reference to the error causing form field, parameter, value, header, etc.
-     *
      * @var string|null
      */
     private $reference;
 
     /**
-     * Parameters which can be used by client in order to display a expressive error message.
-     *
-     * @var array|null
+     * @var array
      */
     private $arguments;
 
@@ -68,9 +53,9 @@ final class Error
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getScope()
+    public function getScope(): string
     {
         return $this->scope;
     }
@@ -100,9 +85,9 @@ final class Error
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function getArguments()
+    public function getArguments(): array
     {
         return $this->arguments;
     }

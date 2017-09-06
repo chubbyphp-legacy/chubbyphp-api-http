@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Manager;
 
-use Chubbyphp\ApiHttp\Error\Error;
+use Chubbyphp\ApiHttp\Error\ErrorInterface;
 use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface;
 use Chubbyphp\Serialization\SerializerInterface;
 use Chubbyphp\Serialization\TransformerInterface;
@@ -83,11 +83,11 @@ final class ResponseManager implements ResponseManagerInterface
      * @param Request $request
      * @param int     $code
      * @param string  $accept
-     * @param Error   $error
+     * @param ErrorInterface   $error
      *
      * @return Response
      */
-    public function createResponseByError(Request $request, int $code, string $accept, Error $error): Response
+    public function createResponseByError(Request $request, int $code, string $accept, ErrorInterface $error): Response
     {
         $response = $this->responseFactory->createResponse($code);
 
