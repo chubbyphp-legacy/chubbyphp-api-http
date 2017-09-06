@@ -14,7 +14,7 @@ A simple http handler implementation for API.
 
  * php: ~7.0
  * chubbyphp/chubbyphp-deserialization: ~1.1
- * chubbyphp/chubbyphp-negotiation: ~1.0
+ * chubbyphp/chubbyphp-negotiation: ~1.1
  * chubbyphp/chubbyphp-serialization: ~1.0
  * psr/http-message: ~1.0
 
