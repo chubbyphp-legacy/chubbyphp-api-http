@@ -10,12 +10,13 @@ use Chubbyphp\Negotiation\AcceptLanguageNegotiatorInterface;
 use Chubbyphp\Negotiation\AcceptNegotiatorInterface;
 use Chubbyphp\Negotiation\ContentTypeNegotiatorInterface;
 use Chubbyphp\Negotiation\NegotiatedValue;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
  * @covers \Chubbyphp\ApiHttp\Manager\RequestManager
  */
-final class RequestManagerTest extends \PHPUnit_Framework_TestCase
+final class RequestManagerTest extends TestCase
 {
     public function testGetAccept()
     {

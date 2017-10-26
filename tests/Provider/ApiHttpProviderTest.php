@@ -11,12 +11,13 @@ use Chubbyphp\Negotiation\AcceptLanguageNegotiator;
 use Chubbyphp\Negotiation\AcceptNegotiator;
 use Chubbyphp\Negotiation\ContentTypeNegotiator;
 use Chubbyphp\Serialization\Provider\SerializationProvider;
+use PHPUnit\Framework\TestCase;
 use Pimple\Container;
 
 /**
  * @covers \Chubbyphp\ApiHttp\Provider\ApiHttpProvider
  */
-final class ApiHttpProviderTest extends \PHPUnit_Framework_TestCase
+final class ApiHttpProviderTest extends TestCase
 {
     public function testRegister()
     {

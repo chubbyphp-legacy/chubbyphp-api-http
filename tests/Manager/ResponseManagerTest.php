@@ -9,6 +9,7 @@ use Chubbyphp\ApiHttp\Manager\RequestManagerInterface;
 use Chubbyphp\ApiHttp\Manager\ResponseManager;
 use Chubbyphp\Serialization\SerializerInterface;
 use Chubbyphp\Serialization\TransformerInterface;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\StreamInterface;
@@ -16,7 +17,7 @@ use Psr\Http\Message\StreamInterface;
 /**
  * @covers \Chubbyphp\ApiHttp\Manager\ResponseManager
  */
-final class ResponseManagerTest extends \PHPUnit_Framework_TestCase
+final class ResponseManagerTest extends TestCase
 {
     public function testCreateResponse()
     {

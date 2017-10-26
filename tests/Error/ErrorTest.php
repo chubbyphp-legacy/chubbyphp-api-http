@@ -3,11 +3,12 @@
 namespace Chubbyphp\Tests\ApiHttp\Error;
 
 use Chubbyphp\ApiHttp\Error\Error;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\ApiHttp\Error\Error
  */
-final class ErrorTest extends \PHPUnit_Framework_TestCase
+final class ErrorTest extends TestCase
 {
     public function testScopeAndKey()
     {

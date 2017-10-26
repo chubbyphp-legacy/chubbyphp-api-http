@@ -5,11 +5,12 @@ namespace Chubbyphp\Tests\ApiHttp\Error;
 use Chubbyphp\ApiHttp\Error\Error;
 use Chubbyphp\ApiHttp\Serialization\ErrorMapping;
 use Chubbyphp\Serialization\Mapping\FieldMapping;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\ApiHttp\Serialization\ErrorMapping
  */
-final class ErrorMappingTest extends \PHPUnit_Framework_TestCase
+final class ErrorMappingTest extends TestCase
 {
     public function testGetClass()
     {
