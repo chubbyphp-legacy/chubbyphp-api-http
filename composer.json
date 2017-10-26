@@ -11,9 +11,9 @@
     ],
     "require": {
         "php": "~7.0",
-        "chubbyphp/chubbyphp-deserialization": "~1.1",
-        "chubbyphp/chubbyphp-negotiation": "~1.1",
-        "chubbyphp/chubbyphp-serialization": "~1.0",
+        "chubbyphp/chubbyphp-deserialization": "~2.0@beta",
+        "chubbyphp/chubbyphp-negotiation": "~1.2",
+        "chubbyphp/chubbyphp-serialization": "~2.0@beta",
         "psr/http-message": "~1.0"
     },
     "require-dev": {
