@@ -12,10 +12,11 @@ use Psr\Http\Message\ResponseInterface as Response;
 interface ResponseManagerInterface
 {
     /**
-     * @param object|null            $object
+     * @param object                 $object
      * @param string                 $accept
      * @param int                    $status
      * @param NormalizerContext|null $context
+     *
      * @return Response
      */
     public function create(
@@ -26,17 +27,27 @@ interface ResponseManagerInterface
     ): Response;
 
     /**
-     * @param string $url
-     * @param int    $code
+     * @param string $accept
+     * @param int    $status
+     *
      * @return Response
      */
-    public function createRedirect(string $url, int $code = 307): Response;
+    public function createEmpty(string $accept, int $status = 204): Response;
+
+    /**
+     * @param string $location
+     * @param int    $status
+     *
+     * @return Response
+     */
+    public function createRedirect(string $location, int $status = 307): Response;
 
     /**
      * @param ErrorInterface         $error
      * @param string                 $accept
      * @param int                    $status
      * @param NormalizerContext|null $context
+     *
      * @return Response
      */
     public function createByError(
@@ -47,16 +58,19 @@ interface ResponseManagerInterface
     ): Response;
 
     /**
-     * @param string                 $type
-     * @param array                  $arguments
+     * @param Request                $request
      * @param string                 $accept
+     * @param string                 $authenticationType
+     * @param string                 $reason
      * @param NormalizerContext|null $context
+     *
      * @return Response
      */
     public function createNotAuthenticated(
-        string $type,
-        array $arguments,
+        Request $request,
         string $accept,
+        string $authenticationType,
+        string $reason,
         NormalizerContext $context = null
     ): Response;
 
@@ -65,6 +79,7 @@ interface ResponseManagerInterface
      * @param array                  $arguments
      * @param string                 $accept
      * @param NormalizerContext|null $context
+     *
      * @return Response
      */
     public function createNotAuthorized(
@@ -79,6 +94,7 @@ interface ResponseManagerInterface
      * @param array                  $arguments
      * @param string                 $accept
      * @param NormalizerContext|null $context
+     *
      * @return Response
      */
     public function createResourceNotFound(
@@ -100,6 +116,7 @@ interface ResponseManagerInterface
      * @param string                 $accept
      * @param array                  $supportedContentTypes
      * @param NormalizerContext|null $context
+     *
      * @return Response
      */
     public function createContentTypeNotSupported(

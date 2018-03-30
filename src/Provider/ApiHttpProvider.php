@@ -24,8 +24,7 @@ final class ApiHttpProvider implements ServiceProviderInterface
                 $container['api-http.request.acceptNegotiator'],
                 $container['api-http.request.acceptLanguageNegotiator'],
                 $container['api-http.request.contentTypeNegotiator'],
-                $container['deserializer'],
-                $container['deserializer.transformer']
+                $container['deserializer']
             );
         };
 
@@ -55,10 +54,9 @@ final class ApiHttpProvider implements ServiceProviderInterface
 
         $container['api-http.response.manager'] = function () use ($container) {
             return new ResponseManager(
-                $container['api-http.request.manager'],
                 $container['api-http.response.factory'],
-                $container['serializer'],
-                $container['serializer.transformer']
+                $container['deserializer'],
+                $container['serializer']
             );
         };
 

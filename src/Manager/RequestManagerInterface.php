@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Manager;
 
+use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 interface RequestManagerInterface
@@ -39,7 +40,12 @@ interface RequestManagerInterface
      *
      * @return object|null
      */
-    public function getDataFromRequestBody(Request $request, $object, string $contentType);
+    public function getDataFromRequestBody(
+        Request $request,
+        $object,
+        string $contentType,
+        DenormalizerContextInterface $context = null
+    );
 
     /**
      * @param Request       $request
@@ -47,20 +53,5 @@ interface RequestManagerInterface
      *
      * @return object
      */
-    public function getDataFromRequestQuery(Request $request, $object);
-
-    /**
-     * @return string[]
-     */
-    public function getSupportedAccepts(): array;
-
-    /**
-     * @return string[]
-     */
-    public function getSupportedContentTypes(): array;
-
-    /**
-     * @return string[]
-     */
-    public function getSupportedLocales(): array;
+    public function getDataFromRequestQuery(Request $request, $object, DenormalizerContextInterface $context = null);
 }

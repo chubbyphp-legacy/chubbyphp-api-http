@@ -7,22 +7,23 @@ namespace Chubbyphp\ApiHttp\Manager;
 use Chubbyphp\ApiHttp\Error\Error;
 use Chubbyphp\ApiHttp\Error\ErrorInterface;
 use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface;
+use Chubbyphp\Deserialization\DeserializerInterface;
+use Chubbyphp\Serialization\Normalizer\NormalizerContext;
 use Chubbyphp\Serialization\SerializerInterface;
-use Chubbyphp\Serialization\TransformerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 final class ResponseManager implements ResponseManagerInterface
 {
     /**
-     * @var RequestManagerInterface
-     */
-    private $requestManager;
-
-    /**
      * @var ResponseFactoryInterface
      */
     private $responseFactory;
+
+    /**
+     * @var DeserializerInterface
+     */
+    private $deserializer;
 
     /**
      * @var SerializerInterface
@@ -30,140 +31,154 @@ final class ResponseManager implements ResponseManagerInterface
     private $serializer;
 
     /**
-     * @var TransformerInterface
-     */
-    private $transformer;
-
-    /**
-     * @param RequestManagerInterface  $requestManager
      * @param ResponseFactoryInterface $responseFactory
+     * @param DeserializerInterface    $deserializer
      * @param SerializerInterface      $serializer
-     * @param TransformerInterface     $transformer
      */
     public function __construct(
-        RequestManagerInterface $requestManager,
         ResponseFactoryInterface $responseFactory,
-        SerializerInterface $serializer,
-        TransformerInterface $transformer
+        DeserializerInterface $deserializer,
+        SerializerInterface $serializer
     ) {
-        $this->requestManager = $requestManager;
         $this->responseFactory = $responseFactory;
+        $this->deserializer = $deserializer;
         $this->serializer = $serializer;
-        $this->transformer = $transformer;
     }
 
     /**
-     * @param Request     $request
-     * @param int         $code
-     * @param string      $accept
-     * @param object|null $object
+     * @param object                 $object
+     * @param string                 $accept
+     * @param int                    $status
+     * @param NormalizerContext|null $context
      *
      * @return Response
      */
-    public function createResponse(Request $request, int $code, string $accept, $object = null): Response
-    {
-        $response = $this->responseFactory->createResponse($code);
+    public function create(
+        $object,
+        string $accept,
+        int $status = 200,
+        NormalizerContext $context = null
+    ): Response {
+        $body = $this->serializer->serialize($object, $accept, $context);
 
-        if (null === $object) {
-            if (200 === $code) {
-                return $response->withStatus(204);
-            }
-
-            return $response;
-        }
-
-        $body = $this->transformer->transform($this->serializer->serialize($request, $object), $accept);
-
-        $response = $response->withStatus($code)->withHeader('Content-Type', $accept);
+        $response = $this->responseFactory->createResponse($status)->withHeader('Content-Type', $accept);
         $response->getBody()->write($body);
 
         return $response;
     }
 
     /**
-     * @param Request        $request
-     * @param int            $code
-     * @param string         $accept
-     * @param ErrorInterface $error
+     * @param string $accept
+     * @param int    $status
      *
      * @return Response
      */
-    public function createResponseByError(Request $request, int $code, string $accept, ErrorInterface $error): Response
+    public function createEmpty(string $accept, int $status = 204): Response
     {
-        $response = $this->responseFactory->createResponse($code);
-
-        $body = $this->transformer->transform($this->serializer->serialize($request, $error), $accept);
-
-        $response = $response->withStatus($code)->withHeader('Content-Type', $accept);
-        $response->getBody()->write($body);
-
-        return $response;
+        return $this->responseFactory->createResponse($status)->withHeader('Content-Type', $accept);
     }
 
     /**
-     * @param Request $request
-     * @param string  $accept
-     * @param string  $contentType
+     * @param string $location
+     * @param int    $status
      *
      * @return Response
      */
-    public function createBodyNotDeserializableResponse(Request $request, string $accept, string $contentType): Response
+    public function createRedirect(string $location, int $status = 307): Response
     {
-        return $this->createResponseByError($request, 400, $accept, new Error(
-            Error::SCOPE_BODY,
-            'body_not_deserializable',
-            'the given body is not deserializable with given content-type',
-            'deserialize',
-            [
-                'contentType' => $contentType,
-                'body' => (string) $request->getBody(),
-            ]
-        ));
+        return $this->responseFactory->createResponse($status)->withAddedHeader('Location', $location);
     }
 
     /**
-     * @param Request $request
-     * @param string  $accept
-     * @param string  $type
-     * @param array   $arguments
+     * @param ErrorInterface         $error
+     * @param string                 $accept
+     * @param int                    $status
+     * @param NormalizerContext|null $context
      *
      * @return Response
      */
-    public function createPermissionDeniedResponse(
+    public function createByError(
+        ErrorInterface $error,
+        string $accept,
+        int $status = 400,
+        NormalizerContext $context = null
+    ): Response {
+        return $this->create($error, $accept, $status, $context);
+    }
+
+    /**
+     * @param Request                $request
+     * @param string                 $accept
+     * @param string                 $authenticationType
+     * @param string                 $reason
+     * @param NormalizerContext|null $context
+     *
+     * @return Response
+     */
+    public function createNotAuthenticated(
         Request $request,
         string $accept,
-        string $type,
-        array $arguments
+        string $authenticationType,
+        string $reason,
+        NormalizerContext $context = null
     ): Response {
-        return $this->createResponseByError($request, 403, $accept, new Error(
+        return $this->createByError(new Error(
+            Error::SCOPE_HEADER,
+            'not_authenticated',
+            'missing or invalid authentication token',
+            'authentication',
+            [
+                'type' => $authenticationType,
+                'value' => $request->getHeaderLine('Authorization'),
+                'reason' => $reason,
+            ]
+        ), $accept, 401, $context);
+    }
+
+    /**
+     * @param string                 $type
+     * @param array                  $arguments
+     * @param string                 $accept
+     * @param NormalizerContext|null $context
+     *
+     * @return Response
+     */
+    public function createNotAuthorized(
+        string $type,
+        array $arguments,
+        string $accept,
+        NormalizerContext $context = null
+    ): Response {
+        return $this->createByError(new Error(
             Error::SCOPE_HEADER,
             'permission_denied',
-            'the wished resource does not exist',
+            'authenticated client/user is not allowed to perform this action',
             $type,
             $arguments
-        ));
+        ), $accept, 403, $context);
     }
 
     /**
-     * @param Request $request
-     * @param string  $accept
-     * @param string  $type
-     * @param array   $arguments
+     * @param string                 $type
+     * @param array                  $arguments
+     * @param string                 $accept
+     * @param NormalizerContext|null $context
      *
      * @return Response
      */
-    public function createResourceNotFoundResponse(
-        Request $request,
-        string $accept,
+    public function createResourceNotFound(
         string $type,
-        array $arguments
+        array $arguments,
+        string $accept,
+        NormalizerContext $context = null
     ): Response {
-        return $this->createResponseByError($request, 404, $accept, new Error(
+        return $this->createByError(new Error(
             Error::SCOPE_RESOURCE,
             'resource_not_found',
-            'the wished resource does not exist',
-            $type, $arguments
-        ));
+            'the requested resource cannot be found',
+            $type,
+            $arguments
+        ), $accept, 404, $context);
     }
 
     /**
@@ -171,60 +186,38 @@ final class ResponseManager implements ResponseManagerInterface
      *
      * @return Response
      */
-    public function createAcceptNotSupportedResponse(Request $request): Response
+    public function createAcceptNotSupported(Request $request): Response
     {
-        $response = $this->responseFactory->createResponse(406);
-        $response = $response->withHeader('X-Not-Acceptable', sprintf(
+        return $this->responseFactory->createResponse(406)->withHeader('X-Not-Acceptable', sprintf(
             'Accept "%s" is not supported, supported are %s',
             $request->getHeaderLine('Accept'),
-            implode(', ', $this->requestManager->getSupportedAccepts())
+            implode(', ', $this->serializer->getContentTypes())
         ));
-
-        return $response;
     }
 
     /**
-     * @param Request $request
-     * @param string  $accept
+     * @param Request                $request
+     * @param string                 $accept
+     * @param array                  $supportedContentTypes
+     * @param NormalizerContext|null $context
      *
      * @return Response
      */
-    public function createContentTypeNotSupportedResponse(Request $request, string $accept): Response
-    {
-        return $this->createResponseByError($request, 415, $accept, new Error(
+    public function createContentTypeNotSupported(
+        Request $request,
+        string $accept,
+        array $supportedContentTypes,
+        NormalizerContext $context = null
+    ): Response {
+        return $this->createByError(new Error(
             Error::SCOPE_HEADER,
             'contentype_not_supported',
             'the given content type is not supported',
             'content-type',
             [
                 'contentType' => $request->getHeaderLine('Content-Type'),
-                'supportedContentTypes' => $this->requestManager->getSupportedContentTypes(),
+                'supportedContentTypes' => $this->deserializer->getContentTypes(),
             ]
-        ));
-    }
-
-    /**
-     * @param Request $request
-     * @param string  $accept
-     * @param string  $scope
-     * @param string  $type
-     * @param array   $errors
-     *
-     * @return Response
-     */
-    public function createValidationErrorResponse(
-        Request $request,
-        string $accept,
-        string $scope,
-        string $type,
-        array $errors
-    ): Response {
-        return $this->createResponseByError($request, 422, $accept, new Error(
-            $scope,
-            'validation_error',
-            'there where validation errors while validating the object',
-            $type,
-            $errors
-        ));
+        ), $accept, 415, $context);
     }
 }

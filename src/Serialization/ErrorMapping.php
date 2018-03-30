@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Chubbyphp\ApiHttp\Serialization;
 
 use Chubbyphp\ApiHttp\Error\Error;
-use Chubbyphp\Serialization\Mapping\FieldMapping;
-use Chubbyphp\Serialization\Mapping\FieldMappingInterface;
-use Chubbyphp\Serialization\Mapping\LinkMappingInterface;
-use Chubbyphp\Serialization\Mapping\ObjectMappingInterface;
+use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingBuilder;
+use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingInterface;
+use Chubbyphp\Serialization\Mapping\NormalizationLinkMappingInterface;
+use Chubbyphp\Serialization\Mapping\NormalizationObjectMappingInterface;
 
-final class ErrorMapping implements ObjectMappingInterface
+final class ErrorMapping implements NormalizationObjectMappingInterface
 {
     /**
      * @return string
@@ -23,37 +23,43 @@ final class ErrorMapping implements ObjectMappingInterface
     /**
      * @return string
      */
-    public function getType(): string
+    public function getNormalizationType(): string
     {
         return 'error';
     }
 
     /**
-     * @return FieldMappingInterface[]
+     * @param string $path
+     *
+     * @return NormalizationFieldMappingInterface[]
      */
-    public function getFieldMappings(): array
+    public function getNormalizationFieldMappings(string $path): array
     {
         return [
-            new FieldMapping('scope'),
-            new FieldMapping('key'),
-            new FieldMapping('detail'),
-            new FieldMapping('reference'),
-            new FieldMapping('arguments'),
+            NormalizationFieldMappingBuilder::create('scope')->getMapping(),
+            NormalizationFieldMappingBuilder::create('key')->getMapping(),
+            NormalizationFieldMappingBuilder::create('detail')->getMapping(),
+            NormalizationFieldMappingBuilder::create('reference')->getMapping(),
+            NormalizationFieldMappingBuilder::create('arguments')->getMapping(),
         ];
     }
 
     /**
-     * @return FieldMappingInterface[]
+     * @param string $path
+     *
+     * @return NormalizationFieldMappingInterface[]
      */
-    public function getEmbeddedFieldMappings(): array
+    public function getNormalizationEmbeddedFieldMappings(string $path): array
     {
         return [];
     }
 
     /**
-     * @return LinkMappingInterface[]
+     * @param string $path
+     *
+     * @return NormalizationLinkMappingInterface[]
      */
-    public function getLinkMappings(): array
+    public function getNormalizationLinkMappings(string $path): array
     {
         return [];
     }

@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Manager;
 
+use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\DeserializerInterface;
-use Chubbyphp\Deserialization\Transformer\TransformerException;
-use Chubbyphp\Deserialization\TransformerInterface;
 use Chubbyphp\Negotiation\AcceptLanguageNegotiatorInterface;
 use Chubbyphp\Negotiation\AcceptNegotiatorInterface;
 use Chubbyphp\Negotiation\ContentTypeNegotiatorInterface;
@@ -35,29 +34,21 @@ final class RequestManager implements RequestManagerInterface
     private $deserializer;
 
     /**
-     * @var TransformerInterface
-     */
-    private $transformer;
-
-    /**
      * @param AcceptNegotiatorInterface         $acceptNegotiator
      * @param AcceptLanguageNegotiatorInterface $acceptLanguageNegotiator
      * @param ContentTypeNegotiatorInterface    $contentTypeNegotiator
      * @param DeserializerInterface             $deserializer
-     * @param TransformerInterface              $transformer
      */
     public function __construct(
         AcceptNegotiatorInterface $acceptNegotiator,
         AcceptLanguageNegotiatorInterface $acceptLanguageNegotiator,
         ContentTypeNegotiatorInterface $contentTypeNegotiator,
-        DeserializerInterface $deserializer,
-        TransformerInterface $transformer
+        DeserializerInterface $deserializer
     ) {
         $this->acceptNegotiator = $acceptNegotiator;
         $this->acceptLanguageNegotiator = $acceptLanguageNegotiator;
         $this->contentTypeNegotiator = $contentTypeNegotiator;
         $this->deserializer = $deserializer;
-        $this->transformer = $transformer;
     }
 
     /**
@@ -106,69 +97,31 @@ final class RequestManager implements RequestManagerInterface
     }
 
     /**
-     * @param Request       $request
-     * @param object|string $object
-     * @param string        $contentType
+     * @param Request                      $request
+     * @param object|string                $object
+     * @param string                       $contentType
+     * @param DenormalizerContextInterface $context
      *
-     * @return object|null
+     * @return object
      */
-    public function getDataFromRequestBody(Request $request, $object, string $contentType)
-    {
-        try {
-            $data = $this->transformer->transform((string) $request->getBody(), $contentType);
-        } catch (TransformerException $e) {
-            return null;
-        }
-
-        $method = $this->getSerializerMethod($object);
-
-        return $this->deserializer->$method($data, $object);
+    public function getDataFromRequestBody(
+        Request $request,
+        $object,
+        string $contentType,
+        DenormalizerContextInterface $context = null
+    ) {
+        return $this->deserializer->deserialize($object, (string) $request->getBody(), $contentType, $context);
     }
 
     /**
-     * @param Request       $request
-     * @param object|string $object
+     * @param Request                      $request
+     * @param object|string                $object
+     * @param DenormalizerContextInterface $context
      *
-     * @return object|null
+     * @return object
      */
-    public function getDataFromRequestQuery(Request $request, $object)
+    public function getDataFromRequestQuery(Request $request, $object, DenormalizerContextInterface $context = null)
     {
-        $method = $this->getSerializerMethod($object);
-
-        return $this->deserializer->$method($request->getQueryParams(), $object);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getSupportedAccepts(): array
-    {
-        return $this->acceptNegotiator->getSupportedMediaTypes();
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getSupportedContentTypes(): array
-    {
-        return $this->contentTypeNegotiator->getSupportedMediaTypes();
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getSupportedLocales(): array
-    {
-        return $this->acceptLanguageNegotiator->getSupportedLocales();
-    }
-
-    /**
-     * @param object|string $object
-     *
-     * @return string
-     */
-    private function getSerializerMethod($object): string
-    {
-        return is_string($object) ? 'deserializeByClass' : 'deserializeByObject';
+        return $this->deserializer->denormalize($object, $request->getQueryParams(), $context);
     }
 }
