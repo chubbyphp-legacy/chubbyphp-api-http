@@ -7,8 +7,7 @@ namespace Chubbyphp\ApiHttp\Manager;
 use Chubbyphp\ApiHttp\Error\Error;
 use Chubbyphp\ApiHttp\Error\ErrorInterface;
 use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface;
-use Chubbyphp\Deserialization\DeserializerInterface;
-use Chubbyphp\Serialization\Normalizer\NormalizerContext;
+use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
 use Chubbyphp\Serialization\SerializerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -21,35 +20,27 @@ final class ResponseManager implements ResponseManagerInterface
     private $responseFactory;
 
     /**
-     * @var DeserializerInterface
-     */
-    private $deserializer;
-
-    /**
      * @var SerializerInterface
      */
     private $serializer;
 
     /**
      * @param ResponseFactoryInterface $responseFactory
-     * @param DeserializerInterface    $deserializer
      * @param SerializerInterface      $serializer
      */
     public function __construct(
         ResponseFactoryInterface $responseFactory,
-        DeserializerInterface $deserializer,
         SerializerInterface $serializer
     ) {
         $this->responseFactory = $responseFactory;
-        $this->deserializer = $deserializer;
         $this->serializer = $serializer;
     }
 
     /**
-     * @param object                 $object
-     * @param string                 $accept
-     * @param int                    $status
-     * @param NormalizerContext|null $context
+     * @param object                          $object
+     * @param string                          $accept
+     * @param int                             $status
+     * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
@@ -57,7 +48,7 @@ final class ResponseManager implements ResponseManagerInterface
         $object,
         string $accept,
         int $status = 200,
-        NormalizerContext $context = null
+        NormalizerContextInterface $context = null
     ): Response {
         $body = $this->serializer->serialize($object, $accept, $context);
 
@@ -86,14 +77,14 @@ final class ResponseManager implements ResponseManagerInterface
      */
     public function createRedirect(string $location, int $status = 307): Response
     {
-        return $this->responseFactory->createResponse($status)->withAddedHeader('Location', $location);
+        return $this->responseFactory->createResponse($status)->withHeader('Location', $location);
     }
 
     /**
-     * @param ErrorInterface         $error
-     * @param string                 $accept
-     * @param int                    $status
-     * @param NormalizerContext|null $context
+     * @param ErrorInterface                  $error
+     * @param string                          $accept
+     * @param int                             $status
+     * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
@@ -101,17 +92,17 @@ final class ResponseManager implements ResponseManagerInterface
         ErrorInterface $error,
         string $accept,
         int $status = 400,
-        NormalizerContext $context = null
+        NormalizerContextInterface $context = null
     ): Response {
         return $this->create($error, $accept, $status, $context);
     }
 
     /**
-     * @param Request                $request
-     * @param string                 $accept
-     * @param string                 $authenticationType
-     * @param string                 $reason
-     * @param NormalizerContext|null $context
+     * @param Request                         $request
+     * @param string                          $accept
+     * @param string                          $authenticationType
+     * @param string                          $reason
+     * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
@@ -120,7 +111,7 @@ final class ResponseManager implements ResponseManagerInterface
         string $accept,
         string $authenticationType,
         string $reason,
-        NormalizerContext $context = null
+        NormalizerContextInterface $context = null
     ): Response {
         return $this->createByError(new Error(
             Error::SCOPE_HEADER,
@@ -136,10 +127,10 @@ final class ResponseManager implements ResponseManagerInterface
     }
 
     /**
-     * @param string                 $type
-     * @param array                  $arguments
-     * @param string                 $accept
-     * @param NormalizerContext|null $context
+     * @param string                          $type
+     * @param array                           $arguments
+     * @param string                          $accept
+     * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
@@ -147,7 +138,7 @@ final class ResponseManager implements ResponseManagerInterface
         string $type,
         array $arguments,
         string $accept,
-        NormalizerContext $context = null
+        NormalizerContextInterface $context = null
     ): Response {
         return $this->createByError(new Error(
             Error::SCOPE_HEADER,
@@ -159,10 +150,10 @@ final class ResponseManager implements ResponseManagerInterface
     }
 
     /**
-     * @param string                 $type
-     * @param array                  $arguments
-     * @param string                 $accept
-     * @param NormalizerContext|null $context
+     * @param string                          $type
+     * @param array                           $arguments
+     * @param string                          $accept
+     * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
@@ -170,7 +161,7 @@ final class ResponseManager implements ResponseManagerInterface
         string $type,
         array $arguments,
         string $accept,
-        NormalizerContext $context = null
+        NormalizerContextInterface $context = null
     ): Response {
         return $this->createByError(new Error(
             Error::SCOPE_RESOURCE,
@@ -196,10 +187,10 @@ final class ResponseManager implements ResponseManagerInterface
     }
 
     /**
-     * @param Request                $request
-     * @param string                 $accept
-     * @param array                  $supportedContentTypes
-     * @param NormalizerContext|null $context
+     * @param Request                         $request
+     * @param string                          $accept
+     * @param array                           $supportedContentTypes
+     * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
@@ -207,7 +198,7 @@ final class ResponseManager implements ResponseManagerInterface
         Request $request,
         string $accept,
         array $supportedContentTypes,
-        NormalizerContext $context = null
+        NormalizerContextInterface $context = null
     ): Response {
         return $this->createByError(new Error(
             Error::SCOPE_HEADER,
@@ -216,7 +207,7 @@ final class ResponseManager implements ResponseManagerInterface
             'content-type',
             [
                 'contentType' => $request->getHeaderLine('Content-Type'),
-                'supportedContentTypes' => $this->deserializer->getContentTypes(),
+                'supportedContentTypes' => $supportedContentTypes,
             ]
         ), $accept, 415, $context);
     }

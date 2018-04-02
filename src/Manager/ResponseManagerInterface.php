@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Chubbyphp\ApiHttp\Manager;
 
 use Chubbyphp\ApiHttp\Error\ErrorInterface;
-use Chubbyphp\Serialization\Normalizer\NormalizerContext;
+use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 interface ResponseManagerInterface
 {
     /**
-     * @param object                 $object
-     * @param string                 $accept
-     * @param int                    $status
-     * @param NormalizerContext|null $context
+     * @param object                          $object
+     * @param string                          $accept
+     * @param int                             $status
+     * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
@@ -23,7 +23,7 @@ interface ResponseManagerInterface
         $object,
         string $accept,
         int $status = 200,
-        NormalizerContext $context = null
+        NormalizerContextInterface $context = null
     ): Response;
 
     /**
@@ -43,10 +43,10 @@ interface ResponseManagerInterface
     public function createRedirect(string $location, int $status = 307): Response;
 
     /**
-     * @param ErrorInterface         $error
-     * @param string                 $accept
-     * @param int                    $status
-     * @param NormalizerContext|null $context
+     * @param ErrorInterface                  $error
+     * @param string                          $accept
+     * @param int                             $status
+     * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
@@ -54,15 +54,15 @@ interface ResponseManagerInterface
         ErrorInterface $error,
         string $accept,
         int $status = 400,
-        NormalizerContext $context = null
+        NormalizerContextInterface $context = null
     ): Response;
 
     /**
-     * @param Request                $request
-     * @param string                 $accept
-     * @param string                 $authenticationType
-     * @param string                 $reason
-     * @param NormalizerContext|null $context
+     * @param Request                         $request
+     * @param string                          $accept
+     * @param string                          $authenticationType
+     * @param string                          $reason
+     * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
@@ -71,14 +71,14 @@ interface ResponseManagerInterface
         string $accept,
         string $authenticationType,
         string $reason,
-        NormalizerContext $context = null
+        NormalizerContextInterface $context = null
     ): Response;
 
     /**
-     * @param string                 $type
-     * @param array                  $arguments
-     * @param string                 $accept
-     * @param NormalizerContext|null $context
+     * @param string                          $type
+     * @param array                           $arguments
+     * @param string                          $accept
+     * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
@@ -86,14 +86,14 @@ interface ResponseManagerInterface
         string $type,
         array $arguments,
         string $accept,
-        NormalizerContext $context = null
+        NormalizerContextInterface $context = null
     ): Response;
 
     /**
-     * @param string                 $type
-     * @param array                  $arguments
-     * @param string                 $accept
-     * @param NormalizerContext|null $context
+     * @param string                          $type
+     * @param array                           $arguments
+     * @param string                          $accept
+     * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
@@ -101,7 +101,7 @@ interface ResponseManagerInterface
         string $type,
         array $arguments,
         string $accept,
-        NormalizerContext $context = null
+        NormalizerContextInterface $context = null
     ): Response;
 
     /**
@@ -112,10 +112,10 @@ interface ResponseManagerInterface
     public function createAcceptNotSupported(Request $request): Response;
 
     /**
-     * @param Request                $request
-     * @param string                 $accept
-     * @param array                  $supportedContentTypes
-     * @param NormalizerContext|null $context
+     * @param Request                         $request
+     * @param string                          $accept
+     * @param array                           $supportedContentTypes
+     * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
@@ -123,6 +123,6 @@ interface ResponseManagerInterface
         Request $request,
         string $accept,
         array $supportedContentTypes,
-        NormalizerContext $context = null
+        NormalizerContextInterface $context = null
     ): Response;
 }
