@@ -88,7 +88,7 @@ final class ResponseManager implements ResponseManagerInterface
      *
      * @return Response
      */
-    public function createByError(
+    public function createFromError(
         ErrorInterface $error,
         string $accept,
         int $status = 400,
@@ -98,54 +98,34 @@ final class ResponseManager implements ResponseManagerInterface
     }
 
     /**
-     * @param Request                         $request
      * @param string                          $accept
-     * @param string                          $authenticationType
-     * @param string                          $reason
      * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
-    public function createNotAuthenticated(
-        Request $request,
-        string $accept,
-        string $authenticationType,
-        string $reason,
-        NormalizerContextInterface $context = null
-    ): Response {
-        return $this->createByError(new Error(
+    public function createNotAuthenticated(string $accept, NormalizerContextInterface $context = null): Response
+    {
+        return $this->createFromError(new Error(
             Error::SCOPE_HEADER,
             'not_authenticated',
-            'missing or invalid authentication token',
-            'authentication',
-            [
-                'type' => $authenticationType,
-                'value' => $request->getHeaderLine('Authorization'),
-                'reason' => $reason,
-            ]
+            'missing or invalid authentication token to perform the request',
+            'authentication'
         ), $accept, 401, $context);
     }
 
     /**
-     * @param string                          $type
-     * @param array                           $arguments
      * @param string                          $accept
      * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
-    public function createNotAuthorized(
-        string $type,
-        array $arguments,
-        string $accept,
-        NormalizerContextInterface $context = null
-    ): Response {
-        return $this->createByError(new Error(
+    public function createNotAuthorized(string $accept, NormalizerContextInterface $context = null): Response
+    {
+        return $this->createFromError(new Error(
             Error::SCOPE_HEADER,
             'permission_denied',
-            'authenticated client/user is not allowed to perform this action',
-            $type,
-            $arguments
+            'missing authorization to perform request',
+            'authorization'
         ), $accept, 403, $context);
     }
 
@@ -163,7 +143,7 @@ final class ResponseManager implements ResponseManagerInterface
         string $accept,
         NormalizerContextInterface $context = null
     ): Response {
-        return $this->createByError(new Error(
+        return $this->createFromError(new Error(
             Error::SCOPE_RESOURCE,
             'resource_not_found',
             'the requested resource cannot be found',
@@ -173,21 +153,21 @@ final class ResponseManager implements ResponseManagerInterface
     }
 
     /**
-     * @param Request $request
+     * @param string $accept
      *
      * @return Response
      */
-    public function createAcceptNotSupported(Request $request): Response
+    public function createAcceptNotSupported(string $accept): Response
     {
         return $this->responseFactory->createResponse(406)->withHeader('X-Not-Acceptable', sprintf(
             'Accept "%s" is not supported, supported are %s',
-            $request->getHeaderLine('Accept'),
+            $accept,
             implode(', ', $this->serializer->getContentTypes())
         ));
     }
 
     /**
-     * @param Request                         $request
+     * @param string                          $contentType
      * @param string                          $accept
      * @param array                           $supportedContentTypes
      * @param NormalizerContextInterface|null $context
@@ -195,18 +175,18 @@ final class ResponseManager implements ResponseManagerInterface
      * @return Response
      */
     public function createContentTypeNotSupported(
-        Request $request,
+        string $contentType,
         string $accept,
         array $supportedContentTypes,
         NormalizerContextInterface $context = null
     ): Response {
-        return $this->createByError(new Error(
+        return $this->createFromError(new Error(
             Error::SCOPE_HEADER,
             'contentype_not_supported',
             'the given content type is not supported',
             'content-type',
             [
-                'contentType' => $request->getHeaderLine('Content-Type'),
+                'contentType' => $contentType,
                 'supportedContentTypes' => $supportedContentTypes,
             ]
         ), $accept, 415, $context);

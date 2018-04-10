@@ -6,7 +6,6 @@ namespace Chubbyphp\ApiHttp\Manager;
 
 use Chubbyphp\ApiHttp\Error\ErrorInterface;
 use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 interface ResponseManagerInterface
@@ -50,7 +49,7 @@ interface ResponseManagerInterface
      *
      * @return Response
      */
-    public function createByError(
+    public function createFromError(
         ErrorInterface $error,
         string $accept,
         int $status = 400,
@@ -58,36 +57,20 @@ interface ResponseManagerInterface
     ): Response;
 
     /**
-     * @param Request                         $request
      * @param string                          $accept
-     * @param string                          $authenticationType
-     * @param string                          $reason
      * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
-    public function createNotAuthenticated(
-        Request $request,
-        string $accept,
-        string $authenticationType,
-        string $reason,
-        NormalizerContextInterface $context = null
-    ): Response;
+    public function createNotAuthenticated(string $accept, NormalizerContextInterface $context = null): Response;
 
     /**
-     * @param string                          $type
-     * @param array                           $arguments
      * @param string                          $accept
      * @param NormalizerContextInterface|null $context
      *
      * @return Response
      */
-    public function createNotAuthorized(
-        string $type,
-        array $arguments,
-        string $accept,
-        NormalizerContextInterface $context = null
-    ): Response;
+    public function createNotAuthorized(string $accept, NormalizerContextInterface $context = null): Response;
 
     /**
      * @param string                          $type
@@ -105,14 +88,14 @@ interface ResponseManagerInterface
     ): Response;
 
     /**
-     * @param Request $request
+     * @param string $accept
      *
      * @return Response
      */
-    public function createAcceptNotSupported(Request $request): Response;
+    public function createAcceptNotSupported(string $accept): Response;
 
     /**
-     * @param Request                         $request
+     * @param string                          $contentType
      * @param string                          $accept
      * @param array                           $supportedContentTypes
      * @param NormalizerContextInterface|null $context
@@ -120,7 +103,7 @@ interface ResponseManagerInterface
      * @return Response
      */
     public function createContentTypeNotSupported(
-        Request $request,
+        string $contentType,
         string $accept,
         array $supportedContentTypes,
         NormalizerContextInterface $context = null
