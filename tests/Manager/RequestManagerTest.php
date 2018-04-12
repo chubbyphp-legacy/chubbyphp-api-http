@@ -15,6 +15,34 @@ use Psr\Http\Message\StreamInterface;
  */
 final class RequestManagerTest extends TestCase
 {
+    public function testGetDataFromRequestQuery()
+    {
+        $object = new \stdClass();
+
+        $queryParams = ['key' => 'value'];
+
+        /** @var Request|MockObject $request */
+        $request = $this->getMockBuilder(Request::class)->getMockForAbstractClass();
+        $request->expects(self::once())->method('getQueryParams')->willReturn($queryParams);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockBuilder(DenormalizerContextInterface::class)->getMockForAbstractClass();
+
+        /** @var DeserializerInterface|MockObject $deserializer */
+        $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::once())
+            ->method('denormalize')
+            ->with($object, $queryParams, $context)
+            ->willReturn($object);
+
+        $manager = new RequestManager($deserializer);
+
+        self::assertSame(
+            $object,
+            $manager->getDataFromRequestQuery($request, $object, $context)
+        );
+    }
+
     public function testGetDataFromRequestBody()
     {
         $object = new \stdClass();
@@ -44,34 +72,6 @@ final class RequestManagerTest extends TestCase
         self::assertSame(
             $object,
             $manager->getDataFromRequestBody($request, $object, 'application/json', $context)
-        );
-    }
-
-    public function testGetDataFromRequestQuery()
-    {
-        $object = new \stdClass();
-
-        $queryParams = ['key' => 'value'];
-
-        /** @var Request|MockObject $request */
-        $request = $this->getMockBuilder(Request::class)->getMockForAbstractClass();
-        $request->expects(self::once())->method('getQueryParams')->willReturn($queryParams);
-
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockBuilder(DenormalizerContextInterface::class)->getMockForAbstractClass();
-
-        /** @var DeserializerInterface|MockObject $deserializer */
-        $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
-        $deserializer->expects(self::once())
-            ->method('denormalize')
-            ->with($object, $queryParams, $context)
-            ->willReturn($object);
-
-        $manager = new RequestManager($deserializer);
-
-        self::assertSame(
-            $object,
-            $manager->getDataFromRequestQuery($request, $object, $context)
         );
     }
 }

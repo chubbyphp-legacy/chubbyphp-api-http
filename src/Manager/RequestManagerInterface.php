@@ -12,6 +12,14 @@ interface RequestManagerInterface
     /**
      * @param Request       $request
      * @param object|string $object
+     *
+     * @return object
+     */
+    public function getDataFromRequestQuery(Request $request, $object, DenormalizerContextInterface $context = null);
+
+    /**
+     * @param Request       $request
+     * @param object|string $object
      * @param string        $contentType
      *
      * @return object|null
@@ -22,12 +30,4 @@ interface RequestManagerInterface
         string $contentType,
         DenormalizerContextInterface $context = null
     );
-
-    /**
-     * @param Request       $request
-     * @param object|string $object
-     *
-     * @return object
-     */
-    public function getDataFromRequestQuery(Request $request, $object, DenormalizerContextInterface $context = null);
 }
