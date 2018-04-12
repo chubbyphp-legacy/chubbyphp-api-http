@@ -630,4 +630,109 @@ final class ResponseManagerTest extends TestCase
 
         self::assertSame($response, $responseManager->createAcceptNotSupported('application/json'));
     }
+
+    public function testCreateContentTypeNotSupportedWithDefaults()
+    {
+        /** @var DeserializerInterface|MockObject $deserializer */
+        $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::once())->method('getContentTypes')->willReturn(['application/xml', 'application/xhtml+xml']);
+
+        $bodyString = '{"key": "value"}';
+
+        $error = new Error(
+            Error::SCOPE_HEADER,
+            'contentype_not_supported',
+            'the given content type is not supported',
+            'content-type',
+            [
+                'contentType' => 'application/json',
+                'supportedContentTypes' => ['application/xml', 'application/xhtml+xml'],
+            ]
+        );
+
+        /** @var StreamInterface|MockObject $body */
+        $body = $this->getMockBuilder(StreamInterface::class)->getMockForAbstractClass();
+        $body->expects(self::once())->method('write')->with($bodyString);
+
+        /** @var Response|MockObject $response */
+        $response = $this->getMockBuilder(Response::class)->getMockForAbstractClass();
+
+        $response->expects(self::once())
+            ->method('withHeader')
+            ->with('Content-Type', 'application/json')
+            ->willReturn($response);
+
+        $response->expects(self::once())
+            ->method('getBody')
+            ->willReturn($body);
+
+        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
+        $responseFactory->expects(self::once())->method('createResponse')->with(415)->willReturn($response);
+
+        /** @var SerializerInterface|MockObject $serializer */
+        $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
+        $serializer->expects(self::once())
+            ->method('serialize')
+            ->with($error, 'application/json', null)
+            ->willReturn($bodyString);
+
+        $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
+
+        self::assertSame($response, $responseManager->createContentTypeNotSupported('application/json', 'application/json'));
+    }
+
+    public function testCreateContentTypeNotSupportedWithoutDefaults()
+    {
+        /** @var DeserializerInterface|MockObject $deserializer */
+        $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::once())->method('getContentTypes')->willReturn(['application/xml', 'application/xhtml+xml']);
+
+        $bodyString = '{"key": "value"}';
+
+        $error = new Error(
+            Error::SCOPE_HEADER,
+            'contentype_not_supported',
+            'the given content type is not supported',
+            'content-type',
+            [
+                'contentType' => 'application/json',
+                'supportedContentTypes' => ['application/xml', 'application/xhtml+xml'],
+            ]
+        );
+
+        /** @var StreamInterface|MockObject $body */
+        $body = $this->getMockBuilder(StreamInterface::class)->getMockForAbstractClass();
+        $body->expects(self::once())->method('write')->with($bodyString);
+
+        /** @var Response|MockObject $response */
+        $response = $this->getMockBuilder(Response::class)->getMockForAbstractClass();
+
+        $response->expects(self::once())
+            ->method('withHeader')
+            ->with('Content-Type', 'application/json')
+            ->willReturn($response);
+
+        $response->expects(self::once())
+            ->method('getBody')
+            ->willReturn($body);
+
+        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
+        $responseFactory->expects(self::once())->method('createResponse')->with(415)->willReturn($response);
+
+        /** @var NormalizerContextInterface|MockObject $context */
+        $context = $this->getMockBuilder(NormalizerContextInterface::class)->getMockForAbstractClass();
+
+        /** @var SerializerInterface|MockObject $serializer */
+        $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
+        $serializer->expects(self::once())
+            ->method('serialize')
+            ->with($error, 'application/json', $context)
+            ->willReturn($bodyString);
+
+        $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
+
+        self::assertSame($response, $responseManager->createContentTypeNotSupported('application/json', 'application/json', $context));
+    }
 }

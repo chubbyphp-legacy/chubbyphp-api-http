@@ -6,94 +6,21 @@ namespace Chubbyphp\ApiHttp\Manager;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\DeserializerInterface;
-use Chubbyphp\Negotiation\AcceptLanguageNegotiatorInterface;
-use Chubbyphp\Negotiation\AcceptNegotiatorInterface;
-use Chubbyphp\Negotiation\ContentTypeNegotiatorInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 final class RequestManager implements RequestManagerInterface
 {
-    /**
-     * @var AcceptNegotiatorInterface
-     */
-    private $acceptNegotiator;
-
-    /**
-     * @var AcceptLanguageNegotiatorInterface
-     */
-    private $acceptLanguageNegotiator;
-
-    /**
-     * @var ContentTypeNegotiatorInterface
-     */
-    private $contentTypeNegotiator;
-
     /**
      * @var DeserializerInterface
      */
     private $deserializer;
 
     /**
-     * @param AcceptNegotiatorInterface         $acceptNegotiator
-     * @param AcceptLanguageNegotiatorInterface $acceptLanguageNegotiator
-     * @param ContentTypeNegotiatorInterface    $contentTypeNegotiator
-     * @param DeserializerInterface             $deserializer
+     * @param DeserializerInterface $deserializer
      */
-    public function __construct(
-        AcceptNegotiatorInterface $acceptNegotiator,
-        AcceptLanguageNegotiatorInterface $acceptLanguageNegotiator,
-        ContentTypeNegotiatorInterface $contentTypeNegotiator,
-        DeserializerInterface $deserializer
-    ) {
-        $this->acceptNegotiator = $acceptNegotiator;
-        $this->acceptLanguageNegotiator = $acceptLanguageNegotiator;
-        $this->contentTypeNegotiator = $contentTypeNegotiator;
+    public function __construct(DeserializerInterface $deserializer)
+    {
         $this->deserializer = $deserializer;
-    }
-
-    /**
-     * @param Request     $request
-     * @param string|null $default
-     *
-     * @return string|null
-     */
-    public function getAccept(Request $request, string $default = null)
-    {
-        if (null === $value = $this->acceptNegotiator->negotiate($request)) {
-            return $default;
-        }
-
-        return $value->getValue();
-    }
-
-    /**
-     * @param Request     $request
-     * @param string|null $default
-     *
-     * @return string|null
-     */
-    public function getAcceptLanguage(Request $request, string $default = null)
-    {
-        if (null === $value = $this->acceptLanguageNegotiator->negotiate($request)) {
-            return $default;
-        }
-
-        return $value->getValue();
-    }
-
-    /**
-     * @param Request     $request
-     * @param string|null $default
-     *
-     * @return string|null
-     */
-    public function getContentType(Request $request, string $default = null)
-    {
-        if (null === $value = $this->contentTypeNegotiator->negotiate($request)) {
-            return $default;
-        }
-
-        return $value->getValue();
     }
 
     /**
