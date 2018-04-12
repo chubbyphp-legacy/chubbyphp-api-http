@@ -27,8 +27,6 @@ composer require chubbyphp/chubbyphp-api-http "~2.0@alpha"
 
 ## Usage
 
-Error Accessor
-
  * [Error][2]
 
 ## Copyright
