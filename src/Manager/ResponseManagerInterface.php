@@ -73,7 +73,7 @@ interface ResponseManagerInterface
     public function createNotAuthorized(string $accept, NormalizerContextInterface $context = null): Response;
 
     /**
-     * @param string                          $type
+     * @param string                          $reference
      * @param array                           $arguments
      * @param string                          $accept
      * @param NormalizerContextInterface|null $context
@@ -81,7 +81,7 @@ interface ResponseManagerInterface
      * @return Response
      */
     public function createResourceNotFound(
-        string $type,
+        string $reference,
         array $arguments,
         string $accept,
         NormalizerContextInterface $context = null
@@ -97,7 +97,6 @@ interface ResponseManagerInterface
     /**
      * @param string                          $contentType
      * @param string                          $accept
-     * @param array                           $supportedContentTypes
      * @param NormalizerContextInterface|null $context
      *
      * @return Response
@@ -105,7 +104,6 @@ interface ResponseManagerInterface
     public function createContentTypeNotSupported(
         string $contentType,
         string $accept,
-        array $supportedContentTypes,
         NormalizerContextInterface $context = null
     ): Response;
 }

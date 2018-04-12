@@ -7,13 +7,18 @@ namespace Chubbyphp\ApiHttp\Manager;
 use Chubbyphp\ApiHttp\Error\Error;
 use Chubbyphp\ApiHttp\Error\ErrorInterface;
 use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface;
+use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
 use Chubbyphp\Serialization\SerializerInterface;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 final class ResponseManager implements ResponseManagerInterface
 {
+    /**
+     * @var DeserializerInterface
+     */
+    private $deserializer;
+
     /**
      * @var ResponseFactoryInterface
      */
@@ -25,13 +30,16 @@ final class ResponseManager implements ResponseManagerInterface
     private $serializer;
 
     /**
+     * @param DeserializerInterface    $deserializer
      * @param ResponseFactoryInterface $responseFactory
      * @param SerializerInterface      $serializer
      */
     public function __construct(
+        DeserializerInterface $deserializer,
         ResponseFactoryInterface $responseFactory,
         SerializerInterface $serializer
     ) {
+        $this->deserializer = $deserializer;
         $this->responseFactory = $responseFactory;
         $this->serializer = $serializer;
     }
@@ -130,7 +138,7 @@ final class ResponseManager implements ResponseManagerInterface
     }
 
     /**
-     * @param string                          $type
+     * @param string                          $reference
      * @param array                           $arguments
      * @param string                          $accept
      * @param NormalizerContextInterface|null $context
@@ -138,7 +146,7 @@ final class ResponseManager implements ResponseManagerInterface
      * @return Response
      */
     public function createResourceNotFound(
-        string $type,
+        string $reference,
         array $arguments,
         string $accept,
         NormalizerContextInterface $context = null
@@ -147,7 +155,7 @@ final class ResponseManager implements ResponseManagerInterface
             Error::SCOPE_RESOURCE,
             'resource_not_found',
             'the requested resource cannot be found',
-            $type,
+            $reference,
             $arguments
         ), $accept, 404, $context);
     }
@@ -169,7 +177,6 @@ final class ResponseManager implements ResponseManagerInterface
     /**
      * @param string                          $contentType
      * @param string                          $accept
-     * @param array                           $supportedContentTypes
      * @param NormalizerContextInterface|null $context
      *
      * @return Response
@@ -177,7 +184,6 @@ final class ResponseManager implements ResponseManagerInterface
     public function createContentTypeNotSupported(
         string $contentType,
         string $accept,
-        array $supportedContentTypes,
         NormalizerContextInterface $context = null
     ): Response {
         return $this->createFromError(new Error(
@@ -187,7 +193,7 @@ final class ResponseManager implements ResponseManagerInterface
             'content-type',
             [
                 'contentType' => $contentType,
-                'supportedContentTypes' => $supportedContentTypes,
+                'supportedContentTypes' => $this->deserializer->getContentTypes(),
             ]
         ), $accept, 415, $context);
     }
