@@ -170,7 +170,7 @@ final class ResponseManager implements ResponseManagerInterface
         return $this->responseFactory->createResponse(406)->withHeader('X-Not-Acceptable', sprintf(
             'Accept "%s" is not supported, supported are %s',
             $accept,
-            implode(', ', $this->serializer->getContentTypes())
+            '"'.implode('", "', $this->serializer->getContentTypes()).'"'
         ));
     }
 

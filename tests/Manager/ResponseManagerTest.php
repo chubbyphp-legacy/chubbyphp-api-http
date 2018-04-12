@@ -11,7 +11,6 @@ use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
 use Chubbyphp\Serialization\SerializerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\StreamInterface;
 
@@ -28,6 +27,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         /** @var StreamInterface|MockObject $body */
         $body = $this->getMockBuilder(StreamInterface::class)->getMockForAbstractClass();
@@ -69,6 +69,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         /** @var StreamInterface|MockObject $body */
         $body = $this->getMockBuilder(StreamInterface::class)->getMockForAbstractClass();
@@ -109,6 +110,7 @@ final class ResponseManagerTest extends TestCase
     {
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         /** @var Response|MockObject $response */
         $response = $this->getMockBuilder(Response::class)->getMockForAbstractClass();
@@ -124,6 +126,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
+        $serializer->expects(self::never())->method('serialize');
 
         $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
 
@@ -134,6 +137,7 @@ final class ResponseManagerTest extends TestCase
     {
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         /** @var Response|MockObject $response */
         $response = $this->getMockBuilder(Response::class)->getMockForAbstractClass();
@@ -149,6 +153,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
+        $serializer->expects(self::never())->method('serialize');
 
         $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
 
@@ -159,6 +164,7 @@ final class ResponseManagerTest extends TestCase
     {
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         /** @var Response|MockObject $response */
         $response = $this->getMockBuilder(Response::class)->getMockForAbstractClass();
@@ -174,6 +180,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
+        $serializer->expects(self::never())->method('serialize');
 
         $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
 
@@ -184,6 +191,7 @@ final class ResponseManagerTest extends TestCase
     {
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         /** @var Response|MockObject $response */
         $response = $this->getMockBuilder(Response::class)->getMockForAbstractClass();
@@ -199,6 +207,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
+        $serializer->expects(self::never())->method('serialize');
 
         $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
 
@@ -209,6 +218,7 @@ final class ResponseManagerTest extends TestCase
     {
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         $bodyString = '{"key": "value"}';
 
@@ -251,6 +261,7 @@ final class ResponseManagerTest extends TestCase
     {
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         $bodyString = '{"key": "value"}';
 
@@ -296,6 +307,7 @@ final class ResponseManagerTest extends TestCase
     {
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         $bodyString = '{"key": "value"}';
 
@@ -342,6 +354,7 @@ final class ResponseManagerTest extends TestCase
     {
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         $bodyString = '{"key": "value"}';
 
@@ -391,6 +404,7 @@ final class ResponseManagerTest extends TestCase
     {
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         $bodyString = '{"key": "value"}';
 
@@ -444,6 +458,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         $bodyString = '{"key": "value"}';
 
@@ -498,6 +513,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         $bodyString = '{"key": "value"}';
 
@@ -549,6 +565,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
 
         $bodyString = '{"key": "value"}';
 
@@ -585,5 +602,32 @@ final class ResponseManagerTest extends TestCase
         $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
 
         self::assertSame($response, $responseManager->createResourceNotFound($reference, $arguments, 'application/json', $context));
+    }
+
+    public function testCreateAcceptNotSupported()
+    {
+        /** @var DeserializerInterface|MockObject $deserializer */
+        $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
+
+        /** @var Response|MockObject $response */
+        $response = $this->getMockBuilder(Response::class)->getMockForAbstractClass();
+
+        $response->expects(self::once())
+            ->method('withHeader')
+            ->with('X-Not-Acceptable', 'Accept "application/json" is not supported, supported are "application/xml", "application/xhtml+xml"')
+            ->willReturn($response);
+
+        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
+        $responseFactory->expects(self::once())->method('createResponse')->with(406)->willReturn($response);
+
+        /** @var SerializerInterface|MockObject $serializer */
+        $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
+        $serializer->expects(self::once())->method('getContentTypes')->willReturn(['application/xml', 'application/xhtml+xml']);
+
+        $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
+
+        self::assertSame($response, $responseManager->createAcceptNotSupported('application/json'));
     }
 }
