@@ -25,8 +25,15 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-api-http][1].
 composer require chubbyphp/chubbyphp-api-http "~2.0@alpha"
 ```
 
+## Usage
+
+Error Accessor
+
+ * [Error][2]
+
 ## Copyright
 
-Dominik Zogg 2017
+Dominik Zogg 2018
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-api-http
+[2]: doc/Error/Error.md
