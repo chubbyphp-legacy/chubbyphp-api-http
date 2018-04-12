@@ -116,8 +116,7 @@ final class ResponseManager implements ResponseManagerInterface
         return $this->createFromError(new Error(
             Error::SCOPE_HEADER,
             'not_authenticated',
-            'missing or invalid authentication token to perform the request',
-            'authentication'
+            'missing or invalid authentication token to perform the request'
         ), $accept, 401, $context);
     }
 
@@ -132,13 +131,11 @@ final class ResponseManager implements ResponseManagerInterface
         return $this->createFromError(new Error(
             Error::SCOPE_HEADER,
             'permission_denied',
-            'missing authorization to perform request',
-            'authorization'
+            'missing authorization to perform request'
         ), $accept, 403, $context);
     }
 
     /**
-     * @param string                          $reference
      * @param array                           $arguments
      * @param string                          $accept
      * @param NormalizerContextInterface|null $context
@@ -146,7 +143,6 @@ final class ResponseManager implements ResponseManagerInterface
      * @return Response
      */
     public function createResourceNotFound(
-        string $reference,
         array $arguments,
         string $accept,
         NormalizerContextInterface $context = null
@@ -155,7 +151,7 @@ final class ResponseManager implements ResponseManagerInterface
             Error::SCOPE_RESOURCE,
             'resource_not_found',
             'the requested resource cannot be found',
-            $reference,
+            null,
             $arguments
         ), $accept, 404, $context);
     }
@@ -190,7 +186,7 @@ final class ResponseManager implements ResponseManagerInterface
             Error::SCOPE_HEADER,
             'contentype_not_supported',
             'the given content type is not supported',
-            'content-type',
+            null,
             [
                 'contentType' => $contentType,
                 'supportedContentTypes' => $this->deserializer->getContentTypes(),

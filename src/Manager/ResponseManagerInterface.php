@@ -73,7 +73,6 @@ interface ResponseManagerInterface
     public function createNotAuthorized(string $accept, NormalizerContextInterface $context = null): Response;
 
     /**
-     * @param string                          $reference
      * @param array                           $arguments
      * @param string                          $accept
      * @param NormalizerContextInterface|null $context
@@ -81,7 +80,6 @@ interface ResponseManagerInterface
      * @return Response
      */
     public function createResourceNotFound(
-        string $reference,
         array $arguments,
         string $accept,
         NormalizerContextInterface $context = null

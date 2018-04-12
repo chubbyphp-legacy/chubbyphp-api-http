@@ -314,8 +314,7 @@ final class ResponseManagerTest extends TestCase
         $error = new Error(
             Error::SCOPE_HEADER,
             'not_authenticated',
-            'missing or invalid authentication token to perform the request',
-            'authentication'
+            'missing or invalid authentication token to perform the request'
         );
 
         /** @var StreamInterface|MockObject $body */
@@ -361,8 +360,7 @@ final class ResponseManagerTest extends TestCase
         $error = new Error(
             Error::SCOPE_HEADER,
             'not_authenticated',
-            'missing or invalid authentication token to perform the request',
-            'authentication'
+            'missing or invalid authentication token to perform the request'
         );
 
         /** @var StreamInterface|MockObject $body */
@@ -411,8 +409,7 @@ final class ResponseManagerTest extends TestCase
         $error = new Error(
             Error::SCOPE_HEADER,
             'permission_denied',
-            'missing authorization to perform request',
-            'authorization'
+            'missing authorization to perform request'
         );
 
         /** @var StreamInterface|MockObject $body */
@@ -452,8 +449,7 @@ final class ResponseManagerTest extends TestCase
         $error = new Error(
             Error::SCOPE_HEADER,
             'permission_denied',
-            'missing authorization to perform request',
-            'authorization'
+            'missing authorization to perform request'
         );
 
         /** @var DeserializerInterface|MockObject $deserializer */
@@ -499,15 +495,13 @@ final class ResponseManagerTest extends TestCase
 
     public function testCreateResourceNotFoundWithDefaults()
     {
-        $reference = 'reference';
-
         $arguments = ['key' => 'value'];
 
         $error = new Error(
             Error::SCOPE_RESOURCE,
             'resource_not_found',
             'the requested resource cannot be found',
-            $reference,
+            null,
             $arguments
         );
 
@@ -546,20 +540,18 @@ final class ResponseManagerTest extends TestCase
 
         $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
 
-        self::assertSame($response, $responseManager->createResourceNotFound($reference, $arguments, 'application/json'));
+        self::assertSame($response, $responseManager->createResourceNotFound($arguments, 'application/json'));
     }
 
     public function testCreateResourceNotFoundWithoutDefaults()
     {
-        $reference = 'reference';
-
         $arguments = ['key' => 'value'];
 
         $error = new Error(
             Error::SCOPE_RESOURCE,
             'resource_not_found',
             'the requested resource cannot be found',
-            $reference,
+            null,
             $arguments
         );
 
@@ -601,7 +593,7 @@ final class ResponseManagerTest extends TestCase
 
         $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
 
-        self::assertSame($response, $responseManager->createResourceNotFound($reference, $arguments, 'application/json', $context));
+        self::assertSame($response, $responseManager->createResourceNotFound($arguments, 'application/json', $context));
     }
 
     public function testCreateAcceptNotSupported()
@@ -643,7 +635,7 @@ final class ResponseManagerTest extends TestCase
             Error::SCOPE_HEADER,
             'contentype_not_supported',
             'the given content type is not supported',
-            'content-type',
+            null,
             [
                 'contentType' => 'application/json',
                 'supportedContentTypes' => ['application/xml', 'application/xhtml+xml'],
@@ -694,7 +686,7 @@ final class ResponseManagerTest extends TestCase
             Error::SCOPE_HEADER,
             'contentype_not_supported',
             'the given content type is not supported',
-            'content-type',
+            null,
             [
                 'contentType' => 'application/json',
                 'supportedContentTypes' => ['application/xml', 'application/xhtml+xml'],
