@@ -29,6 +29,7 @@ composer require chubbyphp/chubbyphp-api-http "~2.0@alpha"
 
  * [Error][2]
  * [RequestManager][3]
+ * [ResponseManager][4]
 
 ## Copyright
 
@@ -37,3 +38,4 @@ Dominik Zogg 2018
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-api-http
 [2]: doc/Error/Error.md
 [3]: doc/Manager/RequestManager.md
+[4]: doc/Manager/ResponseManager.md
