@@ -31,6 +31,7 @@ composer require chubbyphp/chubbyphp-api-http "~2.0@alpha"
  * [RequestManager][3]
  * [ResponseManager][4]
  * [ApiHttpProvider][5]
+ * [ErrorMapping][6]
 
 ## Copyright
 
@@ -41,3 +42,4 @@ Dominik Zogg 2018
 [3]: doc/Manager/RequestManager.md
 [4]: doc/Manager/ResponseManager.md
 [5]: doc/Provider/ApiHttpProvider.md
+[6]: doc/Serialization/ErrorMapping.md
