@@ -15,8 +15,8 @@ A simple http handler implementation for API.
 ## Requirements
 
  * php: ~7.0
- * chubbyphp/chubbyphp-deserialization: ~2.0
- * chubbyphp/chubbyphp-serialization: ~2.0
+ * chubbyphp/chubbyphp-deserialization: ~2.1
+ * chubbyphp/chubbyphp-serialization: ~2.1
  * psr/http-message: ~1.0
 
 ## Installation
@@ -24,7 +24,7 @@ A simple http handler implementation for API.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-api-http][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-api-http "~2.0@alpha"
+composer require chubbyphp/chubbyphp-api-http "~2.0"
 ```
 
 ## Usage
