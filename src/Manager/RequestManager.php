@@ -24,9 +24,9 @@ final class RequestManager implements RequestManagerInterface
     }
 
     /**
-     * @param Request                      $request
-     * @param object|string                $object
-     * @param DenormalizerContextInterface $context
+     * @param Request                           $request
+     * @param object|string                     $object
+     * @param DenormalizerContextInterface|null $context
      *
      * @return object
      */
@@ -36,10 +36,10 @@ final class RequestManager implements RequestManagerInterface
     }
 
     /**
-     * @param Request                      $request
-     * @param object|string                $object
-     * @param string                       $contentType
-     * @param DenormalizerContextInterface $context
+     * @param Request                           $request
+     * @param object|string                     $object
+     * @param string                            $contentType
+     * @param DenormalizerContextInterface|null $context
      *
      * @return object
      */

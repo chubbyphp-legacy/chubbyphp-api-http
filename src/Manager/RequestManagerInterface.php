@@ -10,8 +10,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 interface RequestManagerInterface
 {
     /**
-     * @param Request       $request
-     * @param object|string $object
+     * @param Request                           $request
+     * @param object|string                     $object
+     * @param DenormalizerContextInterface|null $context
      *
      * @return object
      */

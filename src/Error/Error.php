@@ -32,7 +32,7 @@ final class Error implements ErrorInterface
     private $arguments;
 
     /**
-     * @param string|null $scope
+     * @param string      $scope
      * @param string      $key
      * @param string|null $detail
      * @param string|null $reference
