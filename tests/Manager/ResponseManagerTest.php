@@ -4,13 +4,14 @@ namespace Chubbyphp\Tests\ApiHttp\Manager;
 
 use Chubbyphp\ApiHttp\Error\Error;
 use Chubbyphp\ApiHttp\Error\ErrorInterface;
-use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface;
+use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface as LegacyResponseFactoryInterface;
 use Chubbyphp\ApiHttp\Manager\ResponseManager;
 use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
 use Chubbyphp\Serialization\SerializerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\StreamInterface;
 
@@ -19,6 +20,80 @@ use Psr\Http\Message\StreamInterface;
  */
 final class ResponseManagerTest extends TestCase
 {
+    public function testCreateWithDefaultsAndWrongResponseFactory()
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage(
+            'Chubbyphp\ApiHttp\Manager\ResponseManager::__construct() expects parameter 1 to be'
+                .' Psr\Http\Message\ResponseFactoryInterface|Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface'
+                .', stdClass given'
+         );
+
+        /** @var DeserializerInterface|MockObject $deserializer */
+        $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+
+        /** @var SerializerInterface|MockObject $serializer */
+        $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
+
+        $responseManager = new ResponseManager($deserializer, new \stdClass(), $serializer);
+    }
+
+    public function testCreateWithDefaultsAndLegacyResponseFactory()
+    {
+        $bodyString = '{"key": "value"}';
+
+        $object = new \stdClass();
+
+        /** @var DeserializerInterface|MockObject $deserializer */
+        $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
+        $deserializer->expects(self::never())->method('getContentTypes');
+
+        /** @var StreamInterface|MockObject $body */
+        $body = $this->getMockBuilder(StreamInterface::class)->getMockForAbstractClass();
+        $body->expects(self::once())->method('write')->with($bodyString);
+
+        /** @var Response|MockObject $response */
+        $response = $this->getMockBuilder(Response::class)->getMockForAbstractClass();
+
+        $response->expects(self::once())
+            ->method('withHeader')
+            ->with('Content-Type', 'application/json')
+            ->willReturn($response);
+
+        $response->expects(self::once())
+            ->method('getBody')
+            ->willReturn($body);
+
+        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        $responseFactory = $this->getMockBuilder(LegacyResponseFactoryInterface::class)->getMockForAbstractClass();
+        $responseFactory->expects(self::once())->method('createResponse')->with(200)->willReturn($response);
+
+        /** @var SerializerInterface|MockObject $serializer */
+        $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
+        $serializer->expects(self::once())
+            ->method('serialize')
+            ->with($object, 'application/json', null)
+            ->willReturn($bodyString);
+
+        $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
+
+        $error = error_get_last();
+
+        error_clear_last();
+
+        self::assertInternalType('array', $error);
+        self::assertArrayHasKey('type', $error);
+        self::assertArrayHasKey('message', $error);
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(
+            'Use "Psr\Http\Message\ResponseFactoryInterface" instead of'
+                .' "Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface" as __construct argument',
+            $error['message']
+        );
+
+        self::assertSame($response, $responseManager->create($object, 'application/json'));
+    }
+
     public function testCreateWithDefaults()
     {
         $bodyString = '{"key": "value"}';
@@ -47,7 +122,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(200)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(200, '')->willReturn($response);
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
@@ -89,7 +164,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(201)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(201, '')->willReturn($response);
 
         /** @var NormalizerContextInterface|MockObject $context */
         $context = $this->getMockBuilder(NormalizerContextInterface::class)->getMockForAbstractClass();
@@ -122,7 +197,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(204)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(204, '')->willReturn($response);
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
@@ -149,7 +224,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(200)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(200, '')->willReturn($response);
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
@@ -176,7 +251,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(307)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(307, '')->willReturn($response);
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
@@ -203,7 +278,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(301)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(301, '')->willReturn($response);
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
@@ -243,7 +318,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(400)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(400, '')->willReturn($response);
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
@@ -286,7 +361,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(418)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(418, '')->willReturn($response);
 
         /** @var NormalizerContextInterface|MockObject $context */
         $context = $this->getMockBuilder(NormalizerContextInterface::class)->getMockForAbstractClass();
@@ -335,7 +410,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(401)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(401, '')->willReturn($response);
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
@@ -381,7 +456,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(401)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(401, '')->willReturn($response);
 
         /** @var NormalizerContextInterface|MockObject $context */
         $context = $this->getMockBuilder(NormalizerContextInterface::class)->getMockForAbstractClass();
@@ -430,7 +505,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(403)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(403, '')->willReturn($response);
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
@@ -476,7 +551,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(403)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(403, '')->willReturn($response);
 
         /** @var NormalizerContextInterface|MockObject $context */
         $context = $this->getMockBuilder(NormalizerContextInterface::class)->getMockForAbstractClass();
@@ -529,7 +604,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(404)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(404, '')->willReturn($response);
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
@@ -579,7 +654,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(404)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(404, '')->willReturn($response);
 
         /** @var NormalizerContextInterface|MockObject $context */
         $context = $this->getMockBuilder(NormalizerContextInterface::class)->getMockForAbstractClass();
@@ -612,7 +687,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(406)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(406, '')->willReturn($response);
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
@@ -660,7 +735,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(415)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(415, '')->willReturn($response);
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockBuilder(SerializerInterface::class)->getMockForAbstractClass();
@@ -711,7 +786,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
-        $responseFactory->expects(self::once())->method('createResponse')->with(415)->willReturn($response);
+        $responseFactory->expects(self::once())->method('createResponse')->with(415, '')->willReturn($response);
 
         /** @var NormalizerContextInterface|MockObject $context */
         $context = $this->getMockBuilder(NormalizerContextInterface::class)->getMockForAbstractClass();

@@ -6,10 +6,11 @@ namespace Chubbyphp\ApiHttp\Manager;
 
 use Chubbyphp\ApiHttp\Error\Error;
 use Chubbyphp\ApiHttp\Error\ErrorInterface;
-use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface;
+use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface as LegacyResponseFactoryInterface;
 use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
 use Chubbyphp\Serialization\SerializerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 
 final class ResponseManager implements ResponseManagerInterface
@@ -20,7 +21,7 @@ final class ResponseManager implements ResponseManagerInterface
     private $deserializer;
 
     /**
-     * @var ResponseFactoryInterface
+     * @var LegacyResponseFactoryInterface|ResponseFactoryInterface
      */
     private $responseFactory;
 
@@ -30,15 +31,40 @@ final class ResponseManager implements ResponseManagerInterface
     private $serializer;
 
     /**
-     * @param DeserializerInterface    $deserializer
-     * @param ResponseFactoryInterface $responseFactory
-     * @param SerializerInterface      $serializer
+     * @param DeserializerInterface                                   $deserializer
+     * @param LegacyResponseFactoryInterface|ResponseFactoryInterface $responseFactory
+     * @param SerializerInterface                                     $serializer
      */
     public function __construct(
         DeserializerInterface $deserializer,
-        ResponseFactoryInterface $responseFactory,
+        $responseFactory,
         SerializerInterface $serializer
     ) {
+        if (!$responseFactory instanceof ResponseFactoryInterface
+            && !$responseFactory instanceof LegacyResponseFactoryInterface
+        ) {
+            throw new \TypeError(
+                sprintf(
+                    '%s::__construct() expects parameter 1 to be %s|%s, %s given',
+                    self::class,
+                    ResponseFactoryInterface::class,
+                    LegacyResponseFactoryInterface::class,
+                    is_object($responseFactory) ? get_class($responseFactory) : gettype($responseFactory)
+                )
+            );
+        }
+
+        if ($responseFactory instanceof LegacyResponseFactoryInterface) {
+            @trigger_error(
+                sprintf(
+                    'Use "%s" instead of "%s" as __construct argument',
+                    ResponseFactoryInterface::class,
+                    LegacyResponseFactoryInterface::class
+                ),
+                E_USER_DEPRECATED
+            );
+        }
+
         $this->deserializer = $deserializer;
         $this->responseFactory = $responseFactory;
         $this->serializer = $serializer;
