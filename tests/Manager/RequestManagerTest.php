@@ -5,6 +5,8 @@ namespace Chubbyphp\Tests\ApiHttp\Manager;
 use Chubbyphp\ApiHttp\Manager\RequestManager;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\DeserializerInterface;
+use Chubbyphp\Mock\Call;
+use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -15,6 +17,8 @@ use Psr\Http\Message\StreamInterface;
  */
 final class RequestManagerTest extends TestCase
 {
+    use MockByCallsTrait;
+
     public function testGetDataFromRequestQuery()
     {
         $object = new \stdClass();
@@ -22,18 +26,17 @@ final class RequestManagerTest extends TestCase
         $queryParams = ['key' => 'value'];
 
         /** @var Request|MockObject $request */
-        $request = $this->getMockBuilder(Request::class)->getMockForAbstractClass();
-        $request->expects(self::once())->method('getQueryParams')->willReturn($queryParams);
+        $request = $this->getMockByCalls(Request::class, [
+            Call::create('getQueryParams')->with()->willReturn($queryParams),
+        ]);
 
         /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockBuilder(DenormalizerContextInterface::class)->getMockForAbstractClass();
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         /** @var DeserializerInterface|MockObject $deserializer */
-        $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
-        $deserializer->expects(self::once())
-            ->method('denormalize')
-            ->with($object, $queryParams, $context)
-            ->willReturn($object);
+        $deserializer = $this->getMockByCalls(DeserializerInterface::class, [
+            Call::create('denormalize')->with($object, $queryParams, $context, '')->willReturn($object),
+        ]);
 
         $manager = new RequestManager($deserializer);
 
@@ -50,22 +53,24 @@ final class RequestManagerTest extends TestCase
         $bodyString = '{"key": "value}';
 
         /** @var StreamInterface|MockObject $body */
-        $body = $this->getMockBuilder(StreamInterface::class)->getMockForAbstractClass();
-        $body->expects(self::once())->method('__toString')->willReturn($bodyString);
+        $body = $this->getMockByCalls(StreamInterface::class, [
+            Call::create('__toString')->with()->willReturn($bodyString),
+        ]);
 
         /** @var Request|MockObject $request */
-        $request = $this->getMockBuilder(Request::class)->getMockForAbstractClass();
-        $request->expects(self::once())->method('getBody')->willReturn($body);
+        $request = $this->getMockByCalls(Request::class, [
+            Call::create('getBody')->with()->willReturn($body),
+        ]);
 
         /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockBuilder(DenormalizerContextInterface::class)->getMockForAbstractClass();
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         /** @var DeserializerInterface|MockObject $deserializer */
-        $deserializer = $this->getMockBuilder(DeserializerInterface::class)->getMockForAbstractClass();
-        $deserializer->expects(self::once())
-            ->method('deserialize')
-            ->with($object, $bodyString, 'application/json', $context)
-            ->willReturn($object);
+        $deserializer = $this->getMockByCalls(DeserializerInterface::class, [
+            Call::create('deserialize')
+                ->with($object, $bodyString, 'application/json', $context, '')
+                ->willReturn($object),
+        ]);
 
         $manager = new RequestManager($deserializer);
 

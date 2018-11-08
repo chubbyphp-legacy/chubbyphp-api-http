@@ -7,6 +7,7 @@ use Chubbyphp\ApiHttp\Manager\RequestManager;
 use Chubbyphp\ApiHttp\Manager\ResponseManager;
 use Chubbyphp\ApiHttp\Provider\ApiHttpProvider;
 use Chubbyphp\Deserialization\Provider\DeserializationProvider;
+use Chubbyphp\Mock\MockByCallsTrait;
 use Chubbyphp\Serialization\Provider\SerializationProvider;
 use PHPUnit\Framework\TestCase;
 use Pimple\Container;
@@ -16,6 +17,8 @@ use Pimple\Container;
  */
 final class ApiHttpProviderTest extends TestCase
 {
+    use MockByCallsTrait;
+
     public function testRegister()
     {
         $container = new Container();
@@ -24,7 +27,7 @@ final class ApiHttpProviderTest extends TestCase
         $container->register(new SerializationProvider());
 
         $container['api-http.response.factory'] = function () {
-            return $this->getMockBuilder(ResponseFactoryInterface::class)->getMockForAbstractClass();
+            return $this->getMockByCalls(ResponseFactoryInterface::class);
         };
 
         self::assertTrue(isset($container['api-http.response.manager']));
