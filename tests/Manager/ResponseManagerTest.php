@@ -79,7 +79,7 @@ final class ResponseManagerTest extends TestCase
 
         error_clear_last();
 
-        self::assertInternalType('array', $error);
+        self::assertIsArray($error);
         self::assertArrayHasKey('type', $error);
         self::assertArrayHasKey('message', $error);
         self::assertSame(E_USER_DEPRECATED, $error['type']);
