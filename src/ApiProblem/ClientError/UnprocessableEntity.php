@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\ApiHttp\ApiProblem;
+namespace Chubbyphp\ApiHttp\ApiProblem\ClientError;
 
-final class BadRequestApiProblem extends ApiProblem
+use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
+use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
+
+final class UnprocessableEntity extends AbstractApiProblem
 {
     /**
      * @var array[]
@@ -16,7 +19,7 @@ final class BadRequestApiProblem extends ApiProblem
      */
     public function getStatus(): int
     {
-        return 400;
+        return 422;
     }
 
     /**
@@ -24,11 +27,11 @@ final class BadRequestApiProblem extends ApiProblem
      */
     public function getType(): string
     {
-        return 'https://tools.ietf.org/html/rfc2616#section-10.4.1';
+        return 'https://tools.ietf.org/html/rfc4918#section-11.2';
     }
 
     /**
-     * @param array $invalidParameters
+     * @param string[] $invalidParameters
      *
      * @return ApiProblemInterface
      */

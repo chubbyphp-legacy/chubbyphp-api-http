@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\ApiProblem;
 
-abstract class ApiProblem implements ApiProblemInterface
+abstract class AbstractApiProblem implements ApiProblemInterface
 {
     /**
      * @var string

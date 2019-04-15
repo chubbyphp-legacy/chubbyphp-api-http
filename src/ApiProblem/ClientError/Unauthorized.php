@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\ApiHttp\ApiProblem;
+namespace Chubbyphp\ApiHttp\ApiProblem\ClientError;
 
-final class UnauthorizedApiProblem extends ApiProblem
+use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
+use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
+
+final class Unauthorized extends AbstractApiProblem
 {
     /**
      * @var string[]

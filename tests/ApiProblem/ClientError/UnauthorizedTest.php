@@ -1,18 +1,18 @@
 <?php
 
-namespace Chubbyphp\Tests\ApiHttp\Error;
+namespace Chubbyphp\Tests\ApiHttp\ApiProblem\ClientError;
 
-use Chubbyphp\ApiHttp\ApiProblem\UnauthorizedApiProblem;
+use Chubbyphp\ApiHttp\ApiProblem\ClientError\Unauthorized;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\ApiHttp\ApiProblem\UnauthorizedApiProblem
+ * @covers \Chubbyphp\ApiHttp\ApiProblem\ClientError\Unauthorized
  */
-final class UnauthorizedApiProblemTest extends TestCase
+final class UnauthorizedTest extends TestCase
 {
     public function testMinimal()
     {
-        $apiProblem = new UnauthorizedApiProblem('title');
+        $apiProblem = new Unauthorized('title');
 
         self::assertSame(401, $apiProblem->getStatus());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.2', $apiProblem->getType());
@@ -24,7 +24,7 @@ final class UnauthorizedApiProblemTest extends TestCase
 
     public function testMaximal()
     {
-        $apiProblem = (new UnauthorizedApiProblem('title'))
+        $apiProblem = (new Unauthorized('title'))
             ->withTitle('other title')
             ->withDetail('detail')
             ->withInstance('instance')

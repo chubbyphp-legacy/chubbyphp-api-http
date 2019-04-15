@@ -1,19 +1,18 @@
 <?php
 
-namespace Chubbyphp\Tests\ApiHttp\Error;
+namespace Chubbyphp\Tests\ApiHttp\ApiProblem;
 
-use Chubbyphp\ApiHttp\ApiProblem\ApiProblem;
+use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\ApiHttp\ApiProblem\ApiProblem
+ * @covers \Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem
  */
 final class ApiProblemTest extends TestCase
 {
     public function testMinimal()
     {
-        $apiProblem = new class('title') extends ApiProblem
-        {
+        $apiProblem = new class('title') extends AbstractApiProblem {
             public function getStatus(): int
             {
                 return 418;
@@ -34,8 +33,7 @@ final class ApiProblemTest extends TestCase
 
     public function testMaximal()
     {
-        $apiProblem = new class('title') extends ApiProblem
-        {
+        $apiProblem = new class('title') extends AbstractApiProblem {
             public function getStatus(): int
             {
                 return 418;

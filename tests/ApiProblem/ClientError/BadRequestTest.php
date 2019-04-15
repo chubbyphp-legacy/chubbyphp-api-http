@@ -1,18 +1,18 @@
 <?php
 
-namespace Chubbyphp\Tests\ApiHttp\Error;
+namespace Chubbyphp\Tests\ApiHttp\ApiProblem\ClientError;
 
-use Chubbyphp\ApiHttp\ApiProblem\BadRequestApiProblem;
+use Chubbyphp\ApiHttp\ApiProblem\ClientError\BadRequest;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\ApiHttp\ApiProblem\BadRequestApiProblem
+ * @covers \Chubbyphp\ApiHttp\ApiProblem\ClientError\BadRequest
  */
-final class BadRequestApiProblemTest extends TestCase
+final class BadRequestTest extends TestCase
 {
     public function testMinimal()
     {
-        $apiProblem = new BadRequestApiProblem('title');
+        $apiProblem = new BadRequest('title');
 
         self::assertSame(400, $apiProblem->getStatus());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.1', $apiProblem->getType());
@@ -24,7 +24,7 @@ final class BadRequestApiProblemTest extends TestCase
 
     public function testMaximal()
     {
-        $apiProblem = (new BadRequestApiProblem('title'))
+        $apiProblem = (new BadRequest('title'))
             ->withTitle('other title')
             ->withDetail('detail')
             ->withInstance('instance')

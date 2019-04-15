@@ -1,18 +1,18 @@
 <?php
 
-namespace Chubbyphp\Tests\ApiHttp\Error;
+namespace Chubbyphp\Tests\ApiHttp\ApiProblem\ClientError;
 
-use Chubbyphp\ApiHttp\ApiProblem\PaymentRequiredApiProblem;
+use Chubbyphp\ApiHttp\ApiProblem\ClientError\PaymentRequired;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\ApiHttp\ApiProblem\PaymentRequiredApiProblem
+ * @covers \Chubbyphp\ApiHttp\ApiProblem\ClientError\PaymentRequired
  */
-final class PaymentRequiredApiProblemTest extends TestCase
+final class PaymentRequiredTest extends TestCase
 {
     public function testMinimal()
     {
-        $apiProblem = new PaymentRequiredApiProblem('title');
+        $apiProblem = new PaymentRequired('title');
 
         self::assertSame(402, $apiProblem->getStatus());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.3', $apiProblem->getType());
@@ -24,7 +24,7 @@ final class PaymentRequiredApiProblemTest extends TestCase
 
     public function testMaximal()
     {
-        $apiProblem = (new PaymentRequiredApiProblem('title'))
+        $apiProblem = (new PaymentRequired('title'))
             ->withTitle('other title')
             ->withDetail('detail')
             ->withInstance('instance')
