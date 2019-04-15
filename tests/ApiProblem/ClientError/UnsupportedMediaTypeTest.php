@@ -15,6 +15,7 @@ final class UnsupportedMediaTypeTest extends TestCase
         $apiProblem = new UnsupportedMediaType('title');
 
         self::assertSame(415, $apiProblem->getStatus());
+        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.16', $apiProblem->getType());
         self::assertSame('title', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
@@ -31,6 +32,7 @@ final class UnsupportedMediaTypeTest extends TestCase
             ->withSupportedMediaTypes(['application/json', 'application/xml']);
 
         self::assertSame(415, $apiProblem->getStatus());
+        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.16', $apiProblem->getType());
         self::assertSame('other title', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());

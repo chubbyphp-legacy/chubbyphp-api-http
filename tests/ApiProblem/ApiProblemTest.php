@@ -25,6 +25,7 @@ final class ApiProblemTest extends TestCase
         };
 
         self::assertSame(418, $apiProblem->getStatus());
+        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://im-a-teapot.com', $apiProblem->getType());
         self::assertSame('title', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
@@ -51,6 +52,7 @@ final class ApiProblemTest extends TestCase
             ->withInstance('instance');
 
         self::assertSame(418, $apiProblem->getStatus());
+        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://im-a-teapot.com', $apiProblem->getType());
         self::assertSame('other title', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());

@@ -23,6 +23,18 @@ final class MethodNotAllowed extends AbstractApiProblem
     }
 
     /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        if ([] === $this->allowedMethods) {
+            return [];
+        }
+
+        return ['Allow' => implode(',', $this->allowedMethods)];
+    }
+
+    /**
      * @return string
      */
     public function getType(): string

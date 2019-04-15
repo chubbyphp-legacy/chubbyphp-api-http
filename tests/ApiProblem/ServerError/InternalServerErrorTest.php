@@ -15,6 +15,7 @@ final class InternalServerErrorTest extends TestCase
         $apiProblem = new InternalServerError('title');
 
         self::assertSame(500, $apiProblem->getStatus());
+        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.5.1', $apiProblem->getType());
         self::assertSame('title', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
@@ -29,6 +30,7 @@ final class InternalServerErrorTest extends TestCase
             ->withInstance('instance');
 
         self::assertSame(500, $apiProblem->getStatus());
+        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.5.1', $apiProblem->getType());
         self::assertSame('other title', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());

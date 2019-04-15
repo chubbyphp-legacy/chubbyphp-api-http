@@ -15,6 +15,7 @@ final class ForbiddenTest extends TestCase
         $apiProblem = new Forbidden('title');
 
         self::assertSame(403, $apiProblem->getStatus());
+        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.4', $apiProblem->getType());
         self::assertSame('title', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
@@ -29,6 +30,7 @@ final class ForbiddenTest extends TestCase
             ->withInstance('instance');
 
         self::assertSame(403, $apiProblem->getStatus());
+        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.4', $apiProblem->getType());
         self::assertSame('other title', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());

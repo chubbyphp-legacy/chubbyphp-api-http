@@ -23,6 +23,18 @@ final class NotAcceptable extends AbstractApiProblem
     }
 
     /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        if ([] === $this->acceptableMediaTypes) {
+            return [];
+        }
+
+        return ['X-Acceptable' => implode(',', $this->acceptableMediaTypes)];
+    }
+
+    /**
      * @return string
      */
     public function getType(): string

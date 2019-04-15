@@ -15,6 +15,7 @@ final class MethodNotAllowedTest extends TestCase
         $apiProblem = new MethodNotAllowed('title');
 
         self::assertSame(405, $apiProblem->getStatus());
+        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.6', $apiProblem->getType());
         self::assertSame('title', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
@@ -31,6 +32,7 @@ final class MethodNotAllowedTest extends TestCase
             ->withAllowedMethods(['GET', 'POST']);
 
         self::assertSame(405, $apiProblem->getStatus());
+        self::assertSame(['Allow' => 'GET,POST'], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.6', $apiProblem->getType());
         self::assertSame('other title', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());

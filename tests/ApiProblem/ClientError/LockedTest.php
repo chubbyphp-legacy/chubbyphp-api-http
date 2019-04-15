@@ -15,6 +15,7 @@ final class LockedTest extends TestCase
         $apiProblem = new Locked('title');
 
         self::assertSame(423, $apiProblem->getStatus());
+        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc4918#section-11.3', $apiProblem->getType());
         self::assertSame('title', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
@@ -29,6 +30,7 @@ final class LockedTest extends TestCase
             ->withInstance('instance');
 
         self::assertSame(423, $apiProblem->getStatus());
+        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc4918#section-11.3', $apiProblem->getType());
         self::assertSame('other title', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());

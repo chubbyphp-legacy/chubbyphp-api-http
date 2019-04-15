@@ -30,6 +30,14 @@ abstract class AbstractApiProblem implements ApiProblemInterface
     }
 
     /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        return [];
+    }
+
+    /**
      * @param string $title
      *
      * @return ApiProblemInterface

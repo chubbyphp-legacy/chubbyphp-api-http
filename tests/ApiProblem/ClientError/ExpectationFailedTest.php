@@ -15,6 +15,7 @@ final class ExpectationFailedTest extends TestCase
         $apiProblem = new ExpectationFailed('title');
 
         self::assertSame(417, $apiProblem->getStatus());
+        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.18', $apiProblem->getType());
         self::assertSame('title', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
@@ -31,6 +32,7 @@ final class ExpectationFailedTest extends TestCase
             ->withMissingExpectations(['Header X-Sample is missing']);
 
         self::assertSame(417, $apiProblem->getStatus());
+        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.18', $apiProblem->getType());
         self::assertSame('other title', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());
