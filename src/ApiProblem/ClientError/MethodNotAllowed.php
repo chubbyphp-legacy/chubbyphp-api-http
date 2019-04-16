@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Chubbyphp\ApiHttp\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
-use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
 
 final class MethodNotAllowed extends AbstractApiProblem
 {
@@ -13,6 +12,19 @@ final class MethodNotAllowed extends AbstractApiProblem
      * @var string[]
      */
     private $allowedMethods = [];
+
+    /**
+     * @param string[]    $allowedMethods
+     * @param string      $title
+     * @param string|null $detail
+     * @param string|null $instance
+     */
+    public function __construct(array $allowedMethods, string $title, string $detail = null, string $instance = null)
+    {
+        parent::__construct($title, $detail, $instance);
+
+        $this->allowedMethods = $allowedMethods;
+    }
 
     /**
      * @return int
@@ -40,19 +52,6 @@ final class MethodNotAllowed extends AbstractApiProblem
     public function getType(): string
     {
         return 'https://tools.ietf.org/html/rfc2616#section-10.4.6';
-    }
-
-    /**
-     * @param string[] $allowedMethods
-     *
-     * @return ApiProblemInterface
-     */
-    public function withAllowedMethods(array $allowedMethods): ApiProblemInterface
-    {
-        $clone = clone $this;
-        $clone->allowedMethods = $allowedMethods;
-
-        return $clone;
     }
 
     /**

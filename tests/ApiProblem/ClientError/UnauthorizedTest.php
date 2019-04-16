@@ -12,7 +12,7 @@ final class UnauthorizedTest extends TestCase
 {
     public function testMinimal()
     {
-        $apiProblem = new Unauthorized('title');
+        $apiProblem = new Unauthorized([], 'title');
 
         self::assertSame(401, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
@@ -25,18 +25,14 @@ final class UnauthorizedTest extends TestCase
 
     public function testMaximal()
     {
-        $apiProblem = (new Unauthorized('title'))
-            ->withTitle('other title')
-            ->withDetail('detail')
-            ->withInstance('instance')
-            ->withAuthorizationTypes(['basic', 'bearer']);
+        $apiProblem = new Unauthorized(['Basic', 'Bearer'], 'title', 'detail', 'instance');
 
         self::assertSame(401, $apiProblem->getStatus());
-        self::assertSame(['WWW-Authenticate' => 'basic,bearer'], $apiProblem->getHeaders());
+        self::assertSame(['WWW-Authenticate' => 'Basic,Bearer'], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.2', $apiProblem->getType());
-        self::assertSame('other title', $apiProblem->getTitle());
+        self::assertSame('title', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());
         self::assertSame('instance', $apiProblem->getInstance());
-        self::assertSame(['basic', 'bearer'], $apiProblem->getAuthorizationTypes());
+        self::assertSame(['Basic', 'Bearer'], $apiProblem->getAuthorizationTypes());
     }
 }

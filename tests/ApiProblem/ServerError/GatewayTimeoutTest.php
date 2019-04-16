@@ -24,15 +24,12 @@ final class GatewayTimeoutTest extends TestCase
 
     public function testMaximal()
     {
-        $apiProblem = (new GatewayTimeout('title'))
-            ->withTitle('other title')
-            ->withDetail('detail')
-            ->withInstance('instance');
+        $apiProblem = new GatewayTimeout('title', 'detail', 'instance');
 
         self::assertSame(504, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.5.5', $apiProblem->getType());
-        self::assertSame('other title', $apiProblem->getTitle());
+        self::assertSame('title', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());
         self::assertSame('instance', $apiProblem->getInstance());
     }

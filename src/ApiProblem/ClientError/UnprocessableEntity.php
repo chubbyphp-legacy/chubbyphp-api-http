@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Chubbyphp\ApiHttp\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
-use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
 
 final class UnprocessableEntity extends AbstractApiProblem
 {
@@ -13,6 +12,19 @@ final class UnprocessableEntity extends AbstractApiProblem
      * @var array[]
      */
     private $invalidParameters = [];
+
+    /**
+     * @param array       $invalidParameters
+     * @param string      $title
+     * @param string|null $detail
+     * @param string|null $instance
+     */
+    public function __construct(array $invalidParameters, string $title, string $detail = null, string $instance = null)
+    {
+        parent::__construct($title, $detail, $instance);
+
+        $this->invalidParameters = $invalidParameters;
+    }
 
     /**
      * @return int
@@ -28,19 +40,6 @@ final class UnprocessableEntity extends AbstractApiProblem
     public function getType(): string
     {
         return 'https://tools.ietf.org/html/rfc4918#section-11.2';
-    }
-
-    /**
-     * @param string[] $invalidParameters
-     *
-     * @return ApiProblemInterface
-     */
-    public function withInvalidParameters(array $invalidParameters): ApiProblemInterface
-    {
-        $clone = clone $this;
-        $clone->invalidParameters = $invalidParameters;
-
-        return $clone;
     }
 
     /**

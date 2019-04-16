@@ -24,15 +24,12 @@ final class GoneTest extends TestCase
 
     public function testMaximal()
     {
-        $apiProblem = (new Gone('title'))
-            ->withTitle('other title')
-            ->withDetail('detail')
-            ->withInstance('instance');
+        $apiProblem = new Gone('title', 'detail', 'instance');
 
         self::assertSame(410, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.11', $apiProblem->getType());
-        self::assertSame('other title', $apiProblem->getTitle());
+        self::assertSame('title', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());
         self::assertSame('instance', $apiProblem->getInstance());
     }

@@ -24,15 +24,12 @@ final class LengthRequiredTest extends TestCase
 
     public function testMaximal()
     {
-        $apiProblem = (new LengthRequired('title'))
-            ->withTitle('other title')
-            ->withDetail('detail')
-            ->withInstance('instance');
+        $apiProblem = new LengthRequired('title', 'detail', 'instance');
 
         self::assertSame(411, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.12', $apiProblem->getType());
-        self::assertSame('other title', $apiProblem->getTitle());
+        self::assertSame('title', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());
         self::assertSame('instance', $apiProblem->getInstance());
     }

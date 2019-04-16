@@ -5,14 +5,26 @@ declare(strict_types=1);
 namespace Chubbyphp\ApiHttp\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
-use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
 
 final class PreconditionFailed extends AbstractApiProblem
 {
     /**
      * @var string[]
      */
-    private $missingPreconditions = [];
+    private $failedPreconditions = [];
+
+    /**
+     * @param string[]    $failedPreconditions
+     * @param string      $title
+     * @param string|null $detail
+     * @param string|null $instance
+     */
+    public function __construct(array $failedPreconditions, string $title, string $detail = null, string $instance = null)
+    {
+        parent::__construct($title, $detail, $instance);
+
+        $this->failedPreconditions = $failedPreconditions;
+    }
 
     /**
      * @return int
@@ -31,23 +43,10 @@ final class PreconditionFailed extends AbstractApiProblem
     }
 
     /**
-     * @param string[] $missingPreconditions
-     *
-     * @return ApiProblemInterface
-     */
-    public function withMissingPreconditions(array $missingPreconditions): ApiProblemInterface
-    {
-        $clone = clone $this;
-        $clone->missingPreconditions = $missingPreconditions;
-
-        return $clone;
-    }
-
-    /**
      * @return string[]
      */
-    public function getMissingPreconditions(): array
+    public function getFailedPreconditions(): array
     {
-        return $this->missingPreconditions;
+        return $this->failedPreconditions;
     }
 }

@@ -5,14 +5,26 @@ declare(strict_types=1);
 namespace Chubbyphp\ApiHttp\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
-use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
 
 final class RequestEntityTooLarge extends AbstractApiProblem
 {
     /**
-     * @var int|null
+     * @var int
      */
     private $maxContentLength;
+
+    /**
+     * @param int         $maxContentLength
+     * @param string      $title
+     * @param string|null $detail
+     * @param string|null $instance
+     */
+    public function __construct(int $maxContentLength, string $title, string $detail = null, string $instance = null)
+    {
+        parent::__construct($title, $detail, $instance);
+
+        $this->maxContentLength = $maxContentLength;
+    }
 
     /**
      * @return int
@@ -31,22 +43,9 @@ final class RequestEntityTooLarge extends AbstractApiProblem
     }
 
     /**
-     * @param int|null $maxContentLength
-     *
-     * @return ApiProblemInterface
+     * @return int
      */
-    public function withMaxContentLength(int $maxContentLength = null): ApiProblemInterface
-    {
-        $clone = clone $this;
-        $clone->maxContentLength = $maxContentLength;
-
-        return $clone;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getMaxContentLength()
+    public function getMaxContentLength(): int
     {
         return $this->maxContentLength;
     }

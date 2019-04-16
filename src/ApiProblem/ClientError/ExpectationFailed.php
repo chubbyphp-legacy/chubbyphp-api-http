@@ -5,14 +5,26 @@ declare(strict_types=1);
 namespace Chubbyphp\ApiHttp\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
-use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
 
 final class ExpectationFailed extends AbstractApiProblem
 {
     /**
      * @var string[]
      */
-    private $missingExpectations = [];
+    private $failedExpectations = [];
+
+    /**
+     * @param string[]    $failedExpectations
+     * @param string      $title
+     * @param string|null $detail
+     * @param string|null $instance
+     */
+    public function __construct(array $failedExpectations, string $title, string $detail = null, string $instance = null)
+    {
+        parent::__construct($title, $detail, $instance);
+
+        $this->failedExpectations = $failedExpectations;
+    }
 
     /**
      * @return int
@@ -31,23 +43,10 @@ final class ExpectationFailed extends AbstractApiProblem
     }
 
     /**
-     * @param string[] $missingExpectations
-     *
-     * @return ApiProblemInterface
-     */
-    public function withMissingExpectations(array $missingExpectations): ApiProblemInterface
-    {
-        $clone = clone $this;
-        $clone->missingExpectations = $missingExpectations;
-
-        return $clone;
-    }
-
-    /**
      * @return string[]
      */
-    public function getMissingExpectations(): array
+    public function getFailedExpectations(): array
     {
-        return $this->missingExpectations;
+        return $this->failedExpectations;
     }
 }

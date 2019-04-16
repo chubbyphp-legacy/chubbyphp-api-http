@@ -24,15 +24,12 @@ final class InsufficientStorageTest extends TestCase
 
     public function testMaximal()
     {
-        $apiProblem = (new InsufficientStorage('title'))
-            ->withTitle('other title')
-            ->withDetail('detail')
-            ->withInstance('instance');
+        $apiProblem = new InsufficientStorage('title', 'detail', 'instance');
 
         self::assertSame(507, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc4918#section-11.5', $apiProblem->getType());
-        self::assertSame('other title', $apiProblem->getTitle());
+        self::assertSame('title', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());
         self::assertSame('instance', $apiProblem->getInstance());
     }

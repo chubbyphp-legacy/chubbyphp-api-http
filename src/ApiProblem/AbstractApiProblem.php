@@ -22,11 +22,15 @@ abstract class AbstractApiProblem implements ApiProblemInterface
     private $instance;
 
     /**
-     * @param string $title
+     * @param string      $title
+     * @param string|null $detail
+     * @param string|null $instance
      */
-    public function __construct(string $title)
+    public function __construct(string $title, string $detail = null, string $instance = null)
     {
         $this->title = $title;
+        $this->detail = $detail;
+        $this->instance = $instance;
     }
 
     /**
@@ -38,19 +42,6 @@ abstract class AbstractApiProblem implements ApiProblemInterface
     }
 
     /**
-     * @param string $title
-     *
-     * @return ApiProblemInterface
-     */
-    public function withTitle(string $title): ApiProblemInterface
-    {
-        $clone = clone $this;
-        $clone->title = $title;
-
-        return $clone;
-    }
-
-    /**
      * @return string
      */
     public function getTitle(): string
@@ -59,37 +50,11 @@ abstract class AbstractApiProblem implements ApiProblemInterface
     }
 
     /**
-     * @param string|null $detail
-     *
-     * @return ApiProblemInterface
-     */
-    public function withDetail(string $detail = null): ApiProblemInterface
-    {
-        $clone = clone $this;
-        $clone->detail = $detail;
-
-        return $clone;
-    }
-
-    /**
      * @return string|null
      */
     public function getDetail()
     {
         return $this->detail;
-    }
-
-    /**
-     * @param string|null $instance
-     *
-     * @return ApiProblemInterface
-     */
-    public function withInstance(string $instance = null): ApiProblemInterface
-    {
-        $clone = clone $this;
-        $clone->instance = $instance;
-
-        return $clone;
     }
 
     /**
