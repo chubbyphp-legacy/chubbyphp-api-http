@@ -25,7 +25,7 @@ A simple http handler implementation for API.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-api-http][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-api-http "^2.2"
+composer require chubbyphp/chubbyphp-api-http "^3.0"
 ```
 
 ## Usage

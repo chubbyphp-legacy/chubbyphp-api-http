@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": "~7.0",
+        "php": "^7.0",
         "chubbyphp/chubbyphp-deserialization": "^2.1",
         "chubbyphp/chubbyphp-serialization": "^2.1",
         "psr/http-factory": "^1.0",
@@ -30,7 +30,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.2-dev"
+            "dev-master": "3.0-dev"
         }
     }
 }

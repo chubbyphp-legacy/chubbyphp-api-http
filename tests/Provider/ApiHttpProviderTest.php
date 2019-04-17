@@ -2,7 +2,6 @@
 
 namespace Chubbyphp\Tests\ApiHttp\Provider;
 
-use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface;
 use Chubbyphp\ApiHttp\Manager\RequestManager;
 use Chubbyphp\ApiHttp\Manager\ResponseManager;
 use Chubbyphp\ApiHttp\Provider\ApiHttpProvider;
@@ -11,6 +10,7 @@ use Chubbyphp\Mock\MockByCallsTrait;
 use Chubbyphp\Serialization\Provider\SerializationProvider;
 use PHPUnit\Framework\TestCase;
 use Pimple\Container;
+use Psr\Http\Message\ResponseFactoryInterface;
 
 /**
  * @covers \Chubbyphp\ApiHttp\Provider\ApiHttpProvider
