@@ -7,11 +7,9 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false"
-         bootstrap="tests/bootstrap.php"
         >
     <testsuites>
-        <testsuite name="chubbyphp api http">
+        <testsuite name="chubbyphp framework">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
