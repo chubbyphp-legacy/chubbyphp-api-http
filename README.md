@@ -30,19 +30,19 @@ composer require chubbyphp/chubbyphp-api-http "^3.0"
 
 ## Usage
 
- * [Error][2]
+ * [ApiProblem (example)][2]
  * [RequestManager][3]
  * [ResponseManager][4]
  * [ApiHttpProvider][5]
- * [ErrorMapping][6]
+ * [ApiProblemMapping (example)][6]
 
 ## Copyright
 
 Dominik Zogg 2019
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-api-http
-[2]: doc/Error/Error.md
+[2]: doc/ApiProblem/ApiProblem.md
 [3]: doc/Manager/RequestManager.md
 [4]: doc/Manager/ResponseManager.md
 [5]: doc/Provider/ApiHttpProvider.md
-[6]: doc/Serialization/ErrorMapping.md
+[6]: doc/Serialization/ApiProblemMapping.md
