@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class ServiceUnavailableMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new ServiceUnavailableMapping();
 
         self::assertSame(ServiceUnavailable::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new ServiceUnavailableMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new ServiceUnavailableMapping();
 
@@ -40,7 +40,7 @@ final class ServiceUnavailableMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new ServiceUnavailableMapping();
 
@@ -49,7 +49,7 @@ final class ServiceUnavailableMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new ServiceUnavailableMapping();
 

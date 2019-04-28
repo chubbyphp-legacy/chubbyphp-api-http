@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class BadRequestTest extends TestCase
 {
-    public function testMinimal()
+    public function testMinimal(): void
     {
         $apiProblem = new BadRequest([]);
 
@@ -23,7 +23,7 @@ final class BadRequestTest extends TestCase
         self::assertSame([], $apiProblem->getInvalidParameters());
     }
 
-    public function testMaximal()
+    public function testMaximal(): void
     {
         $apiProblem = new BadRequest([
             [

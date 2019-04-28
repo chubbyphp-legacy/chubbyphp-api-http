@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class RequestEntityTooLargeMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new RequestEntityTooLargeMapping();
 
         self::assertSame(RequestEntityTooLarge::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new RequestEntityTooLargeMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new RequestEntityTooLargeMapping();
 
@@ -41,7 +41,7 @@ final class RequestEntityTooLargeMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new RequestEntityTooLargeMapping();
 
@@ -50,7 +50,7 @@ final class RequestEntityTooLargeMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new RequestEntityTooLargeMapping();
 

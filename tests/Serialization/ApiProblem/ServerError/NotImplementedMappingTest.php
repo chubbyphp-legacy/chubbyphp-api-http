@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class NotImplementedMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new NotImplementedMapping();
 
         self::assertSame(NotImplemented::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new NotImplementedMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new NotImplementedMapping();
 
@@ -40,7 +40,7 @@ final class NotImplementedMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new NotImplementedMapping();
 
@@ -49,7 +49,7 @@ final class NotImplementedMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new NotImplementedMapping();
 

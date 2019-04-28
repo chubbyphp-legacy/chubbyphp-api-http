@@ -22,7 +22,7 @@ final class ResponseManagerTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testCreateWithDefaults()
+    public function testCreateWithDefaults(): void
     {
         $bodyString = '{"key": "value"}';
 
@@ -57,7 +57,7 @@ final class ResponseManagerTest extends TestCase
         self::assertSame($response, $responseManager->create($object, 'application/json'));
     }
 
-    public function testCreateWithoutDefaults()
+    public function testCreateWithoutDefaults(): void
     {
         $bodyString = '{"key": "value"}';
 
@@ -95,7 +95,7 @@ final class ResponseManagerTest extends TestCase
         self::assertSame($response, $responseManager->create($object, 'application/json', 201, $context));
     }
 
-    public function testCreateEmptyWithDefaults()
+    public function testCreateEmptyWithDefaults(): void
     {
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockByCalls(DeserializerInterface::class);
@@ -118,7 +118,7 @@ final class ResponseManagerTest extends TestCase
         self::assertSame($response, $responseManager->createEmpty('application/json'));
     }
 
-    public function testCreateEmptyWithoutDefaults()
+    public function testCreateEmptyWithoutDefaults(): void
     {
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockByCalls(DeserializerInterface::class);
@@ -141,7 +141,7 @@ final class ResponseManagerTest extends TestCase
         self::assertSame($response, $responseManager->createEmpty('application/json', 200));
     }
 
-    public function testCreateRedirectWithDefaults()
+    public function testCreateRedirectWithDefaults(): void
     {
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockByCalls(DeserializerInterface::class);
@@ -164,7 +164,7 @@ final class ResponseManagerTest extends TestCase
         self::assertSame($response, $responseManager->createRedirect('https://google.com'));
     }
 
-    public function testCreateRedirectWithoutDefaults()
+    public function testCreateRedirectWithoutDefaults(): void
     {
         /** @var DeserializerInterface|MockObject $deserializer */
         $deserializer = $this->getMockByCalls(DeserializerInterface::class);
@@ -187,7 +187,7 @@ final class ResponseManagerTest extends TestCase
         self::assertSame($response, $responseManager->createRedirect('https://google.com', 301));
     }
 
-    public function testCreateFromApiProblem()
+    public function testCreateFromApiProblem(): void
     {
         /** @var ApiProblemInterface|MockObject $apiProblem */
         $apiProblem = $this->getMockByCalls(ApiProblemInterface::class, [

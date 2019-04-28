@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Manager;
 
+use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
 use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
 use Chubbyphp\Serialization\SerializerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
+use Psr\Http\Message\ResponseInterface;
 
 final class ResponseManager implements ResponseManagerInterface
 {
@@ -49,14 +49,14 @@ final class ResponseManager implements ResponseManagerInterface
      * @param int                             $status
      * @param NormalizerContextInterface|null $context
      *
-     * @return Response
+     * @return ResponseInterface
      */
     public function create(
-        $object,
+         $object,
         string $accept,
         int $status = 200,
         NormalizerContextInterface $context = null
-    ): Response {
+    ): ResponseInterface {
         $body = $this->serializer->serialize($object, $accept, $context);
 
         $response = $this->responseFactory->createResponse($status)->withHeader('Content-Type', $accept);
@@ -69,9 +69,9 @@ final class ResponseManager implements ResponseManagerInterface
      * @param string $accept
      * @param int    $status
      *
-     * @return Response
+     * @return ResponseInterface
      */
-    public function createEmpty(string $accept, int $status = 204): Response
+    public function createEmpty(string $accept, int $status = 204): ResponseInterface
     {
         return $this->responseFactory->createResponse($status)->withHeader('Content-Type', $accept);
     }
@@ -80,9 +80,9 @@ final class ResponseManager implements ResponseManagerInterface
      * @param string $location
      * @param int    $status
      *
-     * @return Response
+     * @return ResponseInterface
      */
-    public function createRedirect(string $location, int $status = 307): Response
+    public function createRedirect(string $location, int $status = 307): ResponseInterface
     {
         return $this->responseFactory->createResponse($status)->withHeader('Location', $location);
     }
@@ -92,13 +92,13 @@ final class ResponseManager implements ResponseManagerInterface
      * @param string                     $accept
      * @param NormalizerContextInterface $context
      *
-     * @return Response
+     * @return ResponseInterface
      */
     public function createFromApiProblem(
         ApiProblemInterface $apiProblem,
         string $accept,
         NormalizerContextInterface $context = null
-    ): Response {
+    ): ResponseInterface {
         $status = $apiProblem->getStatus();
 
         $response = $this->responseFactory->createResponse($status)->withHeader('Content-Type', $accept);

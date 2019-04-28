@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class BadRequestMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new BadRequestMapping();
 
         self::assertSame(BadRequest::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new BadRequestMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new BadRequestMapping();
 
@@ -41,7 +41,7 @@ final class BadRequestMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new BadRequestMapping();
 
@@ -50,7 +50,7 @@ final class BadRequestMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new BadRequestMapping();
 

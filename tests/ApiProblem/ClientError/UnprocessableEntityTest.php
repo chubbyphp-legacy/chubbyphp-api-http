@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class UnprocessableEntityTest extends TestCase
 {
-    public function testMinimal()
+    public function testMinimal(): void
     {
         $apiProblem = new UnprocessableEntity([]);
 
@@ -23,7 +23,7 @@ final class UnprocessableEntityTest extends TestCase
         self::assertSame([], $apiProblem->getInvalidParameters());
     }
 
-    public function testMaximal()
+    public function testMaximal(): void
     {
         $apiProblem = new UnprocessableEntity([
             [

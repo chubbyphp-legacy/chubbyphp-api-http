@@ -19,7 +19,7 @@ final class RequestManagerTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testGetDataFromRequestQuery()
+    public function testGetDataFromRequestQuery(): void
     {
         $object = new \stdClass();
 
@@ -46,7 +46,7 @@ final class RequestManagerTest extends TestCase
         );
     }
 
-    public function testGetDataFromRequestBody()
+    public function testGetDataFromRequestBody(): void
     {
         $object = new \stdClass();
 

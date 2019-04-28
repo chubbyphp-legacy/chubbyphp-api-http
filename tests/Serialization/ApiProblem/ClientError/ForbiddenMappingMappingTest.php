@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class ForbiddenMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new ForbiddenMapping();
 
         self::assertSame(Forbidden::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new ForbiddenMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new ForbiddenMapping();
 
@@ -40,7 +40,7 @@ final class ForbiddenMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new ForbiddenMapping();
 
@@ -49,7 +49,7 @@ final class ForbiddenMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new ForbiddenMapping();
 

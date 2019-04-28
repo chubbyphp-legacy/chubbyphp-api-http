@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class ExpectationFailedMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new ExpectationFailedMapping();
 
         self::assertSame(ExpectationFailed::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new ExpectationFailedMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new ExpectationFailedMapping();
 
@@ -41,7 +41,7 @@ final class ExpectationFailedMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new ExpectationFailedMapping();
 
@@ -50,7 +50,7 @@ final class ExpectationFailedMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new ExpectationFailedMapping();
 

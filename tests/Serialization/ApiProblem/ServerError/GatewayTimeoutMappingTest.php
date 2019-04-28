@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class GatewayTimeoutMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new GatewayTimeoutMapping();
 
         self::assertSame(GatewayTimeout::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new GatewayTimeoutMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new GatewayTimeoutMapping();
 
@@ -40,7 +40,7 @@ final class GatewayTimeoutMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new GatewayTimeoutMapping();
 
@@ -49,7 +49,7 @@ final class GatewayTimeoutMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new GatewayTimeoutMapping();
 

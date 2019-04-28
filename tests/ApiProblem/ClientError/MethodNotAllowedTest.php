@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class MethodNotAllowedTest extends TestCase
 {
-    public function testMinimal()
+    public function testMinimal(): void
     {
         $apiProblem = new MethodNotAllowed('PUT', []);
 
@@ -24,7 +24,7 @@ final class MethodNotAllowedTest extends TestCase
         self::assertSame([], $apiProblem->getAllowedMethods());
     }
 
-    public function testMaximal()
+    public function testMaximal(): void
     {
         $apiProblem = new MethodNotAllowed('PUT', ['GET', 'POST'], 'detail', '/cccdfd0f-0da3-4070-8e55-61bd832b47c0');
 

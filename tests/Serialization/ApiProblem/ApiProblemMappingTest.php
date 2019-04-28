@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class ApiProblemMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new class() extends AbstractApiProblemMapping {
             public function getClass(): string
@@ -23,7 +23,7 @@ final class ApiProblemMappingTest extends TestCase
         self::assertSame(\stdClass::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new class() extends AbstractApiProblemMapping {
             public function getClass(): string
@@ -35,7 +35,7 @@ final class ApiProblemMappingTest extends TestCase
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new class() extends AbstractApiProblemMapping {
             public function getClass(): string
@@ -54,7 +54,7 @@ final class ApiProblemMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new class() extends AbstractApiProblemMapping {
             public function getClass(): string
@@ -68,7 +68,7 @@ final class ApiProblemMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new class() extends AbstractApiProblemMapping {
             public function getClass(): string

@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class NotAcceptableTest extends TestCase
 {
-    public function testMinimal()
+    public function testMinimal(): void
     {
         $apiProblem = new NotAcceptable('application/x-yaml', []);
 
@@ -23,7 +23,7 @@ final class NotAcceptableTest extends TestCase
         self::assertSame([], $apiProblem->getAcceptables());
     }
 
-    public function testMaximal()
+    public function testMaximal(): void
     {
         $apiProblem = new NotAcceptable(
             'application/x-yaml',

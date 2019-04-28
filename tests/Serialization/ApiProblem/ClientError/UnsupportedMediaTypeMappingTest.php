@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class UnsupportedMediaTypeMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new UnsupportedMediaTypeMapping();
 
         self::assertSame(UnsupportedMediaType::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new UnsupportedMediaTypeMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new UnsupportedMediaTypeMapping();
 
@@ -42,7 +42,7 @@ final class UnsupportedMediaTypeMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new UnsupportedMediaTypeMapping();
 
@@ -51,7 +51,7 @@ final class UnsupportedMediaTypeMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new UnsupportedMediaTypeMapping();
 

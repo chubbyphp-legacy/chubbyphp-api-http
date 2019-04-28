@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class NotAcceptableMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new NotAcceptableMapping();
 
         self::assertSame(NotAcceptable::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new NotAcceptableMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new NotAcceptableMapping();
 
@@ -42,7 +42,7 @@ final class NotAcceptableMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new NotAcceptableMapping();
 
@@ -51,7 +51,7 @@ final class NotAcceptableMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new NotAcceptableMapping();
 

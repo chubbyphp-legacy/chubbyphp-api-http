@@ -5,28 +5,32 @@ declare(strict_types=1);
 namespace Chubbyphp\ApiHttp\Manager;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ServerRequestInterface;
 
 interface RequestManagerInterface
 {
     /**
-     * @param Request                           $request
+     * @param ServerRequestInterface            $request
      * @param object|string                     $object
      * @param DenormalizerContextInterface|null $context
      *
      * @return object
      */
-    public function getDataFromRequestQuery(Request $request, $object, DenormalizerContextInterface $context = null);
+    public function getDataFromRequestQuery(
+        ServerRequestInterface $request,
+        $object,
+        DenormalizerContextInterface $context = null
+    );
 
     /**
-     * @param Request       $request
-     * @param object|string $object
-     * @param string        $contentType
+     * @param ServerRequestInterface $request
+     * @param object|string          $object
+     * @param string                 $contentType
      *
-     * @return object|null
+     * @return object
      */
     public function getDataFromRequestBody(
-        Request $request,
+        ServerRequestInterface $request,
         $object,
         string $contentType,
         DenormalizerContextInterface $context = null

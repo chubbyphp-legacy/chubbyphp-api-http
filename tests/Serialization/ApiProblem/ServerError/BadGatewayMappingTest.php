@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class BadGatewayMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new BadGatewayMapping();
 
         self::assertSame(BadGateway::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new BadGatewayMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new BadGatewayMapping();
 
@@ -40,7 +40,7 @@ final class BadGatewayMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new BadGatewayMapping();
 
@@ -49,7 +49,7 @@ final class BadGatewayMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new BadGatewayMapping();
 

@@ -14,7 +14,7 @@ final class ApiHttpProvider implements ServiceProviderInterface
     /**
      * @param Container $container
      */
-    public function register(Container $container)
+    public function register(Container $container): void
     {
         $container['api-http.request.manager'] = function () use ($container) {
             return new RequestManager($container['deserializer']);

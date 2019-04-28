@@ -24,12 +24,12 @@ interface ApiProblemInterface
     /**
      * @return string|null
      */
-    public function getDetail();
+    public function getDetail(): ?string;
 
     /**
      * @return string|null
      */
-    public function getInstance();
+    public function getInstance(): ?string;
 
     /**
      * @return array

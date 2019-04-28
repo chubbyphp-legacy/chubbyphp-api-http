@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class LengthRequiredMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new LengthRequiredMapping();
 
         self::assertSame(LengthRequired::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new LengthRequiredMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new LengthRequiredMapping();
 
@@ -40,7 +40,7 @@ final class LengthRequiredMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new LengthRequiredMapping();
 
@@ -49,7 +49,7 @@ final class LengthRequiredMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new LengthRequiredMapping();
 

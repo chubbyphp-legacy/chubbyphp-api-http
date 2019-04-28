@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class UnsupportedMediaTypeTest extends TestCase
 {
-    public function testMinimal()
+    public function testMinimal(): void
     {
         $apiProblem = new UnsupportedMediaType('application/x-yaml', []);
 
@@ -24,7 +24,7 @@ final class UnsupportedMediaTypeTest extends TestCase
         self::assertSame([], $apiProblem->getSupportedMediaTypes());
     }
 
-    public function testMaximal()
+    public function testMaximal(): void
     {
         $apiProblem = new UnsupportedMediaType(
             'application/x-yaml',

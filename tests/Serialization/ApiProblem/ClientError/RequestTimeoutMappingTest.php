@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class RequestTimeoutMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new RequestTimeoutMapping();
 
         self::assertSame(RequestTimeout::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new RequestTimeoutMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new RequestTimeoutMapping();
 
@@ -40,7 +40,7 @@ final class RequestTimeoutMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new RequestTimeoutMapping();
 
@@ -49,7 +49,7 @@ final class RequestTimeoutMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new RequestTimeoutMapping();
 

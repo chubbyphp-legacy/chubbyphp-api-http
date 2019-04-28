@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class RequestedRangeNotSatisfiableMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new RequestedRangeNotSatisfiableMapping();
 
         self::assertSame(RequestedRangeNotSatisfiable::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new RequestedRangeNotSatisfiableMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new RequestedRangeNotSatisfiableMapping();
 
@@ -40,7 +40,7 @@ final class RequestedRangeNotSatisfiableMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new RequestedRangeNotSatisfiableMapping();
 
@@ -49,7 +49,7 @@ final class RequestedRangeNotSatisfiableMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new RequestedRangeNotSatisfiableMapping();
 

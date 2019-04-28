@@ -79,7 +79,7 @@ abstract class AbstractApiProblem implements ApiProblemInterface
     /**
      * @return string|null
      */
-    public function getDetail()
+    public function getDetail(): ?string
     {
         return $this->detail;
     }
@@ -87,7 +87,7 @@ abstract class AbstractApiProblem implements ApiProblemInterface
     /**
      * @return string|null
      */
-    public function getInstance()
+    public function getInstance(): ?string
     {
         return $this->instance;
     }

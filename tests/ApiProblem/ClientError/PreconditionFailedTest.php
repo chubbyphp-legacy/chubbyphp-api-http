@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class PreconditionFailedTest extends TestCase
 {
-    public function testMinimal()
+    public function testMinimal(): void
     {
         $apiProblem = new PreconditionFailed([]);
 
@@ -23,7 +23,7 @@ final class PreconditionFailedTest extends TestCase
         self::assertSame([], $apiProblem->getFailedPreconditions());
     }
 
-    public function testMaximal()
+    public function testMaximal(): void
     {
         $apiProblem = new PreconditionFailed(['Failed Precondition'], 'detail', '/cccdfd0f-0da3-4070-8e55-61bd832b47c0');
 

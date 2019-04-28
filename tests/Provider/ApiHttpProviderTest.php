@@ -19,7 +19,7 @@ final class ApiHttpProviderTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testRegister()
+    public function testRegister(): void
     {
         $container = new Container();
         $container->register(new ApiHttpProvider());
@@ -38,7 +38,7 @@ final class ApiHttpProviderTest extends TestCase
         self::assertInstanceOf(ResponseFactoryInterface::class, $container['api-http.response.factory']);
     }
 
-    public function testFactoryExpectException()
+    public function testFactoryExpectException(): void
     {
         self::expectException(\RuntimeException::class);
         self::expectExceptionMessage('Missing response factory, define service "api-http.response.factory"');

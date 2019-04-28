@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class HttpVersionNotSupportedMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new HttpVersionNotSupportedMapping();
 
         self::assertSame(HttpVersionNotSupported::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new HttpVersionNotSupportedMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new HttpVersionNotSupportedMapping();
 
@@ -40,7 +40,7 @@ final class HttpVersionNotSupportedMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new HttpVersionNotSupportedMapping();
 
@@ -49,7 +49,7 @@ final class HttpVersionNotSupportedMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new HttpVersionNotSupportedMapping();
 

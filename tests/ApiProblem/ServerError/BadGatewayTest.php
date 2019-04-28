@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class BadGatewayTest extends TestCase
 {
-    public function testMinimal()
+    public function testMinimal(): void
     {
         $apiProblem = new BadGateway();
 
@@ -22,7 +22,7 @@ final class BadGatewayTest extends TestCase
         self::assertNull($apiProblem->getInstance());
     }
 
-    public function testMaximal()
+    public function testMaximal(): void
     {
         $apiProblem = new BadGateway('detail', '/cccdfd0f-0da3-4070-8e55-61bd832b47c0');
 

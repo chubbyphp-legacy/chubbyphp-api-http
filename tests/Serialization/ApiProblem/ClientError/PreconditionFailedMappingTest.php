@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class PreconditionFailedMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new PreconditionFailedMapping();
 
         self::assertSame(PreconditionFailed::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new PreconditionFailedMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new PreconditionFailedMapping();
 
@@ -41,7 +41,7 @@ final class PreconditionFailedMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new PreconditionFailedMapping();
 
@@ -50,7 +50,7 @@ final class PreconditionFailedMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new PreconditionFailedMapping();
 

@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class ExpectationFailedTest extends TestCase
 {
-    public function testMinimal()
+    public function testMinimal(): void
     {
         $apiProblem = new ExpectationFailed([]);
 
@@ -23,7 +23,7 @@ final class ExpectationFailedTest extends TestCase
         self::assertSame([], $apiProblem->getFailedExpectations());
     }
 
-    public function testMaximal()
+    public function testMaximal(): void
     {
         $apiProblem = new ExpectationFailed(['Expectation Failed'], 'detail', '/cccdfd0f-0da3-4070-8e55-61bd832b47c0');
 

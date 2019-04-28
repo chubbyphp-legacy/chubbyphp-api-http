@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class UnauthorizedTest extends TestCase
 {
-    public function testMinimal()
+    public function testMinimal(): void
     {
         $apiProblem = new Unauthorized('Token', []);
 
@@ -24,7 +24,7 @@ final class UnauthorizedTest extends TestCase
         self::assertSame([], $apiProblem->getAuthorizationTypes());
     }
 
-    public function testMaximal()
+    public function testMaximal(): void
     {
         $apiProblem = new Unauthorized('Token', ['Basic', 'Bearer'], 'detail', '/cccdfd0f-0da3-4070-8e55-61bd832b47c0');
 

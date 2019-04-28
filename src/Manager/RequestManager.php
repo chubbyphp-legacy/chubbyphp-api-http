@@ -6,7 +6,7 @@ namespace Chubbyphp\ApiHttp\Manager;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\DeserializerInterface;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ServerRequestInterface;
 
 final class RequestManager implements RequestManagerInterface
 {
@@ -24,19 +24,22 @@ final class RequestManager implements RequestManagerInterface
     }
 
     /**
-     * @param Request                           $request
+     * @param ServerRequestInterface            $request
      * @param object|string                     $object
      * @param DenormalizerContextInterface|null $context
      *
      * @return object
      */
-    public function getDataFromRequestQuery(Request $request, $object, DenormalizerContextInterface $context = null)
-    {
+    public function getDataFromRequestQuery(
+        ServerRequestInterface $request,
+        $object,
+        DenormalizerContextInterface $context = null
+    ) {
         return $this->deserializer->denormalize($object, $request->getQueryParams(), $context);
     }
 
     /**
-     * @param Request                           $request
+     * @param ServerRequestInterface            $request
      * @param object|string                     $object
      * @param string                            $contentType
      * @param DenormalizerContextInterface|null $context
@@ -44,7 +47,7 @@ final class RequestManager implements RequestManagerInterface
      * @return object
      */
     public function getDataFromRequestBody(
-        Request $request,
+        ServerRequestInterface $request,
         $object,
         string $contentType,
         DenormalizerContextInterface $context = null

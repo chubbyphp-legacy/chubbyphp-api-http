@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 final class UnprocessableEntityMappingTest extends TestCase
 {
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $mapping = new UnprocessableEntityMapping();
 
         self::assertSame(UnprocessableEntity::class, $mapping->getClass());
     }
 
-    public function testGetNormalizationType()
+    public function testGetNormalizationType(): void
     {
         $mapping = new UnprocessableEntityMapping();
 
         self::assertSame('apiProblem', $mapping->getNormalizationType());
     }
 
-    public function testGetNormalizationFieldMappings()
+    public function testGetNormalizationFieldMappings(): void
     {
         $mapping = new UnprocessableEntityMapping();
 
@@ -41,7 +41,7 @@ final class UnprocessableEntityMappingTest extends TestCase
         ], $fieldMappings);
     }
 
-    public function testGetNormalizationEmbeddedFieldMappings()
+    public function testGetNormalizationEmbeddedFieldMappings(): void
     {
         $mapping = new UnprocessableEntityMapping();
 
@@ -50,7 +50,7 @@ final class UnprocessableEntityMappingTest extends TestCase
         self::assertEquals([], $embeddedFieldMappings);
     }
 
-    public function testGetNormalizationLinkMappings()
+    public function testGetNormalizationLinkMappings(): void
     {
         $mapping = new UnprocessableEntityMapping();
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Manager;
 
-use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
-use Psr\Http\Message\ResponseInterface as Response;
 use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
+use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
+use Psr\Http\Message\ResponseInterface;
 
 interface ResponseManagerInterface
 {
@@ -16,41 +16,41 @@ interface ResponseManagerInterface
      * @param int                             $status
      * @param NormalizerContextInterface|null $context
      *
-     * @return Response
+     * @return ResponseInterface
      */
     public function create(
-        $object,
+        object $object,
         string $accept,
         int $status = 200,
         NormalizerContextInterface $context = null
-    ): Response;
+    ): ResponseInterface;
 
     /**
      * @param string $accept
      * @param int    $status
      *
-     * @return Response
+     * @return ResponseInterface
      */
-    public function createEmpty(string $accept, int $status = 204): Response;
+    public function createEmpty(string $accept, int $status = 204): ResponseInterface;
 
     /**
      * @param string $location
      * @param int    $status
      *
-     * @return Response
+     * @return ResponseInterface
      */
-    public function createRedirect(string $location, int $status = 307): Response;
+    public function createRedirect(string $location, int $status = 307): ResponseInterface;
 
     /**
      * @param ApiProblemInterface        $apiProblem
      * @param string                     $accept
      * @param NormalizerContextInterface $context
      *
-     * @return Response
+     * @return ResponseInterface
      */
     public function createFromApiProblem(
         ApiProblemInterface $apiProblem,
         string $accept,
         NormalizerContextInterface $context = null
-    ): Response;
+    ): ResponseInterface;
 }
