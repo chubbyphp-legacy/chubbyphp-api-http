@@ -12,11 +12,6 @@ interface ApiProblemInterface
     public function getStatus(): int;
 
     /**
-     * @return array
-     */
-    public function getHeaders(): array;
-
-    /**
      * @return string
      */
     public function getType(): string;
@@ -35,4 +30,9 @@ interface ApiProblemInterface
      * @return string|null
      */
     public function getInstance();
+
+    /**
+     * @return array
+     */
+    public function getHeaders(): array;
 }

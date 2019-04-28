@@ -9,6 +9,16 @@ abstract class AbstractApiProblem implements ApiProblemInterface
     /**
      * @var string
      */
+    private $type;
+
+    /**
+     * @var int
+     */
+    private $status;
+
+    /**
+     * @var string
+     */
     private $title;
 
     /**
@@ -22,23 +32,40 @@ abstract class AbstractApiProblem implements ApiProblemInterface
     private $instance;
 
     /**
+     * @param string      $type
+     * @param int         $status
      * @param string      $title
      * @param string|null $detail
      * @param string|null $instance
      */
-    public function __construct(string $title, string $detail = null, string $instance = null)
-    {
+    public function __construct(
+        string $type,
+        int $status,
+        string $title,
+        string $detail = null,
+        string $instance = null
+    ) {
+        $this->type = $type;
+        $this->status = $status;
         $this->title = $title;
         $this->detail = $detail;
         $this->instance = $instance;
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getHeaders(): array
+    public function getType(): string
     {
-        return [];
+        return $this->type;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
     }
 
     /**
@@ -63,5 +90,13 @@ abstract class AbstractApiProblem implements ApiProblemInterface
     public function getInstance()
     {
         return $this->instance;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        return [];
     }
 }

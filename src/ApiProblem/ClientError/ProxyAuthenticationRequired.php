@@ -9,18 +9,17 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 final class ProxyAuthenticationRequired extends AbstractApiProblem
 {
     /**
-     * @return int
+     * @param string|null $detail
+     * @param string|null $instance
      */
-    public function getStatus(): int
+    public function __construct(string $detail = null, string $instance = null)
     {
-        return 407;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return 'https://tools.ietf.org/html/rfc2616#section-10.4.8';
+        parent::__construct(
+            'https://tools.ietf.org/html/rfc2616#section-10.4.8',
+            407,
+            'Proxy Authentication Required',
+            $detail,
+            $instance
+        );
     }
 }

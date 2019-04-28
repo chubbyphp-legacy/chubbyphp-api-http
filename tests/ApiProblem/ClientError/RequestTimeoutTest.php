@@ -12,25 +12,25 @@ final class RequestTimeoutTest extends TestCase
 {
     public function testMinimal()
     {
-        $apiProblem = new RequestTimeout('title');
+        $apiProblem = new RequestTimeout();
 
         self::assertSame(408, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.9', $apiProblem->getType());
-        self::assertSame('title', $apiProblem->getTitle());
+        self::assertSame('Request Timeout', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
         self::assertNull($apiProblem->getInstance());
     }
 
     public function testMaximal()
     {
-        $apiProblem = new RequestTimeout('title', 'detail', 'instance');
+        $apiProblem = new RequestTimeout('detail', '/cccdfd0f-0da3-4070-8e55-61bd832b47c0');
 
         self::assertSame(408, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.9', $apiProblem->getType());
-        self::assertSame('title', $apiProblem->getTitle());
+        self::assertSame('Request Timeout', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());
-        self::assertSame('instance', $apiProblem->getInstance());
+        self::assertSame('/cccdfd0f-0da3-4070-8e55-61bd832b47c0', $apiProblem->getInstance());
     }
 }

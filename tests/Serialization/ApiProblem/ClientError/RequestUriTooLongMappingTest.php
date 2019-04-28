@@ -47,6 +47,9 @@ final class RequestUriTooLongMappingTest extends TestCase
             NormalizationFieldMappingBuilder::create('instance')
                 ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('instance')))
                 ->getMapping(),
+            NormalizationFieldMappingBuilder::create('maxUriLength')
+                ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('maxUriLength')))
+                ->getMapping(),
         ], $fieldMappings);
     }
 

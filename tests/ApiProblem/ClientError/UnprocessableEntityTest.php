@@ -12,12 +12,12 @@ final class UnprocessableEntityTest extends TestCase
 {
     public function testMinimal()
     {
-        $apiProblem = new UnprocessableEntity([], 'title');
+        $apiProblem = new UnprocessableEntity([]);
 
         self::assertSame(422, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc4918#section-11.2', $apiProblem->getType());
-        self::assertSame('title', $apiProblem->getTitle());
+        self::assertSame('Unprocessable Entity', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
         self::assertNull($apiProblem->getInstance());
         self::assertSame([], $apiProblem->getInvalidParameters());
@@ -34,14 +34,14 @@ final class UnprocessableEntityTest extends TestCase
                 'name' => 'color',
                 'reason' => 'must be \'green\', \'red\' or \'blue\'',
             ],
-        ], 'title', 'detail', 'instance');
+        ], 'detail', '/cccdfd0f-0da3-4070-8e55-61bd832b47c0');
 
         self::assertSame(422, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc4918#section-11.2', $apiProblem->getType());
-        self::assertSame('title', $apiProblem->getTitle());
+        self::assertSame('Unprocessable Entity', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());
-        self::assertSame('instance', $apiProblem->getInstance());
+        self::assertSame('/cccdfd0f-0da3-4070-8e55-61bd832b47c0', $apiProblem->getInstance());
         self::assertSame([
             [
                 'name' => 'age',

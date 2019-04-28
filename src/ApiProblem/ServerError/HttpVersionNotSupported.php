@@ -9,18 +9,17 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 final class HttpVersionNotSupported extends AbstractApiProblem
 {
     /**
-     * @return int
+     * @param string|null $detail
+     * @param string|null $instance
      */
-    public function getStatus(): int
+    public function __construct(string $detail = null, string $instance = null)
     {
-        return 505;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return 'https://tools.ietf.org/html/rfc2616#section-10.5.6';
+        parent::__construct(
+            'https://tools.ietf.org/html/rfc2616#section-10.5.6',
+            505,
+            'Http Version Not Supported',
+            $detail,
+            $instance
+        );
     }
 }

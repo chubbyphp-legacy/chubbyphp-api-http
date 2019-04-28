@@ -15,31 +15,20 @@ final class RequestEntityTooLarge extends AbstractApiProblem
 
     /**
      * @param int         $maxContentLength
-     * @param string      $title
      * @param string|null $detail
      * @param string|null $instance
      */
-    public function __construct(int $maxContentLength, string $title, string $detail = null, string $instance = null)
+    public function __construct(int $maxContentLength, string $detail = null, string $instance = null)
     {
-        parent::__construct($title, $detail, $instance);
+        parent::__construct(
+            'https://tools.ietf.org/html/rfc2616#section-10.4.14',
+            413,
+            'Request Entity Too Large',
+            $detail,
+            $instance
+        );
 
         $this->maxContentLength = $maxContentLength;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatus(): int
-    {
-        return 413;
-    }
-
-    /**
-     * @return int
-     */
-    public function getType(): string
-    {
-        return 'https://tools.ietf.org/html/rfc2616#section-10.4.14';
     }
 
     /**

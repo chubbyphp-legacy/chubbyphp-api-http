@@ -9,18 +9,17 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 final class FailedDependency extends AbstractApiProblem
 {
     /**
-     * @return int
+     * @param string|null $detail
+     * @param string|null $instance
      */
-    public function getStatus(): int
+    public function __construct(string $detail = null, string $instance = null)
     {
-        return 424;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return 'https://tools.ietf.org/html/rfc4918#section-11.4';
+        parent::__construct(
+            'https://tools.ietf.org/html/rfc4918#section-11.4',
+            424,
+            'Failed Dependency',
+            $detail,
+            $instance
+        );
     }
 }

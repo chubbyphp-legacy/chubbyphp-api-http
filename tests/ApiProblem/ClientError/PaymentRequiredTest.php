@@ -12,12 +12,12 @@ final class PaymentRequiredTest extends TestCase
 {
     public function testMinimal()
     {
-        $apiProblem = new PaymentRequired([], 'title');
+        $apiProblem = new PaymentRequired([]);
 
         self::assertSame(402, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.3', $apiProblem->getType());
-        self::assertSame('title', $apiProblem->getTitle());
+        self::assertSame('Payment Required', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
         self::assertNull($apiProblem->getInstance());
         self::assertSame([], $apiProblem->getPaymentTypes());
@@ -25,14 +25,14 @@ final class PaymentRequiredTest extends TestCase
 
     public function testMaximal()
     {
-        $apiProblem = new PaymentRequired(['creditcard', 'paypal'], 'title', 'detail', 'instance');
+        $apiProblem = new PaymentRequired(['creditcard', 'paypal'], 'detail', '/cccdfd0f-0da3-4070-8e55-61bd832b47c0');
 
         self::assertSame(402, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.3', $apiProblem->getType());
-        self::assertSame('title', $apiProblem->getTitle());
+        self::assertSame('Payment Required', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());
-        self::assertSame('instance', $apiProblem->getInstance());
+        self::assertSame('/cccdfd0f-0da3-4070-8e55-61bd832b47c0', $apiProblem->getInstance());
         self::assertSame(['creditcard', 'paypal'], $apiProblem->getPaymentTypes());
     }
 }

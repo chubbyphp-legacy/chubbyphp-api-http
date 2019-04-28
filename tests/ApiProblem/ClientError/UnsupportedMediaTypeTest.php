@@ -12,12 +12,12 @@ final class UnsupportedMediaTypeTest extends TestCase
 {
     public function testMinimal()
     {
-        $apiProblem = new UnsupportedMediaType([], 'title');
+        $apiProblem = new UnsupportedMediaType([]);
 
         self::assertSame(415, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.16', $apiProblem->getType());
-        self::assertSame('title', $apiProblem->getTitle());
+        self::assertSame('Unsupported Media Type', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
         self::assertNull($apiProblem->getInstance());
         self::assertSame([], $apiProblem->getSupportedMediaTypes());
@@ -25,14 +25,14 @@ final class UnsupportedMediaTypeTest extends TestCase
 
     public function testMaximal()
     {
-        $apiProblem = new UnsupportedMediaType(['application/json', 'application/xml'], 'title', 'detail', 'instance');
+        $apiProblem = new UnsupportedMediaType(['application/json', 'application/xml'], 'detail', '/cccdfd0f-0da3-4070-8e55-61bd832b47c0');
 
         self::assertSame(415, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.16', $apiProblem->getType());
-        self::assertSame('title', $apiProblem->getTitle());
+        self::assertSame('Unsupported Media Type', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());
-        self::assertSame('instance', $apiProblem->getInstance());
+        self::assertSame('/cccdfd0f-0da3-4070-8e55-61bd832b47c0', $apiProblem->getInstance());
         self::assertSame(['application/json', 'application/xml'], $apiProblem->getSupportedMediaTypes());
     }
 }

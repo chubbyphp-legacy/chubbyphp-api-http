@@ -15,23 +15,20 @@ final class NotAcceptable extends AbstractApiProblem
 
     /**
      * @param string[]    $acceptableMediaTypes
-     * @param string      $title
      * @param string|null $detail
      * @param string|null $instance
      */
-    public function __construct(array $acceptableMediaTypes, string $title, string $detail = null, string $instance = null)
+    public function __construct(array $acceptableMediaTypes, string $detail = null, string $instance = null)
     {
-        parent::__construct($title, $detail, $instance);
+        parent::__construct(
+            'https://tools.ietf.org/html/rfc2616#section-10.4.7',
+            406,
+            'Not Acceptable',
+            $detail,
+            $instance
+        );
 
         $this->acceptableMediaTypes = $acceptableMediaTypes;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatus(): int
-    {
-        return 406;
     }
 
     /**
@@ -44,14 +41,6 @@ final class NotAcceptable extends AbstractApiProblem
         }
 
         return ['X-Acceptable' => implode(',', $this->acceptableMediaTypes)];
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return 'https://tools.ietf.org/html/rfc2616#section-10.4.7';
     }
 
     /**

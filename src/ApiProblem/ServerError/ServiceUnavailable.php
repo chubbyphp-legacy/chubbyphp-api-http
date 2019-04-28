@@ -9,18 +9,17 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 final class ServiceUnavailable extends AbstractApiProblem
 {
     /**
-     * @return int
+     * @param string|null $detail
+     * @param string|null $instance
      */
-    public function getStatus(): int
+    public function __construct(string $detail = null, string $instance = null)
     {
-        return 503;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return 'https://tools.ietf.org/html/rfc2616#section-10.5.4';
+        parent::__construct(
+            'https://tools.ietf.org/html/rfc2616#section-10.5.4',
+            503,
+            'Service Unavailable',
+            $detail,
+            $instance
+        );
     }
 }

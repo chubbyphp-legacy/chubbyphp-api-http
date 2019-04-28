@@ -15,23 +15,20 @@ final class Unauthorized extends AbstractApiProblem
 
     /**
      * @param string[]    $authorizationTypes
-     * @param string      $title
      * @param string|null $detail
      * @param string|null $instance
      */
-    public function __construct(array $authorizationTypes, string $title, string $detail = null, string $instance = null)
+    public function __construct(array $authorizationTypes, string $detail = null, string $instance = null)
     {
-        parent::__construct($title, $detail, $instance);
+        parent::__construct(
+            'https://tools.ietf.org/html/rfc2616#section-10.4.2',
+            401,
+            'Unauthorized',
+            $detail,
+            $instance
+        );
 
         $this->authorizationTypes = $authorizationTypes;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatus(): int
-    {
-        return 401;
     }
 
     /**
@@ -44,14 +41,6 @@ final class Unauthorized extends AbstractApiProblem
         }
 
         return ['WWW-Authenticate' => implode(',', $this->authorizationTypes)];
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return 'https://tools.ietf.org/html/rfc2616#section-10.4.2';
     }
 
     /**

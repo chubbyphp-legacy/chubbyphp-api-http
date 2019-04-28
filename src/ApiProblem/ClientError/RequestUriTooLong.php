@@ -9,18 +9,33 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 final class RequestUriTooLong extends AbstractApiProblem
 {
     /**
-     * @return int
+     * @var int
      */
-    public function getStatus(): int
+    private $maxUriLength;
+
+    /**
+     * @param int $maxUriLength
+     * @param string|null $detail
+     * @param string|null $instance
+     */
+    public function __construct(int $maxUriLength, string $detail = null, string $instance = null)
     {
-        return 414;
+        parent::__construct(
+            'https://tools.ietf.org/html/rfc2616#section-10.4.15',
+            414,
+            'Request Uri Too Long',
+            $detail,
+            $instance
+        );
+
+        $this->maxUriLength = $maxUriLength;
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getType(): string
+    public function getMaxUriLength(): int
     {
-        return 'https://tools.ietf.org/html/rfc2616#section-10.4.15';
+        return $this->maxUriLength;
     }
 }

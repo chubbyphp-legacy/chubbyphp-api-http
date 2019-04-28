@@ -12,25 +12,25 @@ final class NotFoundTest extends TestCase
 {
     public function testMinimal()
     {
-        $apiProblem = new NotFound('title');
+        $apiProblem = new NotFound();
 
         self::assertSame(404, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.5', $apiProblem->getType());
-        self::assertSame('title', $apiProblem->getTitle());
+        self::assertSame('Not Found', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
         self::assertNull($apiProblem->getInstance());
     }
 
     public function testMaximal()
     {
-        $apiProblem = new NotFound('title', 'detail', 'instance');
+        $apiProblem = new NotFound('detail', '/cccdfd0f-0da3-4070-8e55-61bd832b47c0');
 
         self::assertSame(404, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.5', $apiProblem->getType());
-        self::assertSame('title', $apiProblem->getTitle());
+        self::assertSame('Not Found', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());
-        self::assertSame('instance', $apiProblem->getInstance());
+        self::assertSame('/cccdfd0f-0da3-4070-8e55-61bd832b47c0', $apiProblem->getInstance());
     }
 }

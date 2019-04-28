@@ -15,31 +15,20 @@ final class BadRequest extends AbstractApiProblem
 
     /**
      * @param array       $invalidParameters
-     * @param string      $title
      * @param string|null $detail
      * @param string|null $instance
      */
-    public function __construct(array $invalidParameters, string $title, string $detail = null, string $instance = null)
+    public function __construct(array $invalidParameters, string $detail = null, string $instance = null)
     {
-        parent::__construct($title, $detail, $instance);
+        parent::__construct(
+            'https://tools.ietf.org/html/rfc2616#section-10.4.1',
+            400,
+            'Bad Request',
+            $detail,
+            $instance
+        );
 
         $this->invalidParameters = $invalidParameters;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatus(): int
-    {
-        return 400;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return 'https://tools.ietf.org/html/rfc2616#section-10.4.1';
     }
 
     /**

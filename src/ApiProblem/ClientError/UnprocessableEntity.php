@@ -15,31 +15,20 @@ final class UnprocessableEntity extends AbstractApiProblem
 
     /**
      * @param array       $invalidParameters
-     * @param string      $title
      * @param string|null $detail
      * @param string|null $instance
      */
-    public function __construct(array $invalidParameters, string $title, string $detail = null, string $instance = null)
+    public function __construct(array $invalidParameters, string $detail = null, string $instance = null)
     {
-        parent::__construct($title, $detail, $instance);
+        parent::__construct(
+            'https://tools.ietf.org/html/rfc4918#section-11.2',
+            422,
+            'Unprocessable Entity',
+            $detail,
+            $instance
+        );
 
         $this->invalidParameters = $invalidParameters;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatus(): int
-    {
-        return 422;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return 'https://tools.ietf.org/html/rfc4918#section-11.2';
     }
 
     /**
