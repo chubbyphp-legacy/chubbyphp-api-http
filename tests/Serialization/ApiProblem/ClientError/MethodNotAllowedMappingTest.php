@@ -37,6 +37,7 @@ final class MethodNotAllowedMappingTest extends TestCase
             NormalizationFieldMappingBuilder::create('title')->getMapping(),
             NormalizationFieldMappingBuilder::create('detail')->getMapping(),
             NormalizationFieldMappingBuilder::create('instance')->getMapping(),
+            NormalizationFieldMappingBuilder::create('method')->getMapping(),
             NormalizationFieldMappingBuilder::create('allowedMethods')->getMapping(),
         ], $fieldMappings);
     }

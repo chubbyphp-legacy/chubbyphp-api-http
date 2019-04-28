@@ -28,6 +28,7 @@ final class MethodNotAllowedMapping extends AbstractApiProblemMapping
     {
         $fieldMappings = parent::getNormalizationFieldMappings($path);
 
+        $fieldMappings[] = NormalizationFieldMappingBuilder::create('method')->getMapping();
         $fieldMappings[] = NormalizationFieldMappingBuilder::create('allowedMethods')->getMapping();
 
         return $fieldMappings;
