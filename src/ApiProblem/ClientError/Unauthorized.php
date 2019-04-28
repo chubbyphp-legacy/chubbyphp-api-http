@@ -9,6 +9,11 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 final class Unauthorized extends AbstractApiProblem
 {
     /**
+     * @var string
+     */
+    private $authorization;
+
+    /**
      * @var string[]
      */
     private $authorizationTypes = [];
@@ -18,8 +23,12 @@ final class Unauthorized extends AbstractApiProblem
      * @param string|null $detail
      * @param string|null $instance
      */
-    public function __construct(array $authorizationTypes, string $detail = null, string $instance = null)
-    {
+    public function __construct(
+        string $authorization,
+        array $authorizationTypes,
+        string $detail = null,
+        string $instance = null
+    ) {
         parent::__construct(
             'https://tools.ietf.org/html/rfc2616#section-10.4.2',
             401,
@@ -28,6 +37,7 @@ final class Unauthorized extends AbstractApiProblem
             $instance
         );
 
+        $this->authorization = $authorization;
         $this->authorizationTypes = $authorizationTypes;
     }
 
@@ -41,6 +51,14 @@ final class Unauthorized extends AbstractApiProblem
         }
 
         return ['WWW-Authenticate' => implode(',', $this->authorizationTypes)];
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthorization(): string
+    {
+        return $this->authorization;
     }
 
     /**

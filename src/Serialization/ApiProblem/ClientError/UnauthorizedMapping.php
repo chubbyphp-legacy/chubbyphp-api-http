@@ -28,6 +28,7 @@ final class UnauthorizedMapping extends AbstractApiProblemMapping
     {
         $fieldMappings = parent::getNormalizationFieldMappings($path);
 
+        $fieldMappings[] = NormalizationFieldMappingBuilder::create('authorization')->getMapping();
         $fieldMappings[] = NormalizationFieldMappingBuilder::create('authorizationTypes')->getMapping();
 
         return $fieldMappings;

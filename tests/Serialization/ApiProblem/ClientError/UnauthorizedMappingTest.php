@@ -37,6 +37,7 @@ final class UnauthorizedMappingTest extends TestCase
             NormalizationFieldMappingBuilder::create('title')->getMapping(),
             NormalizationFieldMappingBuilder::create('detail')->getMapping(),
             NormalizationFieldMappingBuilder::create('instance')->getMapping(),
+            NormalizationFieldMappingBuilder::create('authorization')->getMapping(),
             NormalizationFieldMappingBuilder::create('authorizationTypes')->getMapping(),
         ], $fieldMappings);
     }
