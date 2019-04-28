@@ -101,17 +101,11 @@ final class ResponseManager implements ResponseManagerInterface
     ): Response {
         $status = $apiProblem->getStatus();
 
-        $response = $this->responseFactory->createResponse($status);
+        $response = $this->responseFactory->createResponse($status)->withHeader('Content-Type', $accept);
 
         foreach ($apiProblem->getHeaders() as $name => $value) {
             $response = $response->withHeader($name, $value);
         }
-
-        if (406 === $status) {
-            return $response;
-        }
-
-        $response = $response->withHeader('Content-Type', $accept);
 
         $body = $this->serializer->serialize($apiProblem, $accept, $context);
 

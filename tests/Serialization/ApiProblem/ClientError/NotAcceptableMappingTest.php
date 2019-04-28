@@ -37,7 +37,8 @@ final class NotAcceptableMappingTest extends TestCase
             NormalizationFieldMappingBuilder::create('title')->getMapping(),
             NormalizationFieldMappingBuilder::create('detail')->getMapping(),
             NormalizationFieldMappingBuilder::create('instance')->getMapping(),
-            NormalizationFieldMappingBuilder::create('acceptableMediaTypes')->getMapping(),
+            NormalizationFieldMappingBuilder::create('accept')->getMapping(),
+            NormalizationFieldMappingBuilder::create('acceptables')->getMapping(),
         ], $fieldMappings);
     }
 

@@ -225,33 +225,4 @@ final class ResponseManagerTest extends TestCase
 
         self::assertSame($response, $responseManager->createFromApiProblem($apiProblem, 'application/json'));
     }
-
-    public function testCreateFromApiProblemNotAcceptable()
-    {
-        /** @var ApiProblemInterface|MockObject $apiProblem */
-        $apiProblem = $this->getMockByCalls(ApiProblemInterface::class, [
-            Call::create('getStatus')->with()->willReturn(406),
-            Call::create('getHeaders')->with()->willReturn(['X-Acceptable' => 'application/xml']),
-        ]);
-
-        /** @var Response|MockObject $response */
-        $response = $this->getMockByCalls(Response::class, [
-            Call::create('withHeader')->with('X-Acceptable', 'application/xml')->willReturnSelf(),
-        ]);
-
-        /** @var DeserializerInterface|MockObject $deserializer */
-        $deserializer = $this->getMockByCalls(DeserializerInterface::class);
-
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
-        $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
-            Call::create('createResponse')->with(406, '')->willReturn($response),
-        ]);
-
-        /** @var SerializerInterface|MockObject $serializer */
-        $serializer = $this->getMockByCalls(SerializerInterface::class);
-
-        $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
-
-        self::assertSame($response, $responseManager->createFromApiProblem($apiProblem, 'application/json'));
-    }
 }

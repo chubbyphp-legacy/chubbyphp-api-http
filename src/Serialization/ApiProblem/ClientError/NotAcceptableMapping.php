@@ -28,7 +28,8 @@ final class NotAcceptableMapping extends AbstractApiProblemMapping
     {
         $fieldMappings = parent::getNormalizationFieldMappings($path);
 
-        $fieldMappings[] = NormalizationFieldMappingBuilder::create('acceptableMediaTypes')->getMapping();
+        $fieldMappings[] = NormalizationFieldMappingBuilder::create('accept')->getMapping();
+        $fieldMappings[] = NormalizationFieldMappingBuilder::create('acceptables')->getMapping();
 
         return $fieldMappings;
     }

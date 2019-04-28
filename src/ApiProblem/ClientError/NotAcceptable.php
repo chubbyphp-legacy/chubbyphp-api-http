@@ -9,17 +9,27 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 final class NotAcceptable extends AbstractApiProblem
 {
     /**
-     * @var string[]
+     * @var string
      */
-    private $acceptableMediaTypes = [];
+    private $accept;
 
     /**
-     * @param string[]    $acceptableMediaTypes
+     * @var string[]
+     */
+    private $acceptables = [];
+
+    /**
+     * @param string      $accept
+     * @param string[]    $acceptables
      * @param string|null $detail
      * @param string|null $instance
      */
-    public function __construct(array $acceptableMediaTypes, string $detail = null, string $instance = null)
-    {
+    public function __construct(
+        string $accept,
+        array $acceptables,
+        string $detail = null,
+        string $instance = null
+    ) {
         parent::__construct(
             'https://tools.ietf.org/html/rfc2616#section-10.4.7',
             406,
@@ -28,7 +38,8 @@ final class NotAcceptable extends AbstractApiProblem
             $instance
         );
 
-        $this->acceptableMediaTypes = $acceptableMediaTypes;
+        $this->accept = $accept;
+        $this->acceptables = $acceptables;
     }
 
     /**
@@ -36,18 +47,26 @@ final class NotAcceptable extends AbstractApiProblem
      */
     public function getHeaders(): array
     {
-        if ([] === $this->acceptableMediaTypes) {
+        if ([] === $this->acceptables) {
             return [];
         }
 
-        return ['X-Acceptable' => implode(',', $this->acceptableMediaTypes)];
+        return ['X-Acceptables' => implode(',', $this->acceptables)];
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccept(): string
+    {
+        return $this->accept;
     }
 
     /**
      * @return string[]
      */
-    public function getAcceptableMediaTypes(): array
+    public function getAcceptables(): array
     {
-        return $this->acceptableMediaTypes;
+        return $this->acceptables;
     }
 }

@@ -19,7 +19,7 @@ final class MethodNotAllowed extends AbstractApiProblem
     private $allowedMethods = [];
 
     /**
-     * @param string $method,
+     * @param string      $method,
      * @param string[]    $allowedMethods
      * @param string|null $detail
      * @param string|null $instance
