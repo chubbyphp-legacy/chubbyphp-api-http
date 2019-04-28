@@ -9,27 +9,27 @@ abstract class AbstractApiProblem implements ApiProblemInterface
     /**
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * @var int
      */
-    private $status;
+    protected $status;
 
     /**
      * @var string
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      */
-    private $detail;
+    protected $detail;
 
     /**
      * @var string|null
      */
-    private $instance;
+    protected $instance;
 
     /**
      * @param string      $type
