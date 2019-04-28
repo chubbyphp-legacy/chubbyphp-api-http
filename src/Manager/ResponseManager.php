@@ -52,7 +52,7 @@ final class ResponseManager implements ResponseManagerInterface
      * @return ResponseInterface
      */
     public function create(
-         $object,
+        $object,
         string $accept,
         int $status = 200,
         NormalizerContextInterface $context = null
