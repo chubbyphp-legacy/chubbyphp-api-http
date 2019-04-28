@@ -5,11 +5,12 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
+         executionOrder="random"
          processIsolation="false"
          stopOnFailure="false"
         >
     <testsuites>
-        <testsuite name="chubbyphp framework">
+        <testsuite name="chubbyphp api http">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>

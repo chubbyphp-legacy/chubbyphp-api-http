@@ -18,7 +18,9 @@
     },
     "require-dev": {
         "chubbyphp/chubbyphp-mock": "^1.4",
+        "infection/infection": "^0.9.3|^0.12.2",
         "phploc/phploc": "^4.0|^5.0",
+        "phpstan/phpstan": "^0.9.2|^0.11.5",
         "phpunit/phpunit": "^6.5|^7.0|^8.0",
         "pimple/pimple": "^3.1"
     },

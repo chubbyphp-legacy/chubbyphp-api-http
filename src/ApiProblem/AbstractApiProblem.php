@@ -22,7 +22,7 @@ abstract class AbstractApiProblem implements ApiProblemInterface
     protected $title;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $detail;
 
