@@ -6,10 +6,8 @@ namespace Chubbyphp\ApiHttp\Serialization\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\ClientError\UnsupportedMediaType;
 use Chubbyphp\ApiHttp\Serialization\ApiProblem\AbstractApiProblemMapping;
-use Chubbyphp\Serialization\Accessor\MethodAccessor;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingBuilder;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingInterface;
-use Chubbyphp\Serialization\Normalizer\FieldNormalizer;
 
 final class UnsupportedMediaTypeMapping extends AbstractApiProblemMapping
 {
@@ -30,9 +28,7 @@ final class UnsupportedMediaTypeMapping extends AbstractApiProblemMapping
     {
         $fieldMappings = parent::getNormalizationFieldMappings($path);
 
-        $fieldMappings[] = NormalizationFieldMappingBuilder::create('supportedMediaTypes')
-            ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('supportedMediaTypes')))
-            ->getMapping();
+        $fieldMappings[] = NormalizationFieldMappingBuilder::create('supportedMediaTypes')->getMapping();
 
         return $fieldMappings;
     }

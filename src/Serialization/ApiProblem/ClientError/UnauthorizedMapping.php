@@ -6,10 +6,8 @@ namespace Chubbyphp\ApiHttp\Serialization\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\ClientError\Unauthorized;
 use Chubbyphp\ApiHttp\Serialization\ApiProblem\AbstractApiProblemMapping;
-use Chubbyphp\Serialization\Accessor\MethodAccessor;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingBuilder;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingInterface;
-use Chubbyphp\Serialization\Normalizer\FieldNormalizer;
 
 final class UnauthorizedMapping extends AbstractApiProblemMapping
 {
@@ -30,9 +28,7 @@ final class UnauthorizedMapping extends AbstractApiProblemMapping
     {
         $fieldMappings = parent::getNormalizationFieldMappings($path);
 
-        $fieldMappings[] = NormalizationFieldMappingBuilder::create('authorizationTypes')
-            ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('authorizationTypes')))
-            ->getMapping();
+        $fieldMappings[] = NormalizationFieldMappingBuilder::create('authorizationTypes')->getMapping();
 
         return $fieldMappings;
     }

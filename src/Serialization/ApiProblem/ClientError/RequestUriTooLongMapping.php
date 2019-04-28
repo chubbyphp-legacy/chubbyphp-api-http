@@ -6,10 +6,8 @@ namespace Chubbyphp\ApiHttp\Serialization\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\ClientError\RequestUriTooLong;
 use Chubbyphp\ApiHttp\Serialization\ApiProblem\AbstractApiProblemMapping;
-use Chubbyphp\Serialization\Accessor\MethodAccessor;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingBuilder;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingInterface;
-use Chubbyphp\Serialization\Normalizer\FieldNormalizer;
 
 final class RequestUriTooLongMapping extends AbstractApiProblemMapping
 {
@@ -30,9 +28,7 @@ final class RequestUriTooLongMapping extends AbstractApiProblemMapping
     {
         $fieldMappings = parent::getNormalizationFieldMappings($path);
 
-        $fieldMappings[] = NormalizationFieldMappingBuilder::create('maxUriLength')
-            ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('maxUriLength')))
-            ->getMapping();
+        $fieldMappings[] = NormalizationFieldMappingBuilder::create('maxUriLength')->getMapping();
 
         return $fieldMappings;
     }

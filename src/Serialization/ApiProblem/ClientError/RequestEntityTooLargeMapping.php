@@ -6,10 +6,8 @@ namespace Chubbyphp\ApiHttp\Serialization\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\ClientError\RequestEntityTooLarge;
 use Chubbyphp\ApiHttp\Serialization\ApiProblem\AbstractApiProblemMapping;
-use Chubbyphp\Serialization\Accessor\MethodAccessor;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingBuilder;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingInterface;
-use Chubbyphp\Serialization\Normalizer\FieldNormalizer;
 
 final class RequestEntityTooLargeMapping extends AbstractApiProblemMapping
 {
@@ -30,9 +28,7 @@ final class RequestEntityTooLargeMapping extends AbstractApiProblemMapping
     {
         $fieldMappings = parent::getNormalizationFieldMappings($path);
 
-        $fieldMappings[] = NormalizationFieldMappingBuilder::create('maxContentLength')
-            ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('maxContentLength')))
-            ->getMapping();
+        $fieldMappings[] = NormalizationFieldMappingBuilder::create('maxContentLength')->getMapping();
 
         return $fieldMappings;
     }

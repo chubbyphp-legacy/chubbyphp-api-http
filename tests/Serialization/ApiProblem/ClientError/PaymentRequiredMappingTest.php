@@ -4,9 +4,7 @@ namespace Chubbyphp\Tests\ApiHttp\Serialization\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\ClientError\PaymentRequired;
 use Chubbyphp\ApiHttp\Serialization\ApiProblem\ClientError\PaymentRequiredMapping;
-use Chubbyphp\Serialization\Accessor\MethodAccessor;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingBuilder;
-use Chubbyphp\Serialization\Normalizer\FieldNormalizer;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,21 +33,11 @@ final class PaymentRequiredMappingTest extends TestCase
         $fieldMappings = $mapping->getNormalizationFieldMappings('/');
 
         self::assertEquals([
-            NormalizationFieldMappingBuilder::create('type')
-                ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('type')))
-                ->getMapping(),
-            NormalizationFieldMappingBuilder::create('title')
-                ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('title')))
-                ->getMapping(),
-            NormalizationFieldMappingBuilder::create('detail')
-                ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('detail')))
-                ->getMapping(),
-            NormalizationFieldMappingBuilder::create('instance')
-                ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('instance')))
-                ->getMapping(),
-            NormalizationFieldMappingBuilder::create('paymentTypes')
-                ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('paymentTypes')))
-                ->getMapping(),
+            NormalizationFieldMappingBuilder::create('type')->getMapping(),
+            NormalizationFieldMappingBuilder::create('title')->getMapping(),
+            NormalizationFieldMappingBuilder::create('detail')->getMapping(),
+            NormalizationFieldMappingBuilder::create('instance')->getMapping(),
+            NormalizationFieldMappingBuilder::create('paymentTypes')->getMapping(),
         ], $fieldMappings);
     }
 

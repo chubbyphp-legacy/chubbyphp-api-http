@@ -6,10 +6,8 @@ namespace Chubbyphp\ApiHttp\Serialization\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\ClientError\BadRequest;
 use Chubbyphp\ApiHttp\Serialization\ApiProblem\AbstractApiProblemMapping;
-use Chubbyphp\Serialization\Accessor\MethodAccessor;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingBuilder;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingInterface;
-use Chubbyphp\Serialization\Normalizer\FieldNormalizer;
 
 final class BadRequestMapping extends AbstractApiProblemMapping
 {
@@ -30,9 +28,7 @@ final class BadRequestMapping extends AbstractApiProblemMapping
     {
         $fieldMappings = parent::getNormalizationFieldMappings($path);
 
-        $fieldMappings[] = NormalizationFieldMappingBuilder::create('invalidParameters')
-            ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('invalidParameters')))
-            ->getMapping();
+        $fieldMappings[] = NormalizationFieldMappingBuilder::create('invalidParameters')->getMapping();
 
         return $fieldMappings;
     }

@@ -6,10 +6,8 @@ namespace Chubbyphp\ApiHttp\Serialization\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\ClientError\MethodNotAllowed;
 use Chubbyphp\ApiHttp\Serialization\ApiProblem\AbstractApiProblemMapping;
-use Chubbyphp\Serialization\Accessor\MethodAccessor;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingBuilder;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingInterface;
-use Chubbyphp\Serialization\Normalizer\FieldNormalizer;
 
 final class MethodNotAllowedMapping extends AbstractApiProblemMapping
 {
@@ -30,9 +28,7 @@ final class MethodNotAllowedMapping extends AbstractApiProblemMapping
     {
         $fieldMappings = parent::getNormalizationFieldMappings($path);
 
-        $fieldMappings[] = NormalizationFieldMappingBuilder::create('allowedMethods')
-            ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('allowedMethods')))
-            ->getMapping();
+        $fieldMappings[] = NormalizationFieldMappingBuilder::create('allowedMethods')->getMapping();
 
         return $fieldMappings;
     }

@@ -6,10 +6,8 @@ namespace Chubbyphp\ApiHttp\Serialization\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\ClientError\NotAcceptable;
 use Chubbyphp\ApiHttp\Serialization\ApiProblem\AbstractApiProblemMapping;
-use Chubbyphp\Serialization\Accessor\MethodAccessor;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingBuilder;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingInterface;
-use Chubbyphp\Serialization\Normalizer\FieldNormalizer;
 
 final class NotAcceptableMapping extends AbstractApiProblemMapping
 {
@@ -30,9 +28,7 @@ final class NotAcceptableMapping extends AbstractApiProblemMapping
     {
         $fieldMappings = parent::getNormalizationFieldMappings($path);
 
-        $fieldMappings[] = NormalizationFieldMappingBuilder::create('acceptableMediaTypes')
-            ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('acceptableMediaTypes')))
-            ->getMapping();
+        $fieldMappings[] = NormalizationFieldMappingBuilder::create('acceptableMediaTypes')->getMapping();
 
         return $fieldMappings;
     }

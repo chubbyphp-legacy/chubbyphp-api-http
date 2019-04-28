@@ -14,7 +14,7 @@ final class RequestUriTooLong extends AbstractApiProblem
     private $maxUriLength;
 
     /**
-     * @param int $maxUriLength
+     * @param int         $maxUriLength
      * @param string|null $detail
      * @param string|null $instance
      */

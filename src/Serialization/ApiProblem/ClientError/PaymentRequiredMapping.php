@@ -6,10 +6,8 @@ namespace Chubbyphp\ApiHttp\Serialization\ApiProblem\ClientError;
 
 use Chubbyphp\ApiHttp\ApiProblem\ClientError\PaymentRequired;
 use Chubbyphp\ApiHttp\Serialization\ApiProblem\AbstractApiProblemMapping;
-use Chubbyphp\Serialization\Accessor\MethodAccessor;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingBuilder;
 use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingInterface;
-use Chubbyphp\Serialization\Normalizer\FieldNormalizer;
 
 final class PaymentRequiredMapping extends AbstractApiProblemMapping
 {
@@ -30,9 +28,7 @@ final class PaymentRequiredMapping extends AbstractApiProblemMapping
     {
         $fieldMappings = parent::getNormalizationFieldMappings($path);
 
-        $fieldMappings[] = NormalizationFieldMappingBuilder::create('paymentTypes')
-            ->setFieldNormalizer(new FieldNormalizer(new MethodAccessor('paymentTypes')))
-            ->getMapping();
+        $fieldMappings[] = NormalizationFieldMappingBuilder::create('paymentTypes')->getMapping();
 
         return $fieldMappings;
     }
