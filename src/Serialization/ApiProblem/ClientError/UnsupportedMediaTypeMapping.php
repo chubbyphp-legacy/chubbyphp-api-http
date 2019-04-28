@@ -28,6 +28,7 @@ final class UnsupportedMediaTypeMapping extends AbstractApiProblemMapping
     {
         $fieldMappings = parent::getNormalizationFieldMappings($path);
 
+        $fieldMappings[] = NormalizationFieldMappingBuilder::create('mediaType')->getMapping();
         $fieldMappings[] = NormalizationFieldMappingBuilder::create('supportedMediaTypes')->getMapping();
 
         return $fieldMappings;

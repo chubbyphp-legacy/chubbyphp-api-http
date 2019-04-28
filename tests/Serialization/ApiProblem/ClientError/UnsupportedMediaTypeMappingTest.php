@@ -37,6 +37,7 @@ final class UnsupportedMediaTypeMappingTest extends TestCase
             NormalizationFieldMappingBuilder::create('title')->getMapping(),
             NormalizationFieldMappingBuilder::create('detail')->getMapping(),
             NormalizationFieldMappingBuilder::create('instance')->getMapping(),
+            NormalizationFieldMappingBuilder::create('mediaType')->getMapping(),
             NormalizationFieldMappingBuilder::create('supportedMediaTypes')->getMapping(),
         ], $fieldMappings);
     }
