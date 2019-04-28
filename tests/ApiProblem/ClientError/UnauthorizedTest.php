@@ -15,7 +15,7 @@ final class UnauthorizedTest extends TestCase
         $apiProblem = new Unauthorized('Token', []);
 
         self::assertSame(401, $apiProblem->getStatus());
-        self::assertSame([], $apiProblem->getHeaders());
+        self::assertSame(['WWW-Authenticate' => ''], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.2', $apiProblem->getType());
         self::assertSame('Unauthorized', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());

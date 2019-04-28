@@ -15,7 +15,6 @@ final class NotAcceptableTest extends TestCase
         $apiProblem = new NotAcceptable('application/x-yaml', []);
 
         self::assertSame(406, $apiProblem->getStatus());
-        self::assertSame([], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.7', $apiProblem->getType());
         self::assertSame('Not Acceptable', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
@@ -34,7 +33,6 @@ final class NotAcceptableTest extends TestCase
         );
 
         self::assertSame(406, $apiProblem->getStatus());
-        self::assertSame(['X-Acceptables' => 'application/json,application/xml'], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.7', $apiProblem->getType());
         self::assertSame('Not Acceptable', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());

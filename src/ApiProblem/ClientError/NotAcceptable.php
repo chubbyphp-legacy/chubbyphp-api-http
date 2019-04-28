@@ -43,18 +43,6 @@ final class NotAcceptable extends AbstractApiProblem
     }
 
     /**
-     * @return array
-     */
-    public function getHeaders(): array
-    {
-        if ([] === $this->acceptables) {
-            return [];
-        }
-
-        return ['X-Acceptables' => implode(',', $this->acceptables)];
-    }
-
-    /**
      * @return string
      */
     public function getAccept(): string

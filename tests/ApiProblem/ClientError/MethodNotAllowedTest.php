@@ -15,7 +15,7 @@ final class MethodNotAllowedTest extends TestCase
         $apiProblem = new MethodNotAllowed('PUT', []);
 
         self::assertSame(405, $apiProblem->getStatus());
-        self::assertSame([], $apiProblem->getHeaders());
+        self::assertSame(['Allow' => ''], $apiProblem->getHeaders());
         self::assertSame('https://tools.ietf.org/html/rfc2616#section-10.4.6', $apiProblem->getType());
         self::assertSame('Method Not Allowed', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());

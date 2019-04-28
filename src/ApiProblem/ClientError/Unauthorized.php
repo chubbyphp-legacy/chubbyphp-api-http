@@ -46,10 +46,6 @@ final class Unauthorized extends AbstractApiProblem
      */
     public function getHeaders(): array
     {
-        if ([] === $this->authorizationTypes) {
-            return [];
-        }
-
         return ['WWW-Authenticate' => implode(',', $this->authorizationTypes)];
     }
 
