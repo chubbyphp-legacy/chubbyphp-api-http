@@ -191,18 +191,19 @@ final class ResponseManagerTest extends TestCase
     {
         /** @var ApiProblemInterface|MockObject $apiProblem */
         $apiProblem = $this->getMockByCalls(ApiProblemInterface::class, [
-            Call::create('getStatus')->with()->willReturn(404),
-            Call::create('getHeaders')->with()->willReturn([]),
+            Call::create('getStatus')->with()->willReturn(405),
+            Call::create('getHeaders')->with()->willReturn(['Allow' => 'PATCH,PUT']),
         ]);
 
         /** @var StreamInterface|MockObject $body */
         $body = $this->getMockByCalls(StreamInterface::class, [
-            Call::create('write')->with('{"title":"Not found"}'),
+            Call::create('write')->with('{"title":"Method Not Allowed"}'),
         ]);
 
         /** @var Response|MockObject $response */
         $response = $this->getMockByCalls(Response::class, [
             Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
+            Call::create('withHeader')->with('Allow', 'PATCH,PUT')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($body),
         ]);
 
@@ -211,14 +212,14 @@ final class ResponseManagerTest extends TestCase
 
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
-            Call::create('createResponse')->with(404, '')->willReturn($response),
+            Call::create('createResponse')->with(405, '')->willReturn($response),
         ]);
 
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockByCalls(SerializerInterface::class, [
             Call::create('serialize')
                 ->with($apiProblem, 'application/json', null, '')
-                ->willReturn('{"title":"Not found"}'),
+                ->willReturn('{"title":"Method Not Allowed"}'),
         ]);
 
         $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
