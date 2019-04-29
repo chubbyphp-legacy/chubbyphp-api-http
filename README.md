@@ -15,10 +15,10 @@ A simple http handler implementation for API.
 ## Requirements
 
  * php: ^7.1
- * chubbyphp/chubbyphp-deserialization: ^2.1
- * chubbyphp/chubbyphp-serialization: ^2.1
+ * chubbyphp/chubbyphp-deserialization: ^2.0
+ * chubbyphp/chubbyphp-serialization: ^2.0
  * psr/http-factory: ^1.0
- * psr/http-message: ^1.0
+ * psr/http-message: ^1.0.1
 
 ## Installation
 
