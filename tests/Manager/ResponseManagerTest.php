@@ -202,7 +202,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var Response|MockObject $response */
         $response = $this->getMockByCalls(Response::class, [
-            Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
+            Call::create('withHeader')->with('Content-Type', 'application/problem+json')->willReturnSelf(),
             Call::create('withHeader')->with('Allow', 'PATCH,PUT')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($body),
         ]);
