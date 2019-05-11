@@ -16,16 +16,18 @@ A simple http handler implementation for API.
 
  * php: ^7.1
  * chubbyphp/chubbyphp-deserialization: ^2.0
+ * chubbyphp/chubbyphp-negotiation: ^1.0
  * chubbyphp/chubbyphp-serialization: ^2.0
- * psr/http-factory: ^1.0
+ * psr/http-factory: ^1.0.1
  * psr/http-message: ^1.0.1
+ * psr/http-server-middleware: ^1.0.1
 
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-api-http][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-api-http "^3.0"
+composer require chubbyphp/chubbyphp-api-http "^3.1"
 ```
 
 ## Usage
