@@ -35,8 +35,9 @@ composer require chubbyphp/chubbyphp-api-http "^3.1"
  * [ApiProblem (example)][2]
  * [RequestManager][3]
  * [ResponseManager][4]
- * [ApiHttpProvider][5]
- * [ApiProblemMapping (example)][6]
+ * [AcceptAndContentTypeMiddleware][5]
+ * [ApiHttpProvider][6]
+ * [ApiProblemMapping (example)][7]
 
 ## Copyright
 
@@ -46,5 +47,6 @@ Dominik Zogg 2019
 [2]: doc/ApiProblem/ApiProblem.md
 [3]: doc/Manager/RequestManager.md
 [4]: doc/Manager/ResponseManager.md
-[5]: doc/Provider/ApiHttpProvider.md
-[6]: doc/Serialization/ApiProblemMapping.md
+[5]: doc/Middleware/AcceptAndContentTypeMiddleware.md
+[6]: doc/Provider/ApiHttpProvider.md
+[7]: doc/Serialization/ApiProblemMapping.md
