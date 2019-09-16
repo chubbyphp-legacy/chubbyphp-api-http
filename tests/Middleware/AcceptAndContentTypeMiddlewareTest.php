@@ -45,7 +45,7 @@ class AcceptAndContentTypeMiddlewareTest extends TestCase
              */
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
-                self::fail('should not be called');
+                TestCase::fail('should not be called');
             }
         };
 
@@ -154,7 +154,7 @@ class AcceptAndContentTypeMiddlewareTest extends TestCase
              */
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
-                self::fail('should not be called');
+                TestCase::fail('should not be called');
             }
         };
 
