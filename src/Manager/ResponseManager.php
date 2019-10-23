@@ -102,7 +102,8 @@ final class ResponseManager implements ResponseManagerInterface
         $status = $apiProblem->getStatus();
 
         $response = $this->responseFactory->createResponse($status)
-            ->withHeader('Content-Type', str_replace('/', '/problem+', $accept));
+            ->withHeader('Content-Type', str_replace('/', '/problem+', $accept))
+        ;
 
         foreach ($apiProblem->getHeaders() as $name => $value) {
             $response = $response->withHeader($name, $value);

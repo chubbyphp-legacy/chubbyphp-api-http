@@ -28,7 +28,7 @@ final class ApiHttpProvider implements ServiceProviderInterface
             );
         };
 
-        $container['api-http.response.factory'] = function () {
+        $container['api-http.response.factory'] = function (): void {
             throw new \RuntimeException('Missing response factory, define service "api-http.response.factory"');
         };
     }
