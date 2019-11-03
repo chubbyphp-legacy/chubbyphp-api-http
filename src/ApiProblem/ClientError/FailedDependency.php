@@ -8,10 +8,6 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 
 final class FailedDependency extends AbstractApiProblem
 {
-    /**
-     * @param string|null $detail
-     * @param string|null $instance
-     */
     public function __construct(string $detail = null, string $instance = null)
     {
         parent::__construct(

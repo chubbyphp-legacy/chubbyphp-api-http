@@ -28,11 +28,6 @@ final class ResponseManager implements ResponseManagerInterface
      */
     private $serializer;
 
-    /**
-     * @param DeserializerInterface    $deserializer
-     * @param ResponseFactoryInterface $responseFactory
-     * @param SerializerInterface      $serializer
-     */
     public function __construct(
         DeserializerInterface $deserializer,
         ResponseFactoryInterface $responseFactory,
@@ -44,12 +39,7 @@ final class ResponseManager implements ResponseManagerInterface
     }
 
     /**
-     * @param object                          $object
-     * @param string                          $accept
-     * @param int                             $status
-     * @param NormalizerContextInterface|null $context
-     *
-     * @return ResponseInterface
+     * @param object $object
      */
     public function create(
         $object,
@@ -65,34 +55,18 @@ final class ResponseManager implements ResponseManagerInterface
         return $response;
     }
 
-    /**
-     * @param string $accept
-     * @param int    $status
-     *
-     * @return ResponseInterface
-     */
     public function createEmpty(string $accept, int $status = 204): ResponseInterface
     {
         return $this->responseFactory->createResponse($status)->withHeader('Content-Type', $accept);
     }
 
-    /**
-     * @param string $location
-     * @param int    $status
-     *
-     * @return ResponseInterface
-     */
     public function createRedirect(string $location, int $status = 307): ResponseInterface
     {
         return $this->responseFactory->createResponse($status)->withHeader('Location', $location);
     }
 
     /**
-     * @param ApiProblemInterface        $apiProblem
-     * @param string                     $accept
      * @param NormalizerContextInterface $context
-     *
-     * @return ResponseInterface
      */
     public function createFromApiProblem(
         ApiProblemInterface $apiProblem,

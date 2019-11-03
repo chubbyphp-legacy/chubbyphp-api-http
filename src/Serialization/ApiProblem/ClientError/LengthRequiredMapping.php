@@ -9,9 +9,6 @@ use Chubbyphp\ApiHttp\Serialization\ApiProblem\AbstractApiProblemMapping;
 
 final class LengthRequiredMapping extends AbstractApiProblemMapping
 {
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return LengthRequired::class;

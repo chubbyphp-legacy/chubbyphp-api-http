@@ -9,9 +9,6 @@ use Chubbyphp\ApiHttp\Serialization\ApiProblem\AbstractApiProblemMapping;
 
 final class InsufficientStorageMapping extends AbstractApiProblemMapping
 {
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return InsufficientStorage::class;

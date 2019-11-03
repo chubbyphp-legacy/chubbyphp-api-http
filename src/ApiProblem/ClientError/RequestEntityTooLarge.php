@@ -13,11 +13,6 @@ final class RequestEntityTooLarge extends AbstractApiProblem
      */
     private $maxContentLength;
 
-    /**
-     * @param int         $maxContentLength
-     * @param string|null $detail
-     * @param string|null $instance
-     */
     public function __construct(int $maxContentLength, string $detail = null, string $instance = null)
     {
         parent::__construct(
@@ -31,9 +26,6 @@ final class RequestEntityTooLarge extends AbstractApiProblem
         $this->maxContentLength = $maxContentLength;
     }
 
-    /**
-     * @return int
-     */
     public function getMaxContentLength(): int
     {
         return $this->maxContentLength;

@@ -31,11 +31,6 @@ final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
      */
     private $responseManager;
 
-    /**
-     * @param AcceptNegotiatorInterface      $acceptNegotiator
-     * @param ContentTypeNegotiatorInterface $contentTypeNegotiator
-     * @param ResponseManagerInterface       $responseManager
-     */
     public function __construct(
         AcceptNegotiatorInterface $acceptNegotiator,
         ContentTypeNegotiatorInterface $contentTypeNegotiator,
@@ -46,12 +41,6 @@ final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
         $this->responseManager = $responseManager;
     }
 
-    /**
-     * @param ServerRequestInterface  $request
-     * @param RequestHandlerInterface $handler
-     *
-     * @return ResponseInterface
-     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (null === $accept = $this->acceptNegotiator->negotiate($request)) {

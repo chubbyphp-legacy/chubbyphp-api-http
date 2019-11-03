@@ -9,9 +9,6 @@ use Chubbyphp\ApiHttp\Serialization\ApiProblem\AbstractApiProblemMapping;
 
 final class RequestedRangeNotSatisfiableMapping extends AbstractApiProblemMapping
 {
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return RequestedRangeNotSatisfiable::class;

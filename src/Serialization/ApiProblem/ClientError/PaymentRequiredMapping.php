@@ -11,17 +11,12 @@ use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingInterface;
 
 final class PaymentRequiredMapping extends AbstractApiProblemMapping
 {
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return PaymentRequired::class;
     }
 
     /**
-     * @param string $path
-     *
      * @return NormalizationFieldMappingInterface[]
      */
     public function getNormalizationFieldMappings(string $path): array

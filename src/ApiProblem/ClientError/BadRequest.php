@@ -13,11 +13,6 @@ final class BadRequest extends AbstractApiProblem
      */
     private $invalidParameters = [];
 
-    /**
-     * @param array       $invalidParameters
-     * @param string|null $detail
-     * @param string|null $instance
-     */
     public function __construct(array $invalidParameters, string $detail = null, string $instance = null)
     {
         parent::__construct(
@@ -31,9 +26,6 @@ final class BadRequest extends AbstractApiProblem
         $this->invalidParameters = $invalidParameters;
     }
 
-    /**
-     * @return array
-     */
     public function getInvalidParameters(): array
     {
         return $this->invalidParameters;

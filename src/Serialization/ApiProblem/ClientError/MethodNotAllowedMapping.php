@@ -11,17 +11,12 @@ use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingInterface;
 
 final class MethodNotAllowedMapping extends AbstractApiProblemMapping
 {
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return MethodNotAllowed::class;
     }
 
     /**
-     * @param string $path
-     *
      * @return NormalizationFieldMappingInterface[]
      */
     public function getNormalizationFieldMappings(string $path): array

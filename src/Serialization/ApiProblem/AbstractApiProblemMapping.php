@@ -11,17 +11,12 @@ use Chubbyphp\Serialization\Mapping\NormalizationObjectMappingInterface;
 
 abstract class AbstractApiProblemMapping implements NormalizationObjectMappingInterface
 {
-    /**
-     * @return string
-     */
     public function getNormalizationType(): string
     {
         return 'apiProblem';
     }
 
     /**
-     * @param string $path
-     *
      * @return NormalizationFieldMappingInterface[]
      */
     public function getNormalizationFieldMappings(string $path): array
@@ -35,8 +30,6 @@ abstract class AbstractApiProblemMapping implements NormalizationObjectMappingIn
     }
 
     /**
-     * @param string $path
-     *
      * @return NormalizationFieldMappingInterface[]
      */
     public function getNormalizationEmbeddedFieldMappings(string $path): array
@@ -45,8 +38,6 @@ abstract class AbstractApiProblemMapping implements NormalizationObjectMappingIn
     }
 
     /**
-     * @param string $path
-     *
      * @return NormalizationLinkMappingInterface[]
      */
     public function getNormalizationLinkMappings(string $path): array

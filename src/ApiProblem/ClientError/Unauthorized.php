@@ -19,9 +19,7 @@ final class Unauthorized extends AbstractApiProblem
     private $authorizationTypes = [];
 
     /**
-     * @param string[]    $authorizationTypes
-     * @param string|null $detail
-     * @param string|null $instance
+     * @param string[] $authorizationTypes
      */
     public function __construct(
         string $authorization,
@@ -41,17 +39,11 @@ final class Unauthorized extends AbstractApiProblem
         $this->authorizationTypes = $authorizationTypes;
     }
 
-    /**
-     * @return array
-     */
     public function getHeaders(): array
     {
         return ['WWW-Authenticate' => implode(',', $this->authorizationTypes)];
     }
 
-    /**
-     * @return string
-     */
     public function getAuthorization(): string
     {
         return $this->authorization;

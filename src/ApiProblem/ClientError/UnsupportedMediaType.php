@@ -19,9 +19,7 @@ final class UnsupportedMediaType extends AbstractApiProblem
     private $supportedMediaTypes = [];
 
     /**
-     * @param string[]    $supportedMediaTypes
-     * @param string|null $detail
-     * @param string|null $instance
+     * @param string[] $supportedMediaTypes
      */
     public function __construct(
         string $mediaType,
@@ -41,9 +39,6 @@ final class UnsupportedMediaType extends AbstractApiProblem
         $this->supportedMediaTypes = $supportedMediaTypes;
     }
 
-    /**
-     * @return string
-     */
     public function getMediaType(): string
     {
         return $this->mediaType;

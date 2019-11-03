@@ -11,17 +11,12 @@ use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingInterface;
 
 final class UnsupportedMediaTypeMapping extends AbstractApiProblemMapping
 {
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return UnsupportedMediaType::class;
     }
 
     /**
-     * @param string $path
-     *
      * @return NormalizationFieldMappingInterface[]
      */
     public function getNormalizationFieldMappings(string $path): array

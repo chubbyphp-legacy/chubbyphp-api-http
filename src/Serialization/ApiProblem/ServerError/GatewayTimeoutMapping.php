@@ -9,9 +9,6 @@ use Chubbyphp\ApiHttp\Serialization\ApiProblem\AbstractApiProblemMapping;
 
 final class GatewayTimeoutMapping extends AbstractApiProblemMapping
 {
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return GatewayTimeout::class;

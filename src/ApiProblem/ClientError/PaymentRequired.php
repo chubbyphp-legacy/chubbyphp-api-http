@@ -14,9 +14,7 @@ final class PaymentRequired extends AbstractApiProblem
     private $paymentTypes = [];
 
     /**
-     * @param string[]    $paymentTypes
-     * @param string|null $detail
-     * @param string|null $instance
+     * @param string[] $paymentTypes
      */
     public function __construct(array $paymentTypes, string $detail = null, string $instance = null)
     {

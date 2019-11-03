@@ -11,17 +11,12 @@ use Chubbyphp\Serialization\Mapping\NormalizationFieldMappingInterface;
 
 final class ExpectationFailedMapping extends AbstractApiProblemMapping
 {
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return ExpectationFailed::class;
     }
 
     /**
-     * @param string $path
-     *
      * @return NormalizationFieldMappingInterface[]
      */
     public function getNormalizationFieldMappings(string $path): array

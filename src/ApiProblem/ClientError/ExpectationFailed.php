@@ -14,9 +14,7 @@ final class ExpectationFailed extends AbstractApiProblem
     private $failedExpectations = [];
 
     /**
-     * @param string[]    $failedExpectations
-     * @param string|null $detail
-     * @param string|null $instance
+     * @param string[] $failedExpectations
      */
     public function __construct(array $failedExpectations, string $detail = null, string $instance = null)
     {

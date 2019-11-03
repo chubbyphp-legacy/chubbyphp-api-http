@@ -14,9 +14,7 @@ final class PreconditionFailed extends AbstractApiProblem
     private $failedPreconditions = [];
 
     /**
-     * @param string[]    $failedPreconditions
-     * @param string|null $detail
-     * @param string|null $instance
+     * @param string[] $failedPreconditions
      */
     public function __construct(array $failedPreconditions, string $detail = null, string $instance = null)
     {

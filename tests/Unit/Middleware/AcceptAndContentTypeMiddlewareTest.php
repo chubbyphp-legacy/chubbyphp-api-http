@@ -40,11 +40,6 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
         $response = $this->getMockByCalls(ResponseInterface::class, []);
 
         $requestHandler = new class() implements RequestHandlerInterface {
-            /**
-             * @param ServerRequestInterface $request
-             *
-             * @return ResponseInterface
-             */
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 TestCase::fail('should not be called');
@@ -96,19 +91,11 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
              */
             private $response;
 
-            /**
-             * @param ResponseInterface $response
-             */
             public function __construct(ResponseInterface $response)
             {
                 $this->response = $response;
             }
 
-            /**
-             * @param ServerRequestInterface $request
-             *
-             * @return ResponseInterface
-             */
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 return $this->response;
@@ -149,11 +136,6 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
         $response = $this->getMockByCalls(ResponseInterface::class, []);
 
         $requestHandler = new class() implements RequestHandlerInterface {
-            /**
-             * @param ServerRequestInterface $request
-             *
-             * @return ResponseInterface
-             */
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 TestCase::fail('should not be called');
@@ -214,19 +196,11 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
              */
             private $response;
 
-            /**
-             * @param ResponseInterface $response
-             */
             public function __construct(ResponseInterface $response)
             {
                 $this->response = $response;
             }
 
-            /**
-             * @param ServerRequestInterface $request
-             *
-             * @return ResponseInterface
-             */
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 return $this->response;

@@ -19,10 +19,7 @@ final class NotAcceptable extends AbstractApiProblem
     private $acceptables = [];
 
     /**
-     * @param string      $accept
-     * @param string[]    $acceptables
-     * @param string|null $detail
-     * @param string|null $instance
+     * @param string[] $acceptables
      */
     public function __construct(
         string $accept,
@@ -42,9 +39,6 @@ final class NotAcceptable extends AbstractApiProblem
         $this->acceptables = $acceptables;
     }
 
-    /**
-     * @return string
-     */
     public function getAccept(): string
     {
         return $this->accept;

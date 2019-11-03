@@ -19,10 +19,8 @@ final class MethodNotAllowed extends AbstractApiProblem
     private $allowedMethods = [];
 
     /**
-     * @param string      $method,
-     * @param string[]    $allowedMethods
-     * @param string|null $detail
-     * @param string|null $instance
+     * @param string   $method,
+     * @param string[] $allowedMethods
      */
     public function __construct(string $method, array $allowedMethods, string $detail = null, string $instance = null)
     {
@@ -38,17 +36,11 @@ final class MethodNotAllowed extends AbstractApiProblem
         $this->allowedMethods = $allowedMethods;
     }
 
-    /**
-     * @return array
-     */
     public function getHeaders(): array
     {
         return ['Allow' => implode(',', $this->allowedMethods)];
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return $this->method;

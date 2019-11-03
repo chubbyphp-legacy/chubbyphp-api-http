@@ -11,9 +11,6 @@ use Pimple\ServiceProviderInterface;
 
 final class ApiHttpProvider implements ServiceProviderInterface
 {
-    /**
-     * @param Container $container
-     */
     public function register(Container $container): void
     {
         $container['api-http.request.manager'] = static function () use ($container) {

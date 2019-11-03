@@ -15,18 +15,13 @@ final class RequestManager implements RequestManagerInterface
      */
     private $deserializer;
 
-    /**
-     * @param DeserializerInterface $deserializer
-     */
     public function __construct(DeserializerInterface $deserializer)
     {
         $this->deserializer = $deserializer;
     }
 
     /**
-     * @param ServerRequestInterface            $request
-     * @param object|string                     $object
-     * @param DenormalizerContextInterface|null $context
+     * @param object|string $object
      *
      * @return object
      */
@@ -39,10 +34,7 @@ final class RequestManager implements RequestManagerInterface
     }
 
     /**
-     * @param ServerRequestInterface            $request
-     * @param object|string                     $object
-     * @param string                            $contentType
-     * @param DenormalizerContextInterface|null $context
+     * @param object|string $object
      *
      * @return object
      */

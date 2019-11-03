@@ -13,11 +13,6 @@ final class RequestUriTooLong extends AbstractApiProblem
      */
     private $maxUriLength;
 
-    /**
-     * @param int         $maxUriLength
-     * @param string|null $detail
-     * @param string|null $instance
-     */
     public function __construct(int $maxUriLength, string $detail = null, string $instance = null)
     {
         parent::__construct(
@@ -31,9 +26,6 @@ final class RequestUriTooLong extends AbstractApiProblem
         $this->maxUriLength = $maxUriLength;
     }
 
-    /**
-     * @return int
-     */
     public function getMaxUriLength(): int
     {
         return $this->maxUriLength;
