@@ -19,6 +19,7 @@
         "psr/http-server-middleware": "^1.0.1"
     },
     "require-dev": {
+        "chubbyphp/chubbyphp-container": "^1.0",
         "chubbyphp/chubbyphp-mock": "^1.4.2",
         "friendsofphp/php-cs-fixer": "^2.16.1",
         "infection/infection": "^0.14.3",
