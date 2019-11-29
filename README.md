@@ -14,9 +14,9 @@ A simple http handler implementation for API.
 ## Requirements
 
  * php: ^7.2
- * chubbyphp/chubbyphp-deserialization: ^2.14
- * chubbyphp/chubbyphp-negotiation: ^1.4
- * chubbyphp/chubbyphp-serialization: ^2.11
+ * chubbyphp/chubbyphp-deserialization: ^2.15
+ * chubbyphp/chubbyphp-negotiation: ^1.5
+ * chubbyphp/chubbyphp-serialization: ^2.12
  * psr/http-factory: ^1.0.1
  * psr/http-message: ^1.0.1
  * psr/http-server-middleware: ^1.0.1
@@ -26,7 +26,7 @@ A simple http handler implementation for API.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-api-http][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-api-http "^3.2"
+composer require chubbyphp/chubbyphp-api-http "^3.3"
 ```
 
 ## Usage
@@ -35,7 +35,7 @@ composer require chubbyphp/chubbyphp-api-http "^3.2"
  * [RequestManager][3]
  * [ResponseManager][4]
  * [AcceptAndContentTypeMiddleware][5]
- * [ApiHttpProvider][6]
+ * [ApiHttpServiceProvider][6]
  * [ApiProblemMapping (example)][7]
 
 ## Copyright
@@ -47,5 +47,5 @@ Dominik Zogg 2019
 [3]: doc/Manager/RequestManager.md
 [4]: doc/Manager/ResponseManager.md
 [5]: doc/Middleware/AcceptAndContentTypeMiddleware.md
-[6]: doc/Provider/ApiHttpProvider.md
+[6]: doc/ServiceProvider/ApiHttpServiceProvider.md
 [7]: doc/Serialization/ApiProblemMapping.md

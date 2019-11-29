@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\ApiHttp\Unit\Provider;
+namespace Chubbyphp\Tests\ApiHttp\Unit\ServiceProvider;
 
 use Chubbyphp\ApiHttp\Manager\RequestManager;
 use Chubbyphp\ApiHttp\Manager\ResponseManager;
-use Chubbyphp\ApiHttp\Provider\ApiHttpProvider;
-use Chubbyphp\Deserialization\Provider\DeserializationProvider;
+use Chubbyphp\ApiHttp\ServiceProvider\ApiHttpServiceProvider;
+use Chubbyphp\Deserialization\ServiceProvider\DeserializationServiceProvider;
 use Chubbyphp\Mock\MockByCallsTrait;
-use Chubbyphp\Serialization\Provider\SerializationProvider;
+use Chubbyphp\Serialization\ServiceProvider\SerializationServiceProvider;
 use PHPUnit\Framework\TestCase;
 use Pimple\Container;
 use Psr\Http\Message\ResponseFactoryInterface;
 
 /**
- * @covers \Chubbyphp\ApiHttp\Provider\ApiHttpProvider
+ * @covers \Chubbyphp\ApiHttp\ServiceProvider\ApiHttpServiceProvider
  *
  * @internal
  */
-final class ApiHttpProviderTest extends TestCase
+final class ApiHttpServiceProviderTest extends TestCase
 {
     use MockByCallsTrait;
 
@@ -29,9 +29,9 @@ final class ApiHttpProviderTest extends TestCase
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class);
 
         $container = new Container();
-        $container->register(new ApiHttpProvider());
-        $container->register(new DeserializationProvider());
-        $container->register(new SerializationProvider());
+        $container->register(new ApiHttpServiceProvider());
+        $container->register(new DeserializationServiceProvider());
+        $container->register(new SerializationServiceProvider());
 
         $container['api-http.response.factory'] = function () use ($responseFactory) {
             return $responseFactory;
@@ -51,7 +51,7 @@ final class ApiHttpProviderTest extends TestCase
         self::expectExceptionMessage('Missing response factory, define service "api-http.response.factory"');
 
         $container = new Container();
-        $container->register(new ApiHttpProvider());
+        $container->register(new ApiHttpServiceProvider());
 
         $container['api-http.response.factory'];
     }

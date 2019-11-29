@@ -2,31 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\ApiHttp\Provider;
+use Chubbyphp\ApiHttp\ServiceProvider\ApiHttpServiceProvider;
 
-use Chubbyphp\ApiHttp\Manager\RequestManager;
-use Chubbyphp\ApiHttp\Manager\ResponseManager;
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
-
-final class ApiHttpProvider implements ServiceProviderInterface
-{
-    public function register(Container $container): void
-    {
-        $container['api-http.request.manager'] = static function () use ($container) {
-            return new RequestManager($container['deserializer']);
-        };
-
-        $container['api-http.response.manager'] = static function () use ($container) {
-            return new ResponseManager(
-                $container['deserializer'],
-                $container['api-http.response.factory'],
-                $container['serializer']
-            );
-        };
-
-        $container['api-http.response.factory'] = static function (): void {
-            throw new \RuntimeException('Missing response factory, define service "api-http.response.factory"');
-        };
-    }
-}
+class_alias(ApiHttpServiceProvider::class, 'Chubbyphp\ApiHttp\Provider\ApiHttpProvider');
