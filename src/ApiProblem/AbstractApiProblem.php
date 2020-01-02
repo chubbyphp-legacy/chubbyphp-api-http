@@ -70,6 +70,9 @@ abstract class AbstractApiProblem implements ApiProblemInterface
         return $this->instance;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getHeaders(): array
     {
         return [];

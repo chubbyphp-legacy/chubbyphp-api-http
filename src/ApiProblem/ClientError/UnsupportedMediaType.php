@@ -14,12 +14,12 @@ final class UnsupportedMediaType extends AbstractApiProblem
     private $mediaType;
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     private $supportedMediaTypes = [];
 
     /**
-     * @param string[] $supportedMediaTypes
+     * @param array<int, string> $supportedMediaTypes
      */
     public function __construct(
         string $mediaType,
@@ -45,7 +45,7 @@ final class UnsupportedMediaType extends AbstractApiProblem
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getSupportedMediaTypes(): array
     {

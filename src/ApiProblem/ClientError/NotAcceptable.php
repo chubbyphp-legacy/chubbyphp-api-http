@@ -14,12 +14,12 @@ final class NotAcceptable extends AbstractApiProblem
     private $accept;
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     private $acceptables = [];
 
     /**
-     * @param string[] $acceptables
+     * @param array<int, string> $acceptables
      */
     public function __construct(
         string $accept,
@@ -45,7 +45,7 @@ final class NotAcceptable extends AbstractApiProblem
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getAcceptables(): array
     {

@@ -9,12 +9,12 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 final class PaymentRequired extends AbstractApiProblem
 {
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     private $paymentTypes = [];
 
     /**
-     * @param string[] $paymentTypes
+     * @param array<int, string> $paymentTypes
      */
     public function __construct(array $paymentTypes, string $detail = null, string $instance = null)
     {
@@ -30,7 +30,7 @@ final class PaymentRequired extends AbstractApiProblem
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getPaymentTypes(): array
     {

@@ -14,13 +14,13 @@ final class MethodNotAllowed extends AbstractApiProblem
     private $method;
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     private $allowedMethods = [];
 
     /**
-     * @param string   $method,
-     * @param string[] $allowedMethods
+     * @param string             $method,
+     * @param array<int, string> $allowedMethods
      */
     public function __construct(string $method, array $allowedMethods, string $detail = null, string $instance = null)
     {
@@ -36,6 +36,9 @@ final class MethodNotAllowed extends AbstractApiProblem
         $this->allowedMethods = $allowedMethods;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getHeaders(): array
     {
         return ['Allow' => implode(',', $this->allowedMethods)];
@@ -47,7 +50,7 @@ final class MethodNotAllowed extends AbstractApiProblem
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getAllowedMethods(): array
     {

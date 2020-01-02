@@ -9,12 +9,12 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 final class PreconditionFailed extends AbstractApiProblem
 {
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     private $failedPreconditions = [];
 
     /**
-     * @param string[] $failedPreconditions
+     * @param array<int, string> $failedPreconditions
      */
     public function __construct(array $failedPreconditions, string $detail = null, string $instance = null)
     {
@@ -30,7 +30,7 @@ final class PreconditionFailed extends AbstractApiProblem
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getFailedPreconditions(): array
     {

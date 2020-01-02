@@ -9,12 +9,12 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 final class ExpectationFailed extends AbstractApiProblem
 {
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     private $failedExpectations = [];
 
     /**
-     * @param string[] $failedExpectations
+     * @param array<int, string> $failedExpectations
      */
     public function __construct(array $failedExpectations, string $detail = null, string $instance = null)
     {
@@ -30,7 +30,7 @@ final class ExpectationFailed extends AbstractApiProblem
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getFailedExpectations(): array
     {

@@ -10,6 +10,9 @@ use Psr\Container\ContainerInterface;
 
 final class ApiHttpServiceFactory
 {
+    /**
+     * @return array<string, callable>
+     */
     public function __invoke(): array
     {
         return [

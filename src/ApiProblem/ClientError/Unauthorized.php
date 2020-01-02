@@ -14,12 +14,12 @@ final class Unauthorized extends AbstractApiProblem
     private $authorization;
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     private $authorizationTypes = [];
 
     /**
-     * @param string[] $authorizationTypes
+     * @param array<int, string> $authorizationTypes
      */
     public function __construct(
         string $authorization,
@@ -39,6 +39,9 @@ final class Unauthorized extends AbstractApiProblem
         $this->authorizationTypes = $authorizationTypes;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getHeaders(): array
     {
         return ['WWW-Authenticate' => implode(',', $this->authorizationTypes)];
@@ -50,7 +53,7 @@ final class Unauthorized extends AbstractApiProblem
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getAuthorizationTypes(): array
     {

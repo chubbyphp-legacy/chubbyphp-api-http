@@ -16,5 +16,8 @@ interface ApiProblemInterface
 
     public function getInstance(): ?string;
 
+    /**
+     * @return array<string, string>
+     */
     public function getHeaders(): array;
 }

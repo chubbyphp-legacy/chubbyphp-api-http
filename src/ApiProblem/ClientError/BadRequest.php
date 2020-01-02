@@ -9,10 +9,13 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 final class BadRequest extends AbstractApiProblem
 {
     /**
-     * @var array[]
+     * @var array<int, array>
      */
     private $invalidParameters = [];
 
+    /**
+     * @param array<int, array> $invalidParameters
+     */
     public function __construct(array $invalidParameters, string $detail = null, string $instance = null)
     {
         parent::__construct(
@@ -26,6 +29,9 @@ final class BadRequest extends AbstractApiProblem
         $this->invalidParameters = $invalidParameters;
     }
 
+    /**
+     * @return array<int, array>
+     */
     public function getInvalidParameters(): array
     {
         return $this->invalidParameters;
