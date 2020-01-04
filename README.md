@@ -41,7 +41,7 @@ composer require chubbyphp/chubbyphp-api-http "^3.3"
 
 ## Copyright
 
-Dominik Zogg 2019
+Dominik Zogg 2020
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-api-http
 [2]: doc/ApiProblem/ApiProblem.md
