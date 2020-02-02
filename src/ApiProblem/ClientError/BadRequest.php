@@ -9,14 +9,14 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 final class BadRequest extends AbstractApiProblem
 {
     /**
-     * @var array<int, array>
+     * @var array<int, array<mixed>>
      */
     private $invalidParameters = [];
 
     /**
-     * @param array<int, array> $invalidParameters
+     * @param array<int, array<mixed>> $invalidParameters
      */
-    public function __construct(array $invalidParameters, string $detail = null, string $instance = null)
+    public function __construct(array $invalidParameters, ?string $detail = null, ?string $instance = null)
     {
         parent::__construct(
             'https://tools.ietf.org/html/rfc2616#section-10.4.1',
@@ -30,7 +30,7 @@ final class BadRequest extends AbstractApiProblem
     }
 
     /**
-     * @return array<int, array>
+     * @return array<int, array<mixed>>
      */
     public function getInvalidParameters(): array
     {

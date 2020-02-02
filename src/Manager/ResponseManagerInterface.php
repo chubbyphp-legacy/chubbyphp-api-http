@@ -17,19 +17,16 @@ interface ResponseManagerInterface
         $object,
         string $accept,
         int $status = 200,
-        NormalizerContextInterface $context = null
+        ?NormalizerContextInterface $context = null
     ): ResponseInterface;
 
     public function createEmpty(string $accept, int $status = 204): ResponseInterface;
 
     public function createRedirect(string $location, int $status = 307): ResponseInterface;
 
-    /**
-     * @param NormalizerContextInterface $context
-     */
     public function createFromApiProblem(
         ApiProblemInterface $apiProblem,
         string $accept,
-        NormalizerContextInterface $context = null
+        ?NormalizerContextInterface $context = null
     ): ResponseInterface;
 }

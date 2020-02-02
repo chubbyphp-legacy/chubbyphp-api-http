@@ -24,8 +24,8 @@ final class NotAcceptable extends AbstractApiProblem
     public function __construct(
         string $accept,
         array $acceptables,
-        string $detail = null,
-        string $instance = null
+        ?string $detail = null,
+        ?string $instance = null
     ) {
         parent::__construct(
             'https://tools.ietf.org/html/rfc2616#section-10.4.7',

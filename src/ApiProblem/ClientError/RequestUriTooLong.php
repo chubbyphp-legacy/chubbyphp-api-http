@@ -13,7 +13,7 @@ final class RequestUriTooLong extends AbstractApiProblem
      */
     private $maxUriLength;
 
-    public function __construct(int $maxUriLength, string $detail = null, string $instance = null)
+    public function __construct(int $maxUriLength, ?string $detail = null, ?string $instance = null)
     {
         parent::__construct(
             'https://tools.ietf.org/html/rfc2616#section-10.4.15',

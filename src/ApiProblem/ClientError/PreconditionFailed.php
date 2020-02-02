@@ -16,7 +16,7 @@ final class PreconditionFailed extends AbstractApiProblem
     /**
      * @param array<int, string> $failedPreconditions
      */
-    public function __construct(array $failedPreconditions, string $detail = null, string $instance = null)
+    public function __construct(array $failedPreconditions, ?string $detail = null, ?string $instance = null)
     {
         parent::__construct(
             'https://tools.ietf.org/html/rfc2616#section-10.4.13',

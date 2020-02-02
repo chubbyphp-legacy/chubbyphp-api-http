@@ -19,7 +19,6 @@ final class ApiHttpServiceProvider implements ServiceProviderInterface
 
         $container['api-http.response.manager'] = static function () use ($container) {
             return new ResponseManager(
-                $container['deserializer'],
                 $container['api-http.response.factory'],
                 $container['serializer']
             );

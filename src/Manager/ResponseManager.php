@@ -14,11 +14,6 @@ use Psr\Http\Message\ResponseInterface;
 final class ResponseManager implements ResponseManagerInterface
 {
     /**
-     * @var DeserializerInterface
-     */
-    private $deserializer;
-
-    /**
      * @var ResponseFactoryInterface
      */
     private $responseFactory;
@@ -28,14 +23,21 @@ final class ResponseManager implements ResponseManagerInterface
      */
     private $serializer;
 
-    public function __construct(
-        DeserializerInterface $deserializer,
-        ResponseFactoryInterface $responseFactory,
-        SerializerInterface $serializer
-    ) {
-        $this->deserializer = $deserializer;
-        $this->responseFactory = $responseFactory;
-        $this->serializer = $serializer;
+    public function __construct()
+    {
+        $args = func_get_args();
+
+        if ($args[0] instanceof DeserializerInterface) {
+            @trigger_error(
+                'Remove deserializer as first argument.',
+                E_USER_DEPRECATED
+            );
+
+            array_shift($args);
+        }
+
+        $this->setResponseFactory($args[0]);
+        $this->setSerializer($args[1]);
     }
 
     /**
@@ -45,7 +47,7 @@ final class ResponseManager implements ResponseManagerInterface
         $object,
         string $accept,
         int $status = 200,
-        NormalizerContextInterface $context = null
+        ?NormalizerContextInterface $context = null
     ): ResponseInterface {
         $body = $this->serializer->serialize($object, $accept, $context);
 
@@ -65,13 +67,10 @@ final class ResponseManager implements ResponseManagerInterface
         return $this->responseFactory->createResponse($status)->withHeader('Location', $location);
     }
 
-    /**
-     * @param NormalizerContextInterface $context
-     */
     public function createFromApiProblem(
         ApiProblemInterface $apiProblem,
         string $accept,
-        NormalizerContextInterface $context = null
+        ?NormalizerContextInterface $context = null
     ): ResponseInterface {
         $status = $apiProblem->getStatus();
 
@@ -88,5 +87,15 @@ final class ResponseManager implements ResponseManagerInterface
         $response->getBody()->write($body);
 
         return $response;
+    }
+
+    private function setResponseFactory(ResponseFactoryInterface $responseFactory): void
+    {
+        $this->responseFactory = $responseFactory;
+    }
+
+    private function setSerializer(SerializerInterface $serializer): void
+    {
+        $this->serializer = $serializer;
     }
 }

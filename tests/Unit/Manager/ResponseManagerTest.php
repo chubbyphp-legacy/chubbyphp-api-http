@@ -26,7 +26,7 @@ final class ResponseManagerTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testCreateWithDefaults(): void
+    public function testCreateWithDefaultsAndDeserializer(): void
     {
         $bodyString = '{"key": "value"}';
 
@@ -56,7 +56,48 @@ final class ResponseManagerTest extends TestCase
             Call::create('serialize')->with($object, 'application/json', null, '')->willReturn($bodyString),
         ]);
 
+        error_clear_last();
+
         $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame('Remove deserializer as first argument.', $error['message']);
+
+        self::assertSame($response, $responseManager->create($object, 'application/json'));
+    }
+
+    public function testCreateWithDefaults(): void
+    {
+        $bodyString = '{"key": "value"}';
+
+        $object = new \stdClass();
+
+        /** @var StreamInterface|MockObject $body */
+        $body = $this->getMockByCalls(StreamInterface::class, [
+            Call::create('write')->with($bodyString),
+        ]);
+
+        /** @var Response|MockObject $response */
+        $response = $this->getMockByCalls(Response::class, [
+            Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
+            Call::create('getBody')->with()->willReturn($body),
+        ]);
+
+        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
+            Call::create('createResponse')->with(200, '')->willReturn($response),
+        ]);
+
+        /** @var SerializerInterface|MockObject $serializer */
+        $serializer = $this->getMockByCalls(SerializerInterface::class, [
+            Call::create('serialize')->with($object, 'application/json', null, '')->willReturn($bodyString),
+        ]);
+
+        $responseManager = new ResponseManager($responseFactory, $serializer);
 
         self::assertSame($response, $responseManager->create($object, 'application/json'));
     }
@@ -66,9 +107,6 @@ final class ResponseManagerTest extends TestCase
         $bodyString = '{"key": "value"}';
 
         $object = new \stdClass();
-
-        /** @var DeserializerInterface|MockObject $deserializer */
-        $deserializer = $this->getMockByCalls(DeserializerInterface::class);
 
         /** @var StreamInterface|MockObject $body */
         $body = $this->getMockByCalls(StreamInterface::class, [
@@ -94,16 +132,13 @@ final class ResponseManagerTest extends TestCase
             Call::create('serialize')->with($object, 'application/json', $context, '')->willReturn($bodyString),
         ]);
 
-        $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
+        $responseManager = new ResponseManager($responseFactory, $serializer);
 
         self::assertSame($response, $responseManager->create($object, 'application/json', 201, $context));
     }
 
     public function testCreateEmptyWithDefaults(): void
     {
-        /** @var DeserializerInterface|MockObject $deserializer */
-        $deserializer = $this->getMockByCalls(DeserializerInterface::class);
-
         /** @var Response|MockObject $response */
         $response = $this->getMockByCalls(Response::class, [
             Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
@@ -117,16 +152,13 @@ final class ResponseManagerTest extends TestCase
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockByCalls(SerializerInterface::class);
 
-        $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
+        $responseManager = new ResponseManager($responseFactory, $serializer);
 
         self::assertSame($response, $responseManager->createEmpty('application/json'));
     }
 
     public function testCreateEmptyWithoutDefaults(): void
     {
-        /** @var DeserializerInterface|MockObject $deserializer */
-        $deserializer = $this->getMockByCalls(DeserializerInterface::class);
-
         /** @var Response|MockObject $response */
         $response = $this->getMockByCalls(Response::class, [
             Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
@@ -140,16 +172,13 @@ final class ResponseManagerTest extends TestCase
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockByCalls(SerializerInterface::class);
 
-        $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
+        $responseManager = new ResponseManager($responseFactory, $serializer);
 
         self::assertSame($response, $responseManager->createEmpty('application/json', 200));
     }
 
     public function testCreateRedirectWithDefaults(): void
     {
-        /** @var DeserializerInterface|MockObject $deserializer */
-        $deserializer = $this->getMockByCalls(DeserializerInterface::class);
-
         /** @var Response|MockObject $response */
         $response = $this->getMockByCalls(Response::class, [
             Call::create('withHeader')->with('Location', 'https://google.com')->willReturnSelf(),
@@ -163,16 +192,13 @@ final class ResponseManagerTest extends TestCase
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockByCalls(SerializerInterface::class);
 
-        $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
+        $responseManager = new ResponseManager($responseFactory, $serializer);
 
         self::assertSame($response, $responseManager->createRedirect('https://google.com'));
     }
 
     public function testCreateRedirectWithoutDefaults(): void
     {
-        /** @var DeserializerInterface|MockObject $deserializer */
-        $deserializer = $this->getMockByCalls(DeserializerInterface::class);
-
         /** @var Response|MockObject $response */
         $response = $this->getMockByCalls(Response::class, [
             Call::create('withHeader')->with('Location', 'https://google.com')->willReturnSelf(),
@@ -186,7 +212,7 @@ final class ResponseManagerTest extends TestCase
         /** @var SerializerInterface|MockObject $serializer */
         $serializer = $this->getMockByCalls(SerializerInterface::class);
 
-        $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
+        $responseManager = new ResponseManager($responseFactory, $serializer);
 
         self::assertSame($response, $responseManager->createRedirect('https://google.com', 301));
     }
@@ -211,9 +237,6 @@ final class ResponseManagerTest extends TestCase
             Call::create('getBody')->with()->willReturn($body),
         ]);
 
-        /** @var DeserializerInterface|MockObject $deserializer */
-        $deserializer = $this->getMockByCalls(DeserializerInterface::class);
-
         /** @var ResponseFactoryInterface|MockObject $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(405, '')->willReturn($response),
@@ -226,7 +249,7 @@ final class ResponseManagerTest extends TestCase
                 ->willReturn('{"title":"Method Not Allowed"}'),
         ]);
 
-        $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
+        $responseManager = new ResponseManager($responseFactory, $serializer);
 
         self::assertSame($response, $responseManager->createFromApiProblem($apiProblem, 'application/json'));
     }

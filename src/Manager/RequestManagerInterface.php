@@ -17,7 +17,7 @@ interface RequestManagerInterface
     public function getDataFromRequestQuery(
         ServerRequestInterface $request,
         $object,
-        DenormalizerContextInterface $context = null
+        ?DenormalizerContextInterface $context = null
     );
 
     /**
@@ -29,6 +29,6 @@ interface RequestManagerInterface
         ServerRequestInterface $request,
         $object,
         string $contentType,
-        DenormalizerContextInterface $context = null
+        ?DenormalizerContextInterface $context = null
     );
 }

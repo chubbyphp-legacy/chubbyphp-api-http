@@ -17,7 +17,7 @@ final class PreconditionFailedMapping extends AbstractApiProblemMapping
     }
 
     /**
-     * @return NormalizationFieldMappingInterface[]
+     * @return array<int, NormalizationFieldMappingInterface>
      */
     public function getNormalizationFieldMappings(string $path): array
     {

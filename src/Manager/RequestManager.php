@@ -28,7 +28,7 @@ final class RequestManager implements RequestManagerInterface
     public function getDataFromRequestQuery(
         ServerRequestInterface $request,
         $object,
-        DenormalizerContextInterface $context = null
+        ?DenormalizerContextInterface $context = null
     ) {
         return $this->deserializer->denormalize($object, $request->getQueryParams(), $context);
     }
@@ -42,7 +42,7 @@ final class RequestManager implements RequestManagerInterface
         ServerRequestInterface $request,
         $object,
         string $contentType,
-        DenormalizerContextInterface $context = null
+        ?DenormalizerContextInterface $context = null
     ) {
         return $this->deserializer->deserialize($object, (string) $request->getBody(), $contentType, $context);
     }

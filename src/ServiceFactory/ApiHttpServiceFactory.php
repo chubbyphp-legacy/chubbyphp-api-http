@@ -21,7 +21,6 @@ final class ApiHttpServiceFactory
             },
             'api-http.response.manager' => static function (ContainerInterface $container) {
                 return new ResponseManager(
-                    $container->get('deserializer'),
                     $container->get('api-http.response.factory'),
                     $container->get('serializer')
                 );

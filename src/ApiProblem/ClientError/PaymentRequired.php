@@ -16,7 +16,7 @@ final class PaymentRequired extends AbstractApiProblem
     /**
      * @param array<int, string> $paymentTypes
      */
-    public function __construct(array $paymentTypes, string $detail = null, string $instance = null)
+    public function __construct(array $paymentTypes, ?string $detail = null, ?string $instance = null)
     {
         parent::__construct(
             'https://tools.ietf.org/html/rfc2616#section-10.4.3',

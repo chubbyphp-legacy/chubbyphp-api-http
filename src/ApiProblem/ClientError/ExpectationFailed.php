@@ -16,7 +16,7 @@ final class ExpectationFailed extends AbstractApiProblem
     /**
      * @param array<int, string> $failedExpectations
      */
-    public function __construct(array $failedExpectations, string $detail = null, string $instance = null)
+    public function __construct(array $failedExpectations, ?string $detail = null, ?string $instance = null)
     {
         parent::__construct(
             'https://tools.ietf.org/html/rfc2616#section-10.4.18',

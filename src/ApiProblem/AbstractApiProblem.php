@@ -35,8 +35,8 @@ abstract class AbstractApiProblem implements ApiProblemInterface
         string $type,
         int $status,
         string $title,
-        string $detail = null,
-        string $instance = null
+        ?string $detail = null,
+        ?string $instance = null
     ) {
         $this->type = $type;
         $this->status = $status;
