@@ -28,7 +28,8 @@ final class AcceptAndContentTypeMiddlewareResponseManager implements AcceptAndCo
         string $mimeType
     ): ResponseInterface {
         return $this->responseManager->createFromApiProblem(
-            new NotAcceptable($accept, $acceptableMimeTypes), $mimeType
+            new NotAcceptable($accept, $acceptableMimeTypes),
+            $mimeType
         );
     }
 
@@ -38,7 +39,8 @@ final class AcceptAndContentTypeMiddlewareResponseManager implements AcceptAndCo
         string $mimeType
     ): ResponseInterface {
         return $this->responseManager->createFromApiProblem(
-            new UnsupportedMediaType($mediaType, $supportedMediaTypes), $mimeType
+            new UnsupportedMediaType($mediaType, $supportedMediaTypes),
+            $mimeType
         );
     }
 }
