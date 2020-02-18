@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace Chubbyphp\ApiHttp\Manager;
 
 use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
+use Chubbyphp\ApiHttp\ApiProblem\ClientError\NotAcceptable;
+use Chubbyphp\ApiHttp\ApiProblem\ClientError\UnsupportedMediaType;
+use Chubbyphp\ApiHttp\Middleware\AcceptAndContentTypeMiddlewareResponseFactoryInterface;
 use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
 use Chubbyphp\Serialization\SerializerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 
-final class ResponseManager implements ResponseManagerInterface
+final class ResponseManager implements ResponseManagerInterface, AcceptAndContentTypeMiddlewareResponseFactoryInterface
 {
     /**
      * @var ResponseFactoryInterface
@@ -42,6 +45,10 @@ final class ResponseManager implements ResponseManagerInterface
 
     /**
      * @param object $object
+     * @param string $accept
+     * @param int $status
+     * @param NormalizerContextInterface|null $context
+     * @return ResponseInterface
      */
     public function create(
         $object,
@@ -97,5 +104,21 @@ final class ResponseManager implements ResponseManagerInterface
     private function setSerializer(SerializerInterface $serializer): void
     {
         $this->serializer = $serializer;
+    }
+
+    public function createForNotAcceptable(
+        string $accept,
+        array $acceptableMimeTypes,
+        string $mimeType
+    ): ResponseInterface {
+        return $this->createFromApiProblem(new NotAcceptable($accept, $acceptableMimeTypes), $mimeType);
+    }
+
+    public function createForUnsupportedMediaType(
+        string $mediaType,
+        array $supportedMediaTypes,
+        string $mimeType
+    ): ResponseInterface {
+        return $this->createFromApiProblem(new UnsupportedMediaType($mediaType, $supportedMediaTypes), $mimeType);
     }
 }

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Middleware;
 
-use Chubbyphp\ApiHttp\ApiProblem\ClientError\NotAcceptable;
-use Chubbyphp\ApiHttp\ApiProblem\ClientError\UnsupportedMediaType;
-use Chubbyphp\ApiHttp\Manager\ResponseManagerInterface;
 use Chubbyphp\Negotiation\AcceptNegotiatorInterface;
 use Chubbyphp\Negotiation\ContentTypeNegotiatorInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -27,18 +24,18 @@ final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
     private $contentTypeNegotiator;
 
     /**
-     * @var ResponseManagerInterface
+     * @var AcceptAndContentTypeMiddlewareResponseFactoryInterface
      */
-    private $responseManager;
+    private $responseFactory;
 
     public function __construct(
         AcceptNegotiatorInterface $acceptNegotiator,
         ContentTypeNegotiatorInterface $contentTypeNegotiator,
-        ResponseManagerInterface $responseManager
+        AcceptAndContentTypeMiddlewareResponseFactoryInterface $responseFactory
     ) {
         $this->acceptNegotiator = $acceptNegotiator;
         $this->contentTypeNegotiator = $contentTypeNegotiator;
-        $this->responseManager = $responseManager;
+        $this->responseFactory = $responseFactory;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -46,11 +43,9 @@ final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
         if (null === $accept = $this->acceptNegotiator->negotiate($request)) {
             $supportedMediaTypes = $this->acceptNegotiator->getSupportedMediaTypes();
 
-            return $this->responseManager->createFromApiProblem(
-                new NotAcceptable(
-                    $request->getHeaderLine('Accept'),
-                    $supportedMediaTypes
-                ),
+            return $this->responseFactory->createForNotAcceptable(
+                $request->getHeaderLine('Accept'),
+                $supportedMediaTypes,
                 $supportedMediaTypes[0]
             );
         }
@@ -59,11 +54,9 @@ final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
 
         if (in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true)) {
             if (null === $contentType = $this->contentTypeNegotiator->negotiate($request)) {
-                return $this->responseManager->createFromApiProblem(
-                    new UnsupportedMediaType(
-                        $request->getHeaderLine('Content-Type'),
-                        $this->contentTypeNegotiator->getSupportedMediaTypes()
-                    ),
+                return $this->responseFactory->createForUnsupportedMediaType(
+                    $request->getHeaderLine('Content-Type'),
+                    $this->contentTypeNegotiator->getSupportedMediaTypes(),
                     $accept->getValue()
                 );
             }

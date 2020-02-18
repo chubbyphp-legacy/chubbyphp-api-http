@@ -8,6 +8,7 @@ use Chubbyphp\ApiHttp\ApiProblem\ClientError\NotAcceptable;
 use Chubbyphp\ApiHttp\ApiProblem\ClientError\UnsupportedMediaType;
 use Chubbyphp\ApiHttp\Manager\ResponseManagerInterface;
 use Chubbyphp\ApiHttp\Middleware\AcceptAndContentTypeMiddleware;
+use Chubbyphp\ApiHttp\Middleware\AcceptAndContentTypeMiddlewareResponseFactoryInterface;
 use Chubbyphp\Mock\Argument\ArgumentCallback;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
@@ -55,21 +56,14 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
         /** @var ContentTypeNegotiatorInterface|MockObject $contentTypeNegotiator */
         $contentTypeNegotiator = $this->getMockByCalls(ContentTypeNegotiatorInterface::class, []);
 
-        /** @var ResponseManagerInterface|MockObject $responseManager */
-        $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
-            Call::create('createFromApiProblem')
-                ->with(
-                    new ArgumentCallback(function (NotAcceptable $apiProblem): void {
-                        self::assertSame('application/xml', $apiProblem->getAccept());
-                        self::assertSame(['application/json'], $apiProblem->getAcceptables());
-                    }),
-                    'application/json',
-                    null
-                )
+        /** @var AcceptAndContentTypeMiddlewareResponseFactoryInterface|MockObject $responseFactory */
+        $responseFactory = $this->getMockByCalls(AcceptAndContentTypeMiddlewareResponseFactoryInterface::class, [
+            Call::create('createForNotAcceptable')
+                ->with('application/xml', ['application/json'], 'application/json')
                 ->willReturn($response),
         ]);
 
-        $middleware = new AcceptAndContentTypeMiddleware($acceptNegotiator, $contentTypeNegotiator, $responseManager);
+        $middleware = new AcceptAndContentTypeMiddleware($acceptNegotiator, $contentTypeNegotiator, $responseFactory);
 
         self::assertSame($response, $middleware->process($request, $requestHandler));
     }
@@ -115,10 +109,10 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
         /** @var ContentTypeNegotiatorInterface|MockObject $contentTypeNegotiator */
         $contentTypeNegotiator = $this->getMockByCalls(ContentTypeNegotiatorInterface::class, []);
 
-        /** @var ResponseManagerInterface|MockObject $responseManager */
-        $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, []);
+        /** @var AcceptAndContentTypeMiddlewareResponseFactoryInterface|MockObject $responseFactory */
+        $responseFactory = $this->getMockByCalls(AcceptAndContentTypeMiddlewareResponseFactoryInterface::class, []);
 
-        $middleware = new AcceptAndContentTypeMiddleware($acceptNegotiator, $contentTypeNegotiator, $responseManager);
+        $middleware = new AcceptAndContentTypeMiddleware($acceptNegotiator, $contentTypeNegotiator, $responseFactory);
 
         self::assertSame($response, $middleware->process($request, $requestHandler));
     }
@@ -159,21 +153,14 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
             Call::create('getSupportedMediaTypes')->with()->willReturn(['application/json']),
         ]);
 
-        /** @var ResponseManagerInterface|MockObject $responseManager */
-        $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
-            Call::create('createFromApiProblem')
-                ->with(
-                    new ArgumentCallback(function (UnsupportedMediaType $apiProblem): void {
-                        self::assertSame('application/xml', $apiProblem->getMediaType());
-                        self::assertSame(['application/json'], $apiProblem->getSupportedMediaTypes());
-                    }),
-                    'application/json',
-                    null
-                )
+        /** @var AcceptAndContentTypeMiddlewareResponseFactoryInterface|MockObject $responseFactory */
+        $responseFactory = $this->getMockByCalls(AcceptAndContentTypeMiddlewareResponseFactoryInterface::class, [
+            Call::create('createForUnsupportedMediaType')
+                ->with('application/xml', ['application/json'], 'application/json')
                 ->willReturn($response),
         ]);
 
-        $middleware = new AcceptAndContentTypeMiddleware($acceptNegotiator, $contentTypeNegotiator, $responseManager);
+        $middleware = new AcceptAndContentTypeMiddleware($acceptNegotiator, $contentTypeNegotiator, $responseFactory);
 
         self::assertSame($response, $middleware->process($request, $requestHandler));
     }
@@ -227,10 +214,10 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
             Call::create('negotiate')->with($request)->willReturn($contentType),
         ]);
 
-        /** @var ResponseManagerInterface|MockObject $responseManager */
-        $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, []);
+        /** @var AcceptAndContentTypeMiddlewareResponseFactoryInterface|MockObject $responseFactory */
+        $responseFactory = $this->getMockByCalls(AcceptAndContentTypeMiddlewareResponseFactoryInterface::class, []);
 
-        $middleware = new AcceptAndContentTypeMiddleware($acceptNegotiator, $contentTypeNegotiator, $responseManager);
+        $middleware = new AcceptAndContentTypeMiddleware($acceptNegotiator, $contentTypeNegotiator, $responseFactory);
 
         self::assertSame($response, $middleware->process($request, $requestHandler));
     }
