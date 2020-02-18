@@ -22,7 +22,7 @@ interface AcceptAndContentTypeMiddlewareResponseFactoryInterface
 
     /**
      * @param string $mediaType
-     * @param array|string[] $supportedMediaTypes
+     * @param array<int, string> $supportedMediaTypes
      * @param string $mimeType
      * @return ResponseInterface
      */
