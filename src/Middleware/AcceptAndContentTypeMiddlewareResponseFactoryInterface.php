@@ -10,7 +10,7 @@ interface AcceptAndContentTypeMiddlewareResponseFactoryInterface
 {
     /**
      * @param string $accept
-     * @param array|string[] $acceptableMimeTypes
+     * @param array<int, string> $acceptableMimeTypes
      * @param string $mimeType
      * @return ResponseInterface
      */
