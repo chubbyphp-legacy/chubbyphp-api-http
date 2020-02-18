@@ -41,7 +41,7 @@ final class AcceptAndContentTypeMiddlewareResponseManager implements AcceptAndCo
 
     /**
      * @param string $mediaType
-     * @param array|string[] $supportedMediaTypes
+     * @param array<int, string> $supportedMediaTypes
      * @param string $mimeType
      * @return ResponseInterface
      */
