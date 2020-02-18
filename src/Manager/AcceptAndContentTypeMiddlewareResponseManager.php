@@ -22,6 +22,12 @@ final class AcceptAndContentTypeMiddlewareResponseManager implements AcceptAndCo
         $this->responseManager = $responseManager;
     }
 
+    /**
+     * @param string $accept
+     * @param array|string[] $acceptableMimeTypes
+     * @param string $mimeType
+     * @return ResponseInterface
+     */
     public function createForNotAcceptable(
         string $accept,
         array $acceptableMimeTypes,
@@ -33,6 +39,12 @@ final class AcceptAndContentTypeMiddlewareResponseManager implements AcceptAndCo
         );
     }
 
+    /**
+     * @param string $mediaType
+     * @param array|string[] $supportedMediaTypes
+     * @param string $mimeType
+     * @return ResponseInterface
+     */
     public function createForUnsupportedMediaType(
         string $mediaType,
         array $supportedMediaTypes,

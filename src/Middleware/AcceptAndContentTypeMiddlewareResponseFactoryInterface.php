@@ -8,12 +8,24 @@ use Psr\Http\Message\ResponseInterface;
 
 interface AcceptAndContentTypeMiddlewareResponseFactoryInterface
 {
+    /**
+     * @param string $accept
+     * @param array|string[] $acceptableMimeTypes
+     * @param string $mimeType
+     * @return ResponseInterface
+     */
     public function createForNotAcceptable(
         string $accept,
         array $acceptableMimeTypes,
         string $mimeType
     ): ResponseInterface;
 
+    /**
+     * @param string $mediaType
+     * @param array|string[] $supportedMediaTypes
+     * @param string $mimeType
+     * @return ResponseInterface
+     */
     public function createForUnsupportedMediaType(
         string $mediaType,
         array $supportedMediaTypes,
