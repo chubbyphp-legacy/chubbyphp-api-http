@@ -42,6 +42,10 @@ final class ResponseManager implements ResponseManagerInterface
 
     /**
      * @param object $object
+     * @param string $accept
+     * @param int $status
+     * @param NormalizerContextInterface|null $context
+     * @return ResponseInterface
      */
     public function create(
         $object,
