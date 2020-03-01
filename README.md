@@ -20,13 +20,14 @@ A simple http handler implementation for API.
  * psr/http-factory: ^1.0.1
  * psr/http-message: ^1.0.1
  * psr/http-server-middleware: ^1.0.1
+ * psr/log: ^1.1.2
 
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-api-http][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-api-http "^3.3"
+composer require chubbyphp/chubbyphp-api-http "^3.4"
 ```
 
 ## Usage
@@ -35,9 +36,10 @@ composer require chubbyphp/chubbyphp-api-http "^3.3"
  * [RequestManager][3]
  * [ResponseManager][4]
  * [AcceptAndContentTypeMiddleware][5]
- * [ApiHttpServiceFactory][6]
- * [ApiHttpServiceProvider][7]
- * [ApiProblemMapping (example)][8]
+ * [ApiExceptionMiddleware][6]
+ * [ApiHttpServiceFactory][7]
+ * [ApiHttpServiceProvider][8]
+ * [ApiProblemMapping (example)][9]
 
 ## Copyright
 
@@ -48,6 +50,7 @@ Dominik Zogg 2020
 [3]: doc/Manager/RequestManager.md
 [4]: doc/Manager/ResponseManager.md
 [5]: doc/Middleware/AcceptAndContentTypeMiddleware.md
-[6]: doc/ServiceFactory/ApiHttpServiceFactory.md
-[7]: doc/ServiceProvider/ApiHttpServiceProvider.md
-[8]: doc/Serialization/ApiProblemMapping.md
+[6]: doc/ServiceFactory/ApiExceptionMiddleware.md
+[7]: doc/ServiceFactory/ApiHttpServiceFactory.md
+[8]: doc/ServiceProvider/ApiHttpServiceProvider.md
+[9]: doc/Serialization/ApiProblemMapping.md

@@ -8,6 +8,11 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 
 final class InternalServerError extends AbstractApiProblem
 {
+    /**
+     * @var array<int, array<mixed>>|null
+     */
+    private $backtrace;
+
     public function __construct(?string $detail = null, ?string $instance = null)
     {
         parent::__construct(
@@ -17,5 +22,21 @@ final class InternalServerError extends AbstractApiProblem
             $detail,
             $instance
         );
+    }
+
+    /**
+     * @param array<int, array<mixed>>|null $backtrace
+     */
+    public function setBacktrace(?array $backtrace): void
+    {
+        $this->backtrace = $backtrace;
+    }
+
+    /**
+     * @return array<int, array<mixed>>|null
+     */
+    public function getBacktrace(): ?array
+    {
+        return $this->backtrace;
     }
 }

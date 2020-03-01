@@ -24,11 +24,21 @@ final class InternalServerErrorTest extends TestCase
         self::assertSame('Internal Server Error', $apiProblem->getTitle());
         self::assertNull($apiProblem->getDetail());
         self::assertNull($apiProblem->getInstance());
+        self::assertNull($apiProblem->getBacktrace());
     }
 
     public function testMaximal(): void
     {
+        $backtrace = [
+            [
+                'class' => 'RuntimeException',
+                'message' => 'runtime exception',
+                'code' => 5000,
+            ],
+        ];
+
         $apiProblem = new InternalServerError('detail', '/cccdfd0f-0da3-4070-8e55-61bd832b47c0');
+        $apiProblem->setBacktrace($backtrace);
 
         self::assertSame(500, $apiProblem->getStatus());
         self::assertSame([], $apiProblem->getHeaders());
@@ -36,5 +46,6 @@ final class InternalServerErrorTest extends TestCase
         self::assertSame('Internal Server Error', $apiProblem->getTitle());
         self::assertSame('detail', $apiProblem->getDetail());
         self::assertSame('/cccdfd0f-0da3-4070-8e55-61bd832b47c0', $apiProblem->getInstance());
+        self::assertSame($backtrace, $apiProblem->getBacktrace());
     }
 }
