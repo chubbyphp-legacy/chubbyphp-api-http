@@ -14,13 +14,13 @@ A simple http handler implementation for API.
 ## Requirements
 
  * php: ^7.2
- * chubbyphp/chubbyphp-deserialization: ^2.15
- * chubbyphp/chubbyphp-negotiation: ^1.5
- * chubbyphp/chubbyphp-serialization: ^2.12
+ * chubbyphp/chubbyphp-deserialization: ^2.17.1
+ * chubbyphp/chubbyphp-negotiation: ^1.5.3
+ * chubbyphp/chubbyphp-serialization: ^2.13.2
  * psr/http-factory: ^1.0.1
  * psr/http-message: ^1.0.1
  * psr/http-server-middleware: ^1.0.1
- * psr/log: ^1.1.2
+ * psr/log: ^1.1.3
 
 ## Installation
 

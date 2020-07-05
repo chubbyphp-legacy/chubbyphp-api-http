@@ -11,26 +11,26 @@
     ],
     "require": {
         "php": "^7.2",
-        "chubbyphp/chubbyphp-deserialization": "^2.15.2",
-        "chubbyphp/chubbyphp-negotiation": "^1.5.1",
-        "chubbyphp/chubbyphp-serialization": "^2.12.2",
+        "chubbyphp/chubbyphp-deserialization": "^2.17.1",
+        "chubbyphp/chubbyphp-negotiation": "^1.5.3",
+        "chubbyphp/chubbyphp-serialization": "^2.13.2",
         "psr/http-factory": "^1.0.1",
         "psr/http-message": "^1.0.1",
         "psr/http-server-middleware": "^1.0.1",
-        "psr/log": "^1.1.2"
+        "psr/log": "^1.1.3"
     },
     "require-dev": {
-        "chubbyphp/chubbyphp-container": "^1.0",
+        "chubbyphp/chubbyphp-container": "^1.1",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
-        "chubbyphp/chubbyphp-mock": "^1.4.2",
-        "infection/infection": "^0.15",
+        "chubbyphp/chubbyphp-mock": "^1.4.5",
+        "infection/infection": "^0.15.3|^0.16.4",
         "mavimo/phpstan-junit": "^0.3",
         "php-coveralls/php-coveralls": "^2.2",
-        "phploc/phploc": "^5.0",
-        "phpstan/extension-installer": "^1.0.3",
-        "phpstan/phpstan": "^0.12.3",
-        "phpunit/phpunit": "^8.5.1",
-        "pimple/pimple": "^3.2.3"
+        "phploc/phploc": "^5.0|^6.0.2",
+        "phpstan/extension-installer": "^1.0.4",
+        "phpstan/phpstan": "^0.12.32",
+        "phpunit/phpunit": "^8.5.8|^9.2.5",
+        "pimple/pimple": "^3.3"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\ApiHttp\\": "src/" }
