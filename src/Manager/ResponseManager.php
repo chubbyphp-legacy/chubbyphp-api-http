@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Chubbyphp\ApiHttp\Manager;
 
 use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
-use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
 use Chubbyphp\Serialization\SerializerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -23,21 +22,10 @@ final class ResponseManager implements ResponseManagerInterface
      */
     private $serializer;
 
-    public function __construct()
+    public function __construct(ResponseFactoryInterface $responseFactory, SerializerInterface $serializer)
     {
-        $args = func_get_args();
-
-        if ($args[0] instanceof DeserializerInterface) {
-            @trigger_error(
-                'Remove deserializer as first argument.',
-                E_USER_DEPRECATED
-            );
-
-            array_shift($args);
-        }
-
-        $this->setResponseFactory($args[0]);
-        $this->setSerializer($args[1]);
+        $this->responseFactory = $responseFactory;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -87,15 +75,5 @@ final class ResponseManager implements ResponseManagerInterface
         $response->getBody()->write($body);
 
         return $response;
-    }
-
-    private function setResponseFactory(ResponseFactoryInterface $responseFactory): void
-    {
-        $this->responseFactory = $responseFactory;
-    }
-
-    private function setSerializer(SerializerInterface $serializer): void
-    {
-        $this->serializer = $serializer;
     }
 }
