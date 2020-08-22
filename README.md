@@ -14,9 +14,9 @@ A simple http handler implementation for API.
 ## Requirements
 
  * php: ^7.2
- * chubbyphp/chubbyphp-deserialization: ^2.17.1
- * chubbyphp/chubbyphp-negotiation: ^1.5.3
- * chubbyphp/chubbyphp-serialization: ^2.13.2
+ * chubbyphp/chubbyphp-deserialization: ^2.18
+ * chubbyphp/chubbyphp-negotiation: ^1.6
+ * chubbyphp/chubbyphp-serialization: ^2.14
  * psr/http-factory: ^1.0.1
  * psr/http-message: ^1.0.1
  * psr/http-server-middleware: ^1.0.1
@@ -27,19 +27,23 @@ A simple http handler implementation for API.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-api-http][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-api-http "^3.4"
+composer require chubbyphp/chubbyphp-api-http "^3.5"
 ```
 
 ## Usage
 
  * [ApiProblem (example)][2]
- * [RequestManager][3]
- * [ResponseManager][4]
- * [AcceptAndContentTypeMiddleware][5]
- * [ApiExceptionMiddleware][6]
- * [ApiHttpServiceFactory][7]
- * [ApiHttpServiceProvider][8]
- * [ApiProblemMapping (example)][9]
+ * [AcceptAndContentTypeMiddlewareFactory][3]
+ * [ApiExceptionMiddlewareFactory][4]
+ * [RequestManagerFactory][5]
+ * [ResponseManagerFactory][6]
+ * [RequestManager][7]
+ * [ResponseManager][8]
+ * [AcceptAndContentTypeMiddleware][9]
+ * [ApiExceptionMiddleware][10]
+ * [ApiHttpServiceFactory][11]
+ * [ApiHttpServiceProvider][12]
+ * [ApiProblemMapping (example)][13]
 
 ## Copyright
 
@@ -47,10 +51,14 @@ Dominik Zogg 2020
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-api-http
 [2]: doc/ApiProblem/ApiProblem.md
-[3]: doc/Manager/RequestManager.md
-[4]: doc/Manager/ResponseManager.md
-[5]: doc/Middleware/AcceptAndContentTypeMiddleware.md
-[6]: doc/ServiceFactory/ApiExceptionMiddleware.md
-[7]: doc/ServiceFactory/ApiHttpServiceFactory.md
-[8]: doc/ServiceProvider/ApiHttpServiceProvider.md
-[9]: doc/Serialization/ApiProblemMapping.md
+[3]: doc/Container/AcceptAndContentTypeMiddlewareFactory.md
+[4]: doc/Container/ApiExceptionMiddlewareFactory.md
+[5]: doc/Container/RequestManagerFactory.md
+[6]: doc/Container/ResponseManagerFactory.md
+[7]: doc/Manager/RequestManager.md
+[8]: doc/Manager/ResponseManager.md
+[9]: doc/Middleware/AcceptAndContentTypeMiddleware.md
+[10]: doc/Middleware/ApiExceptionMiddleware.md
+[11]: doc/ServiceFactory/ApiHttpServiceFactory.md
+[12]: doc/ServiceProvider/ApiHttpServiceProvider.md
+[13]: doc/Serialization/ApiProblemMapping.md
