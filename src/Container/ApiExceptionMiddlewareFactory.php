@@ -9,6 +9,9 @@ use Chubbyphp\ApiHttp\Middleware\ApiExceptionMiddleware;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @deprecated \Chubbyphp\ApiHttp\ServiceFactory\ApiExceptionMiddlewareFactory
+ */
 final class ApiExceptionMiddlewareFactory
 {
     public function __invoke(ContainerInterface $container): ApiExceptionMiddleware

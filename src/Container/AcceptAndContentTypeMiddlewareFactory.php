@@ -10,6 +10,9 @@ use Chubbyphp\Negotiation\AcceptNegotiatorInterface;
 use Chubbyphp\Negotiation\ContentTypeNegotiatorInterface;
 use Psr\Container\ContainerInterface;
 
+/**
+ * @deprecated \Chubbyphp\ApiHttp\ServiceFactory\AcceptAndContentTypeMiddlewareFactory
+ */
 final class AcceptAndContentTypeMiddlewareFactory
 {
     public function __invoke(ContainerInterface $container): AcceptAndContentTypeMiddleware

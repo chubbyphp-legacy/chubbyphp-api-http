@@ -9,6 +9,9 @@ use Chubbyphp\ApiHttp\Manager\RequestManagerInterface;
 use Chubbyphp\Deserialization\DeserializerInterface;
 use Psr\Container\ContainerInterface;
 
+/**
+ * @deprecated \Chubbyphp\ApiHttp\ServiceFactory\RequestManagerFactory
+ */
 final class RequestManagerFactory
 {
     public function __invoke(ContainerInterface $container): RequestManagerInterface
