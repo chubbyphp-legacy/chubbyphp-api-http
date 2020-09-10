@@ -12,7 +12,7 @@
     "require": {
         "php": "^7.2",
         "chubbyphp/chubbyphp-deserialization": "^3.0@dev",
-        "chubbyphp/chubbyphp-negotiation": "^1.6",
+        "chubbyphp/chubbyphp-negotiation": "^1.7",
         "chubbyphp/chubbyphp-serialization": "^3.0@dev",
         "psr/http-factory": "^1.0.1",
         "psr/http-message": "^1.0.1",
@@ -22,6 +22,7 @@
     "require-dev": {
         "chubbyphp/chubbyphp-container": "^1.1",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
+        "chubbyphp/chubbyphp-laminas-config-factory": "^1.0",
         "chubbyphp/chubbyphp-mock": "^1.4.5",
         "infection/infection": "^0.15.3|^0.16.4",
         "mavimo/phpstan-junit": "^0.3",

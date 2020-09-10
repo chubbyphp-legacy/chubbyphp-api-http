@@ -15,7 +15,7 @@ A simple http handler implementation for API.
 
  * php: ^7.2
  * chubbyphp/chubbyphp-deserialization: ^3.0
- * chubbyphp/chubbyphp-negotiation: ^1.6
+ * chubbyphp/chubbyphp-negotiation: ^1.7
  * chubbyphp/chubbyphp-serialization: ^3.0
  * psr/http-factory: ^1.0.1
  * psr/http-message: ^1.0.1
@@ -51,10 +51,10 @@ Dominik Zogg 2020
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-api-http
 [2]: doc/ApiProblem/ApiProblem.md
-[3]: doc/Container/AcceptAndContentTypeMiddlewareFactory.md
-[4]: doc/Container/ApiExceptionMiddlewareFactory.md
-[5]: doc/Container/RequestManagerFactory.md
-[6]: doc/Container/ResponseManagerFactory.md
+[3]: doc/ServiceFactory/AcceptAndContentTypeMiddlewareFactory.md
+[4]: doc/ServiceFactory/ApiExceptionMiddlewareFactory.md
+[5]: doc/ServiceFactory/RequestManagerFactory.md
+[6]: doc/ServiceFactory/ResponseManagerFactory.md
 [7]: doc/Manager/RequestManager.md
 [8]: doc/Manager/ResponseManager.md
 [9]: doc/Middleware/AcceptAndContentTypeMiddleware.md
