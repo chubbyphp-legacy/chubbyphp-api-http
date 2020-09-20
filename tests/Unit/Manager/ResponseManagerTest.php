@@ -6,7 +6,6 @@ namespace Chubbyphp\Tests\ApiHttp\Unit\Manager;
 
 use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
 use Chubbyphp\ApiHttp\Manager\ResponseManager;
-use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
 use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
@@ -25,50 +24,6 @@ use Psr\Http\Message\StreamInterface;
 final class ResponseManagerTest extends TestCase
 {
     use MockByCallsTrait;
-
-    public function testCreateWithDefaultsAndDeserializer(): void
-    {
-        $bodyString = '{"key": "value"}';
-
-        $object = new \stdClass();
-
-        /** @var DeserializerInterface|MockObject $deserializer */
-        $deserializer = $this->getMockByCalls(DeserializerInterface::class);
-
-        /** @var StreamInterface|MockObject $body */
-        $body = $this->getMockByCalls(StreamInterface::class, [
-            Call::create('write')->with($bodyString),
-        ]);
-
-        /** @var Response|MockObject $response */
-        $response = $this->getMockByCalls(Response::class, [
-            Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
-            Call::create('getBody')->with()->willReturn($body),
-        ]);
-
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
-        $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
-            Call::create('createResponse')->with(200, '')->willReturn($response),
-        ]);
-
-        /** @var SerializerInterface|MockObject $serializer */
-        $serializer = $this->getMockByCalls(SerializerInterface::class, [
-            Call::create('serialize')->with($object, 'application/json', null, '')->willReturn($bodyString),
-        ]);
-
-        error_clear_last();
-
-        $responseManager = new ResponseManager($deserializer, $responseFactory, $serializer);
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame('Remove deserializer as first argument.', $error['message']);
-
-        self::assertSame($response, $responseManager->create($object, 'application/json'));
-    }
 
     public function testCreateWithDefaults(): void
     {
