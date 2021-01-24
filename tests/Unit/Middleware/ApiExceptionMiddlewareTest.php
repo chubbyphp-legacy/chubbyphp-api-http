@@ -91,7 +91,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
             Call::create('error')
                 ->with(
                     'Exception',
-                    new ArgumentCallback(function (array $context): void {
+                    new ArgumentCallback(static function (array $context): void {
                         $backtrace = $context['backtrace'];
 
                         self::assertCount(2, $backtrace);
@@ -143,7 +143,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
             Call::create('createFromApiProblem')
                 ->with(
-                    new ArgumentCallback(function (InternalServerError $error): void {
+                    new ArgumentCallback(static function (InternalServerError $error): void {
                         self::assertSame('runtime exception', $error->getDetail());
 
                         $backtrace = $error->getBacktrace();
@@ -179,7 +179,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
             Call::create('error')
                 ->with(
                     'Exception',
-                    new ArgumentCallback(function (array $context): void {
+                    new ArgumentCallback(static function (array $context): void {
                         $backtrace = $context['backtrace'];
 
                         self::assertCount(2, $backtrace);
@@ -231,7 +231,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
             Call::create('createFromApiProblem')
                 ->with(
-                    new ArgumentCallback(function (InternalServerError $error): void {
+                    new ArgumentCallback(static function (InternalServerError $error): void {
                         self::assertNull($error->getDetail());
                         self::assertNull($error->getBacktrace());
                     }),
@@ -246,7 +246,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
             Call::create('error')
                 ->with(
                     'Exception',
-                    new ArgumentCallback(function (array $context): void {
+                    new ArgumentCallback(static function (array $context): void {
                         $backtrace = $context['backtrace'];
 
                         self::assertCount(2, $backtrace);
@@ -298,7 +298,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
             Call::create('createFromApiProblem')
                 ->with(
-                    new ArgumentCallback(function (InternalServerError $error): void {
+                    new ArgumentCallback(static function (InternalServerError $error): void {
                         self::assertNull($error->getDetail());
                         self::assertNull($error->getBacktrace());
                     }),

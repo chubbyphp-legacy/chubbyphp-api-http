@@ -33,9 +33,7 @@ final class ApiHttpServiceProviderTest extends TestCase
         $container->register(new DeserializationServiceProvider());
         $container->register(new SerializationServiceProvider());
 
-        $container['api-http.response.factory'] = function () use ($responseFactory) {
-            return $responseFactory;
-        };
+        $container['api-http.response.factory'] = static fn () => $responseFactory;
 
         self::assertTrue(isset($container['api-http.response.manager']));
         self::assertTrue(isset($container['api-http.response.factory']));

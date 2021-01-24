@@ -16,9 +16,7 @@ final class ApiHttpServiceFactory
     public function __invoke(): array
     {
         return [
-            'api-http.request.manager' => static function (ContainerInterface $container) {
-                return new RequestManager($container->get('deserializer'));
-            },
+            'api-http.request.manager' => static fn (ContainerInterface $container) => new RequestManager($container->get('deserializer')),
             'api-http.response.manager' => static function (ContainerInterface $container) {
                 return new ResponseManager(
                     $container->get('api-http.response.factory'),

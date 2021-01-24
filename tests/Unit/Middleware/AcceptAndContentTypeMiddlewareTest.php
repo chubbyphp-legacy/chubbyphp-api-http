@@ -59,7 +59,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
             Call::create('createFromApiProblem')
                 ->with(
-                    new ArgumentCallback(function (NotAcceptable $apiProblem): void {
+                    new ArgumentCallback(static function (NotAcceptable $apiProblem): void {
                         self::assertSame('application/xml', $apiProblem->getAccept());
                         self::assertSame(['application/json'], $apiProblem->getAcceptables());
                     }),
@@ -163,7 +163,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
             Call::create('createFromApiProblem')
                 ->with(
-                    new ArgumentCallback(function (UnsupportedMediaType $apiProblem): void {
+                    new ArgumentCallback(static function (UnsupportedMediaType $apiProblem): void {
                         self::assertSame('application/xml', $apiProblem->getMediaType());
                         self::assertSame(['application/json'], $apiProblem->getSupportedMediaTypes());
                     }),
