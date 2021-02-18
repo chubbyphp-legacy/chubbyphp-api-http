@@ -59,7 +59,7 @@ composer require chubbyphp/chubbyphp-api-http "^4.1"
 
 ## Copyright
 
-Dominik Zogg 2020
+Dominik Zogg 2021
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-api-http
 [2]: doc/ApiProblem/ApiProblem.md
