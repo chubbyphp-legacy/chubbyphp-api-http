@@ -12,15 +12,9 @@ use Psr\Http\Message\ResponseInterface;
 
 final class ResponseManager implements ResponseManagerInterface
 {
-    /**
-     * @var ResponseFactoryInterface
-     */
-    private $responseFactory;
+    private ResponseFactoryInterface $responseFactory;
 
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
+    private SerializerInterface $serializer;
 
     public function __construct(ResponseFactoryInterface $responseFactory, SerializerInterface $serializer)
     {
@@ -28,11 +22,8 @@ final class ResponseManager implements ResponseManagerInterface
         $this->serializer = $serializer;
     }
 
-    /**
-     * @param object $object
-     */
     public function create(
-        $object,
+        object $object,
         string $accept,
         int $status = 200,
         ?NormalizerContextInterface $context = null

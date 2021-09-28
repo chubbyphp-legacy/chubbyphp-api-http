@@ -31,23 +31,23 @@ final class ResponseManagerTest extends TestCase
 
         $object = new \stdClass();
 
-        /** @var StreamInterface|MockObject $body */
+        /** @var MockObject|StreamInterface $body */
         $body = $this->getMockByCalls(StreamInterface::class, [
             Call::create('write')->with($bodyString),
         ]);
 
-        /** @var Response|MockObject $response */
+        /** @var MockObject|Response $response */
         $response = $this->getMockByCalls(Response::class, [
             Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($body),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(200, '')->willReturn($response),
         ]);
 
-        /** @var SerializerInterface|MockObject $serializer */
+        /** @var MockObject|SerializerInterface $serializer */
         $serializer = $this->getMockByCalls(SerializerInterface::class, [
             Call::create('serialize')->with($object, 'application/json', null, '')->willReturn($bodyString),
         ]);
@@ -63,26 +63,26 @@ final class ResponseManagerTest extends TestCase
 
         $object = new \stdClass();
 
-        /** @var StreamInterface|MockObject $body */
+        /** @var MockObject|StreamInterface $body */
         $body = $this->getMockByCalls(StreamInterface::class, [
             Call::create('write')->with($bodyString),
         ]);
 
-        /** @var Response|MockObject $response */
+        /** @var MockObject|Response $response */
         $response = $this->getMockByCalls(Response::class, [
             Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($body),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(201, '')->willReturn($response),
         ]);
 
-        /** @var NormalizerContextInterface|MockObject $context */
+        /** @var MockObject|NormalizerContextInterface $context */
         $context = $this->getMockByCalls(NormalizerContextInterface::class);
 
-        /** @var SerializerInterface|MockObject $serializer */
+        /** @var MockObject|SerializerInterface $serializer */
         $serializer = $this->getMockByCalls(SerializerInterface::class, [
             Call::create('serialize')->with($object, 'application/json', $context, '')->willReturn($bodyString),
         ]);
@@ -94,17 +94,17 @@ final class ResponseManagerTest extends TestCase
 
     public function testCreateEmptyWithDefaults(): void
     {
-        /** @var Response|MockObject $response */
+        /** @var MockObject|Response $response */
         $response = $this->getMockByCalls(Response::class, [
             Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(204, '')->willReturn($response),
         ]);
 
-        /** @var SerializerInterface|MockObject $serializer */
+        /** @var MockObject|SerializerInterface $serializer */
         $serializer = $this->getMockByCalls(SerializerInterface::class);
 
         $responseManager = new ResponseManager($responseFactory, $serializer);
@@ -114,17 +114,17 @@ final class ResponseManagerTest extends TestCase
 
     public function testCreateEmptyWithoutDefaults(): void
     {
-        /** @var Response|MockObject $response */
+        /** @var MockObject|Response $response */
         $response = $this->getMockByCalls(Response::class, [
             Call::create('withHeader')->with('Content-Type', 'application/json')->willReturnSelf(),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(200, '')->willReturn($response),
         ]);
 
-        /** @var SerializerInterface|MockObject $serializer */
+        /** @var MockObject|SerializerInterface $serializer */
         $serializer = $this->getMockByCalls(SerializerInterface::class);
 
         $responseManager = new ResponseManager($responseFactory, $serializer);
@@ -134,17 +134,17 @@ final class ResponseManagerTest extends TestCase
 
     public function testCreateRedirectWithDefaults(): void
     {
-        /** @var Response|MockObject $response */
+        /** @var MockObject|Response $response */
         $response = $this->getMockByCalls(Response::class, [
             Call::create('withHeader')->with('Location', 'https://google.com')->willReturnSelf(),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(307, '')->willReturn($response),
         ]);
 
-        /** @var SerializerInterface|MockObject $serializer */
+        /** @var MockObject|SerializerInterface $serializer */
         $serializer = $this->getMockByCalls(SerializerInterface::class);
 
         $responseManager = new ResponseManager($responseFactory, $serializer);
@@ -154,17 +154,17 @@ final class ResponseManagerTest extends TestCase
 
     public function testCreateRedirectWithoutDefaults(): void
     {
-        /** @var Response|MockObject $response */
+        /** @var MockObject|Response $response */
         $response = $this->getMockByCalls(Response::class, [
             Call::create('withHeader')->with('Location', 'https://google.com')->willReturnSelf(),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(301, '')->willReturn($response),
         ]);
 
-        /** @var SerializerInterface|MockObject $serializer */
+        /** @var MockObject|SerializerInterface $serializer */
         $serializer = $this->getMockByCalls(SerializerInterface::class);
 
         $responseManager = new ResponseManager($responseFactory, $serializer);
@@ -180,24 +180,24 @@ final class ResponseManagerTest extends TestCase
             Call::create('getHeaders')->with()->willReturn(['Allow' => 'PATCH,PUT']),
         ]);
 
-        /** @var StreamInterface|MockObject $body */
+        /** @var MockObject|StreamInterface $body */
         $body = $this->getMockByCalls(StreamInterface::class, [
             Call::create('write')->with('{"title":"Method Not Allowed"}'),
         ]);
 
-        /** @var Response|MockObject $response */
+        /** @var MockObject|Response $response */
         $response = $this->getMockByCalls(Response::class, [
             Call::create('withHeader')->with('Content-Type', 'application/problem+json')->willReturnSelf(),
             Call::create('withHeader')->with('Allow', 'PATCH,PUT')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($body),
         ]);
 
-        /** @var ResponseFactoryInterface|MockObject $responseFactory */
+        /** @var MockObject|ResponseFactoryInterface $responseFactory */
         $responseFactory = $this->getMockByCalls(ResponseFactoryInterface::class, [
             Call::create('createResponse')->with(405, '')->willReturn($response),
         ]);
 
-        /** @var SerializerInterface|MockObject $serializer */
+        /** @var MockObject|SerializerInterface $serializer */
         $serializer = $this->getMockByCalls(SerializerInterface::class, [
             Call::create('serialize')
                 ->with($apiProblem, 'application/json', null, '')

@@ -11,7 +11,7 @@ final class ExpectationFailed extends AbstractApiProblem
     /**
      * @var array<int, string>
      */
-    private $failedExpectations = [];
+    private array $failedExpectations = [];
 
     /**
      * @param array<int, string> $failedExpectations

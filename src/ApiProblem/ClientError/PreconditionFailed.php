@@ -11,7 +11,7 @@ final class PreconditionFailed extends AbstractApiProblem
     /**
      * @var array<int, string>
      */
-    private $failedPreconditions = [];
+    private array $failedPreconditions = [];
 
     /**
      * @param array<int, string> $failedPreconditions

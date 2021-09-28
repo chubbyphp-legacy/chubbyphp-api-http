@@ -10,11 +10,8 @@ use Psr\Http\Message\ResponseInterface;
 
 interface ResponseManagerInterface
 {
-    /**
-     * @param object $object
-     */
     public function create(
-        $object,
+        object $object,
         string $accept,
         int $status = 200,
         ?NormalizerContextInterface $context = null

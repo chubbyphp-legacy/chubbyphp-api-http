@@ -11,7 +11,7 @@ final class BadRequest extends AbstractApiProblem
     /**
      * @var array<int, array<mixed>>
      */
-    private $invalidParameters = [];
+    private array $invalidParameters = [];
 
     /**
      * @param array<int, array<mixed>> $invalidParameters

@@ -11,7 +11,7 @@ final class PaymentRequired extends AbstractApiProblem
     /**
      * @var array<int, string>
      */
-    private $paymentTypes = [];
+    private array $paymentTypes = [];
 
     /**
      * @param array<int, string> $paymentTypes

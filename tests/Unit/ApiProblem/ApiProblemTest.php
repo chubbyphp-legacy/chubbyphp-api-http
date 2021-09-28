@@ -12,12 +12,12 @@ use PHPUnit\Framework\TestCase;
  *
  * @internal
  */
-final class ConflictTest extends TestCase
+final class ApiProblemTest extends TestCase
 {
     public function testMinimal(): void
     {
         $apiProblem = new class() extends AbstractApiProblem {
-            public function __construct(string $detail = null, string $instance = null)
+            public function __construct(?string $detail = null, ?string $instance = null)
             {
                 parent::__construct('https://im-a-teapot.com', 418, 'Im a Teapot', $detail, $instance);
             }
@@ -34,7 +34,7 @@ final class ConflictTest extends TestCase
     public function testMaximal(): void
     {
         $apiProblem = new class('detail', '/cccdfd0f-0da3-4070-8e55-61bd832b47c0') extends AbstractApiProblem {
-            public function __construct(string $detail = null, string $instance = null)
+            public function __construct(?string $detail = null, ?string $instance = null)
             {
                 parent::__construct('https://im-a-teapot.com', 418, 'Im a Teapot', $detail, $instance);
             }

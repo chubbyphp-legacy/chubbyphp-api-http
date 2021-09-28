@@ -8,15 +8,12 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 
 final class MethodNotAllowed extends AbstractApiProblem
 {
-    /**
-     * @var string
-     */
-    private $method;
+    private string $method;
 
     /**
      * @var array<int, string>
      */
-    private $allowedMethods = [];
+    private array $allowedMethods = [];
 
     /**
      * @param string             $method,

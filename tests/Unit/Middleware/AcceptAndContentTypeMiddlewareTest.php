@@ -31,12 +31,12 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
 
     public function testWithoutAccept(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getHeaderLine')->with('Accept')->willReturn('application/xml'),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class, []);
 
         $requestHandler = new class() implements RequestHandlerInterface {
@@ -55,7 +55,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
         /** @var ContentTypeNegotiatorInterface|MockObject $contentTypeNegotiator */
         $contentTypeNegotiator = $this->getMockByCalls(ContentTypeNegotiatorInterface::class, []);
 
-        /** @var ResponseManagerInterface|MockObject $responseManager */
+        /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
             Call::create('createFromApiProblem')
                 ->with(
@@ -76,20 +76,17 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
 
     public function testWithAccept(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('withAttribute')->with('accept', 'application/json')->willReturnSelf(),
             Call::create('getMethod')->with()->willReturn('GET'),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class, []);
 
         $requestHandler = new class($response) implements RequestHandlerInterface {
-            /**
-             * @var ResponseInterface
-             */
-            private $response;
+            private ResponseInterface $response;
 
             public function __construct(ResponseInterface $response)
             {
@@ -102,7 +99,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
             }
         };
 
-        /** @var NegotiatedValueInterface|MockObject $accept */
+        /** @var MockObject|NegotiatedValueInterface $accept */
         $accept = $this->getMockByCalls(NegotiatedValueInterface::class, [
             Call::create('getValue')->with()->willReturn('application/json'),
         ]);
@@ -115,7 +112,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
         /** @var ContentTypeNegotiatorInterface|MockObject $contentTypeNegotiator */
         $contentTypeNegotiator = $this->getMockByCalls(ContentTypeNegotiatorInterface::class, []);
 
-        /** @var ResponseManagerInterface|MockObject $responseManager */
+        /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, []);
 
         $middleware = new AcceptAndContentTypeMiddleware($acceptNegotiator, $contentTypeNegotiator, $responseManager);
@@ -125,14 +122,14 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
 
     public function testWithoutContentType(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('withAttribute')->with('accept', 'application/json')->willReturnSelf(),
             Call::create('getMethod')->with()->willReturn('POST'),
             Call::create('getHeaderLine')->with('Content-Type')->willReturn('application/xml'),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class, []);
 
         $requestHandler = new class() implements RequestHandlerInterface {
@@ -142,7 +139,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
             }
         };
 
-        /** @var NegotiatedValueInterface|MockObject $accept */
+        /** @var MockObject|NegotiatedValueInterface $accept */
         $accept = $this->getMockByCalls(NegotiatedValueInterface::class, [
             Call::create('getValue')->with()->willReturn('application/json'),
             Call::create('getValue')->with()->willReturn('application/json'),
@@ -159,7 +156,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
             Call::create('getSupportedMediaTypes')->with()->willReturn(['application/json']),
         ]);
 
-        /** @var ResponseManagerInterface|MockObject $responseManager */
+        /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
             Call::create('createFromApiProblem')
                 ->with(
@@ -180,21 +177,18 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
 
     public function testWithContentType(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('withAttribute')->with('accept', 'application/json')->willReturnSelf(),
             Call::create('getMethod')->with()->willReturn('POST'),
             Call::create('withAttribute')->with('contentType', 'application/json')->willReturnSelf(),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class, []);
 
         $requestHandler = new class($response) implements RequestHandlerInterface {
-            /**
-             * @var ResponseInterface
-             */
-            private $response;
+            private ResponseInterface $response;
 
             public function __construct(ResponseInterface $response)
             {
@@ -207,7 +201,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
             }
         };
 
-        /** @var NegotiatedValueInterface|MockObject $accept */
+        /** @var MockObject|NegotiatedValueInterface $accept */
         $accept = $this->getMockByCalls(NegotiatedValueInterface::class, [
             Call::create('getValue')->with()->willReturn('application/json'),
         ]);
@@ -217,7 +211,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
             Call::create('negotiate')->with($request)->willReturn($accept),
         ]);
 
-        /** @var NegotiatedValueInterface|MockObject $contentType */
+        /** @var MockObject|NegotiatedValueInterface $contentType */
         $contentType = $this->getMockByCalls(NegotiatedValueInterface::class, [
             Call::create('getValue')->with()->willReturn('application/json'),
         ]);
@@ -227,7 +221,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
             Call::create('negotiate')->with($request)->willReturn($contentType),
         ]);
 
-        /** @var ResponseManagerInterface|MockObject $responseManager */
+        /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, []);
 
         $middleware = new AcceptAndContentTypeMiddleware($acceptNegotiator, $contentTypeNegotiator, $responseManager);

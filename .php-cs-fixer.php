@@ -12,7 +12,9 @@ $finder = PhpCsFixer\Finder::create()
 /** @var array $config */
 $config = require __DIR__ . '/vendor/chubbyphp/chubbyphp-dev-helper/phpcs.php';
 
-return PhpCsFixer\Config::create()
+$config['rules']['final_public_method_for_abstract_class'] = false;
+
+return (new PhpCsFixer\Config)
     ->setIndent($config['indent'])
     ->setLineEnding($config['lineEnding'])
     ->setRules($config['rules'])

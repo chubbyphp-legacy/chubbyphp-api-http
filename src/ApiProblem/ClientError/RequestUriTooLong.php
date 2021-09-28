@@ -8,10 +8,7 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 
 final class RequestUriTooLong extends AbstractApiProblem
 {
-    /**
-     * @var int
-     */
-    private $maxUriLength;
+    private int $maxUriLength;
 
     public function __construct(int $maxUriLength, ?string $detail = null, ?string $instance = null)
     {

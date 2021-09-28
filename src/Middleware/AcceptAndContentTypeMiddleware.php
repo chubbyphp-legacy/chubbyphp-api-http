@@ -16,20 +16,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var AcceptNegotiatorInterface
-     */
-    private $acceptNegotiator;
+    private AcceptNegotiatorInterface $acceptNegotiator;
 
-    /**
-     * @var ContentTypeNegotiatorInterface
-     */
-    private $contentTypeNegotiator;
+    private ContentTypeNegotiatorInterface $contentTypeNegotiator;
 
-    /**
-     * @var ResponseManagerInterface
-     */
-    private $responseManager;
+    private ResponseManagerInterface $responseManager;
 
     public function __construct(
         AcceptNegotiatorInterface $acceptNegotiator,
@@ -57,7 +48,7 @@ final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
 
         $request = $request->withAttribute('accept', $accept->getValue());
 
-        if (in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true)) {
+        if (\in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true)) {
             if (null === $contentType = $this->contentTypeNegotiator->negotiate($request)) {
                 return $this->responseManager->createFromApiProblem(
                     new UnsupportedMediaType(

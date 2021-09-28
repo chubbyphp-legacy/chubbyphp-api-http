@@ -8,15 +8,12 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 
 final class NotAcceptable extends AbstractApiProblem
 {
-    /**
-     * @var string
-     */
-    private $accept;
+    private string $accept;
 
     /**
      * @var array<int, string>
      */
-    private $acceptables = [];
+    private array $acceptables = [];
 
     /**
      * @param array<int, string> $acceptables

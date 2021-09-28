@@ -8,15 +8,12 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 
 final class UnsupportedMediaType extends AbstractApiProblem
 {
-    /**
-     * @var string
-     */
-    private $mediaType;
+    private string $mediaType;
 
     /**
      * @var array<int, string>
      */
-    private $supportedMediaTypes = [];
+    private array $supportedMediaTypes = [];
 
     /**
      * @param array<int, string> $supportedMediaTypes

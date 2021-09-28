@@ -29,7 +29,7 @@ final class RequestManagerTest extends TestCase
 
         $queryParams = ['key' => 'value'];
 
-        /** @var Request|MockObject $request */
+        /** @var MockObject|Request $request */
         $request = $this->getMockByCalls(Request::class, [
             Call::create('getQueryParams')->with()->willReturn($queryParams),
         ]);
@@ -56,12 +56,12 @@ final class RequestManagerTest extends TestCase
 
         $bodyString = '{"key": "value}';
 
-        /** @var StreamInterface|MockObject $body */
+        /** @var MockObject|StreamInterface $body */
         $body = $this->getMockByCalls(StreamInterface::class, [
             Call::create('__toString')->with()->willReturn($bodyString),
         ]);
 
-        /** @var Request|MockObject $request */
+        /** @var MockObject|Request $request */
         $request = $this->getMockByCalls(Request::class, [
             Call::create('getBody')->with()->willReturn($body),
         ]);

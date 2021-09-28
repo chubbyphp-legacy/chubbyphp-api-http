@@ -28,17 +28,14 @@ final class ApiExceptionMiddlewareTest extends TestCase
 
     public function testWithoutExceptionWithDebugWithLogger(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
         $requestHandler = new class($response) implements RequestHandlerInterface {
-            /**
-             * @var ResponseInterface
-             */
-            private $response;
+            private ResponseInterface $response;
 
             public function __construct(ResponseInterface $response)
             {
@@ -51,7 +48,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
             }
         };
 
-        /** @var ResponseManagerInterface|MockObject $responseManager */
+        /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class);
 
         /** @var LoggerInterface|MockObject $logger */
@@ -68,12 +65,12 @@ final class ApiExceptionMiddlewareTest extends TestCase
         $this->expectExceptionMessage('runtime exception');
         $this->expectExceptionCode(5000);
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getAttribute')->with('accept', null)->willReturn(null),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
         $requestHandler = new class() implements RequestHandlerInterface {
@@ -83,7 +80,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
             }
         };
 
-        /** @var ResponseManagerInterface|MockObject $responseManager */
+        /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class);
 
         /** @var LoggerInterface|MockObject $logger */
@@ -124,12 +121,12 @@ final class ApiExceptionMiddlewareTest extends TestCase
 
     public function testWithExceptionWithDebugWithLogger(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getAttribute')->with('accept', null)->willReturn('application/xml'),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
         $requestHandler = new class() implements RequestHandlerInterface {
@@ -139,7 +136,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
             }
         };
 
-        /** @var ResponseManagerInterface|MockObject $responseManager */
+        /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
             Call::create('createFromApiProblem')
                 ->with(
@@ -212,12 +209,12 @@ final class ApiExceptionMiddlewareTest extends TestCase
 
     public function testWithExceptionWithoutDebugWithLogger(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getAttribute')->with('accept', null)->willReturn('application/xml'),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
         $requestHandler = new class() implements RequestHandlerInterface {
@@ -227,7 +224,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
             }
         };
 
-        /** @var ResponseManagerInterface|MockObject $responseManager */
+        /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
             Call::create('createFromApiProblem')
                 ->with(
@@ -279,12 +276,12 @@ final class ApiExceptionMiddlewareTest extends TestCase
 
     public function testWithExceptionWithoutDebugWithoutLogger(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getAttribute')->with('accept', null)->willReturn('application/xml'),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
         $requestHandler = new class() implements RequestHandlerInterface {
@@ -294,7 +291,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
             }
         };
 
-        /** @var ResponseManagerInterface|MockObject $responseManager */
+        /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
             Call::create('createFromApiProblem')
                 ->with(

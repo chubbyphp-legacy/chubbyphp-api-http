@@ -6,30 +6,15 @@ namespace Chubbyphp\ApiHttp\ApiProblem;
 
 abstract class AbstractApiProblem implements ApiProblemInterface
 {
-    /**
-     * @var string
-     */
-    protected $type;
+    protected string $type;
 
-    /**
-     * @var int
-     */
-    protected $status;
+    protected int $status;
 
-    /**
-     * @var string
-     */
-    protected $title;
+    protected string $title;
 
-    /**
-     * @var string|null
-     */
-    protected $detail;
+    protected ?string $detail;
 
-    /**
-     * @var string|null
-     */
-    protected $instance;
+    protected ?string $instance;
 
     public function __construct(
         string $type,

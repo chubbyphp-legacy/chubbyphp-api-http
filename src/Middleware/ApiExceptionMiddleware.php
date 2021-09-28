@@ -15,20 +15,11 @@ use Psr\Log\NullLogger;
 
 final class ApiExceptionMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var ResponseManagerInterface
-     */
-    private $responseManager;
+    private ResponseManagerInterface $responseManager;
 
-    /**
-     * @var bool
-     */
-    private $debug;
+    private bool $debug;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(
         ResponseManagerInterface $responseManager,
@@ -77,7 +68,7 @@ final class ApiExceptionMiddleware implements MiddlewareInterface
         $exceptions = [];
         do {
             $exceptions[] = [
-                'class' => get_class($exception),
+                'class' => \get_class($exception),
                 'message' => $exception->getMessage(),
                 'code' => $exception->getCode(),
                 'file' => $exception->getFile(),
