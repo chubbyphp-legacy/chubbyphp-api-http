@@ -10,11 +10,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class RequestManager implements RequestManagerInterface
 {
-    private DeserializerInterface $deserializer;
-
-    public function __construct(DeserializerInterface $deserializer)
+    public function __construct(private DeserializerInterface $deserializer)
     {
-        $this->deserializer = $deserializer;
     }
 
     /**

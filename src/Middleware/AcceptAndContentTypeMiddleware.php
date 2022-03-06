@@ -16,20 +16,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
 {
-    private AcceptNegotiatorInterface $acceptNegotiator;
-
-    private ContentTypeNegotiatorInterface $contentTypeNegotiator;
-
-    private ResponseManagerInterface $responseManager;
-
     public function __construct(
-        AcceptNegotiatorInterface $acceptNegotiator,
-        ContentTypeNegotiatorInterface $contentTypeNegotiator,
-        ResponseManagerInterface $responseManager
+        private AcceptNegotiatorInterface $acceptNegotiator,
+        private ContentTypeNegotiatorInterface $contentTypeNegotiator,
+        private ResponseManagerInterface $responseManager
     ) {
-        $this->acceptNegotiator = $acceptNegotiator;
-        $this->contentTypeNegotiator = $contentTypeNegotiator;
-        $this->responseManager = $responseManager;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

@@ -15,12 +15,10 @@ final class ApiHttpServiceProvider implements ServiceProviderInterface
     {
         $container['api-http.request.manager'] = static fn () => new RequestManager($container['deserializer']);
 
-        $container['api-http.response.manager'] = static function () use ($container) {
-            return new ResponseManager(
-                $container['api-http.response.factory'],
-                $container['serializer']
-            );
-        };
+        $container['api-http.response.manager'] = static fn () => new ResponseManager(
+            $container['api-http.response.factory'],
+            $container['serializer']
+        );
 
         $container['api-http.response.factory'] = static function (): void {
             throw new \RuntimeException('Missing response factory, define service "api-http.response.factory"');

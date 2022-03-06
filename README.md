@@ -25,21 +25,21 @@ A simple http handler implementation for API.
 
 ## Requirements
 
- * php: ^7.4|^8.0
- * chubbyphp/chubbyphp-deserialization: ^3.0
- * chubbyphp/chubbyphp-negotiation: ^1.7
- * chubbyphp/chubbyphp-serialization: ^3.0
+ * php: ^8.0
+ * chubbyphp/chubbyphp-deserialization: ^3.4.1
+ * chubbyphp/chubbyphp-negotiation: ^1.9
+ * chubbyphp/chubbyphp-serialization: ^3.2
  * psr/http-factory: ^1.0.1
  * psr/http-message: ^1.0.1
  * psr/http-server-middleware: ^1.0.1
- * psr/log: ^1.1.3
+ * psr/log: ^1.1.4|^2.0|^3.0
 
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-api-http][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-api-http "^4.1"
+composer require chubbyphp/chubbyphp-api-http "^4.2"
 ```
 
 ## Usage
@@ -59,7 +59,7 @@ composer require chubbyphp/chubbyphp-api-http "^4.1"
 
 ## Copyright
 
-Dominik Zogg 2021
+Dominik Zogg 2022
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-api-http
 [2]: doc/ApiProblem/ApiProblem.md

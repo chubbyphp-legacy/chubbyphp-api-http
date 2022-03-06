@@ -8,9 +8,7 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 
 final class RequestEntityTooLarge extends AbstractApiProblem
 {
-    private int $maxContentLength;
-
-    public function __construct(int $maxContentLength, ?string $detail = null, ?string $instance = null)
+    public function __construct(private int $maxContentLength, ?string $detail = null, ?string $instance = null)
     {
         parent::__construct(
             'https://tools.ietf.org/html/rfc2616#section-10.4.14',
@@ -19,8 +17,6 @@ final class RequestEntityTooLarge extends AbstractApiProblem
             $detail,
             $instance
         );
-
-        $this->maxContentLength = $maxContentLength;
     }
 
     public function getMaxContentLength(): int

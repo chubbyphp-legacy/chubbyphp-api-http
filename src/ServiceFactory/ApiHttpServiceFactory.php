@@ -17,12 +17,10 @@ final class ApiHttpServiceFactory
     {
         return [
             'api-http.request.manager' => static fn (ContainerInterface $container) => new RequestManager($container->get('deserializer')),
-            'api-http.response.manager' => static function (ContainerInterface $container) {
-                return new ResponseManager(
-                    $container->get('api-http.response.factory'),
-                    $container->get('serializer')
-                );
-            },
+            'api-http.response.manager' => static fn (ContainerInterface $container) => new ResponseManager(
+                $container->get('api-http.response.factory'),
+                $container->get('serializer')
+            ),
             'api-http.response.factory' => static function (): void {
                 throw new \RuntimeException('Missing response factory, define service "api-http.response.factory"');
             },

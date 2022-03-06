@@ -8,19 +8,16 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 
 final class MethodNotAllowed extends AbstractApiProblem
 {
-    private string $method;
-
-    /**
-     * @var array<int, string>
-     */
-    private array $allowedMethods = [];
-
     /**
      * @param string             $method,
      * @param array<int, string> $allowedMethods
      */
-    public function __construct(string $method, array $allowedMethods, ?string $detail = null, ?string $instance = null)
-    {
+    public function __construct(
+        private string $method,
+        private array $allowedMethods,
+        ?string $detail = null,
+        ?string $instance = null
+    ) {
         parent::__construct(
             'https://tools.ietf.org/html/rfc2616#section-10.4.6',
             405,
@@ -28,9 +25,6 @@ final class MethodNotAllowed extends AbstractApiProblem
             $detail,
             $instance
         );
-
-        $this->method = $method;
-        $this->allowedMethods = $allowedMethods;
     }
 
     /**

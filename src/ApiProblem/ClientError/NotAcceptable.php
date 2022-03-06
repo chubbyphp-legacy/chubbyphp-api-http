@@ -8,19 +8,12 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 
 final class NotAcceptable extends AbstractApiProblem
 {
-    private string $accept;
-
-    /**
-     * @var array<int, string>
-     */
-    private array $acceptables = [];
-
     /**
      * @param array<int, string> $acceptables
      */
     public function __construct(
-        string $accept,
-        array $acceptables,
+        private string $accept,
+        private array $acceptables,
         ?string $detail = null,
         ?string $instance = null
     ) {
@@ -31,9 +24,6 @@ final class NotAcceptable extends AbstractApiProblem
             $detail,
             $instance
         );
-
-        $this->accept = $accept;
-        $this->acceptables = $acceptables;
     }
 
     public function getAccept(): string

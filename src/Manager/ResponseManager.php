@@ -12,14 +12,10 @@ use Psr\Http\Message\ResponseInterface;
 
 final class ResponseManager implements ResponseManagerInterface
 {
-    private ResponseFactoryInterface $responseFactory;
-
-    private SerializerInterface $serializer;
-
-    public function __construct(ResponseFactoryInterface $responseFactory, SerializerInterface $serializer)
-    {
-        $this->responseFactory = $responseFactory;
-        $this->serializer = $serializer;
+    public function __construct(
+        private ResponseFactoryInterface $responseFactory,
+        private SerializerInterface $serializer
+    ) {
     }
 
     public function create(

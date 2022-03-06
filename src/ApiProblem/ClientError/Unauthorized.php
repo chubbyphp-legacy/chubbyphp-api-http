@@ -8,19 +8,12 @@ use Chubbyphp\ApiHttp\ApiProblem\AbstractApiProblem;
 
 final class Unauthorized extends AbstractApiProblem
 {
-    private string $authorization;
-
-    /**
-     * @var array<int, string>
-     */
-    private array $authorizationTypes = [];
-
     /**
      * @param array<int, string> $authorizationTypes
      */
     public function __construct(
-        string $authorization,
-        array $authorizationTypes,
+        private string $authorization,
+        private array $authorizationTypes,
         ?string $detail = null,
         ?string $instance = null
     ) {
@@ -31,9 +24,6 @@ final class Unauthorized extends AbstractApiProblem
             $detail,
             $instance
         );
-
-        $this->authorization = $authorization;
-        $this->authorizationTypes = $authorizationTypes;
     }
 
     /**
