@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Manager;
 
-use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
+use Chubbyphp\HttpException\HttpExceptionInterface;
 use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
 use Chubbyphp\Serialization\SerializerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -42,22 +42,23 @@ final class ResponseManager implements ResponseManagerInterface
         return $this->responseFactory->createResponse($status)->withHeader('Location', $location);
     }
 
-    public function createFromApiProblem(
-        ApiProblemInterface $apiProblem,
+    public function createFromHttpException(
+        HttpExceptionInterface $httpException,
         string $accept,
-        ?NormalizerContextInterface $context = null
     ): ResponseInterface {
-        $status = $apiProblem->getStatus();
+        $status = $httpException->getStatus();
 
         $response = $this->responseFactory->createResponse($status)
             ->withHeader('Content-Type', str_replace('/', '/problem+', $accept))
         ;
 
-        foreach ($apiProblem->getHeaders() as $name => $value) {
+        $data = $httpException->jsonSerialize();
+
+        foreach ($data['headers'] ?? [] as $name => $value) {
             $response = $response->withHeader($name, $value);
         }
 
-        $body = $this->serializer->serialize($apiProblem, $accept, $context);
+        $body = $this->serializer->encode($data, $accept);
 
         $response->getBody()->write($body);
 

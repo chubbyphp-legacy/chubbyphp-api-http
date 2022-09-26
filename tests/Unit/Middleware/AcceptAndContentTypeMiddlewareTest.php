@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\ApiHttp\Unit\Middleware;
 
-use Chubbyphp\ApiHttp\ApiProblem\ClientError\NotAcceptable;
-use Chubbyphp\ApiHttp\ApiProblem\ClientError\UnsupportedMediaType;
 use Chubbyphp\ApiHttp\Manager\ResponseManagerInterface;
 use Chubbyphp\ApiHttp\Middleware\AcceptAndContentTypeMiddleware;
+use Chubbyphp\HttpException\HttpExceptionInterface;
 use Chubbyphp\Mock\Argument\ArgumentCallback;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
@@ -57,14 +56,17 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
 
         /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
-            Call::create('createFromApiProblem')
+            Call::create('createFromHttpException')
                 ->with(
-                    new ArgumentCallback(static function (NotAcceptable $apiProblem): void {
-                        self::assertSame('application/xml', $apiProblem->getAccept());
-                        self::assertSame(['application/json'], $apiProblem->getAcceptables());
+                    new ArgumentCallback(static function (HttpExceptionInterface $httpException): void {
+                        self::assertSame(406, $httpException->getStatus());
+
+                        $data = $httpException->jsonSerialize();
+
+                        self::assertSame('application/xml', $data['accept']);
+                        self::assertSame(['application/json'], $data['supported-accepts']);
                     }),
                     'application/json',
-                    null
                 )
                 ->willReturn($response),
         ]);
@@ -155,14 +157,17 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
 
         /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
-            Call::create('createFromApiProblem')
+            Call::create('createFromHttpException')
                 ->with(
-                    new ArgumentCallback(static function (UnsupportedMediaType $apiProblem): void {
-                        self::assertSame('application/xml', $apiProblem->getMediaType());
-                        self::assertSame(['application/json'], $apiProblem->getSupportedMediaTypes());
+                    new ArgumentCallback(static function (HttpExceptionInterface $httpException): void {
+                        self::assertSame(415, $httpException->getStatus());
+
+                        $data = $httpException->jsonSerialize();
+
+                        self::assertSame('application/xml', $data['content-type']);
+                        self::assertSame(['application/json'], $data['supported-content-types']);
                     }),
                     'application/json',
-                    null
                 )
                 ->willReturn($response),
         ]);

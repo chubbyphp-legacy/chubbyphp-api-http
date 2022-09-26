@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Middleware;
 
-use Chubbyphp\ApiHttp\ApiProblem\ServerError\InternalServerError;
 use Chubbyphp\ApiHttp\Manager\ResponseManagerInterface;
+use Chubbyphp\HttpException\HttpException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -45,13 +45,15 @@ final class ApiExceptionMiddleware implements MiddlewareInterface
         }
 
         if ($this->debug) {
-            $internalServerError = new InternalServerError($exception->getMessage());
-            $internalServerError->setBacktrace($backtrace);
+            $httpException = HttpException::createInternalServerError([
+                'detail' => $exception->getMessage(),
+                'backtrace' => $backtrace,
+            ]);
         } else {
-            $internalServerError = new InternalServerError();
+            $httpException = HttpException::createInternalServerError();
         }
 
-        return $this->responseManager->createFromApiProblem($internalServerError, $accept);
+        return $this->responseManager->createFromHttpException($httpException, $accept);
     }
 
     /**

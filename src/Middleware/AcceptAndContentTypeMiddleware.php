@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Middleware;
 
-use Chubbyphp\ApiHttp\ApiProblem\ClientError\NotAcceptable;
-use Chubbyphp\ApiHttp\ApiProblem\ClientError\UnsupportedMediaType;
 use Chubbyphp\ApiHttp\Manager\ResponseManagerInterface;
+use Chubbyphp\HttpException\HttpException;
 use Chubbyphp\Negotiation\AcceptNegotiatorInterface;
 use Chubbyphp\Negotiation\ContentTypeNegotiatorInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -28,12 +27,12 @@ final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
         if (null === $accept = $this->acceptNegotiator->negotiate($request)) {
             $supportedMediaTypes = $this->acceptNegotiator->getSupportedMediaTypes();
 
-            return $this->responseManager->createFromApiProblem(
-                new NotAcceptable(
-                    $request->getHeaderLine('Accept'),
-                    $supportedMediaTypes
-                ),
-                $supportedMediaTypes[0]
+            return $this->responseManager->createFromHttpException(
+                HttpException::createNotAcceptable([
+                    'accept' => $request->getHeaderLine('Accept'),
+                    'supported-accepts' => $supportedMediaTypes,
+                ]),
+                $supportedMediaTypes[0],
             );
         }
 
@@ -41,12 +40,12 @@ final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
 
         if (\in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true)) {
             if (null === $contentType = $this->contentTypeNegotiator->negotiate($request)) {
-                return $this->responseManager->createFromApiProblem(
-                    new UnsupportedMediaType(
-                        $request->getHeaderLine('Content-Type'),
-                        $this->contentTypeNegotiator->getSupportedMediaTypes()
-                    ),
-                    $accept->getValue()
+                return $this->responseManager->createFromHttpException(
+                    HttpException::createUnsupportedMediaType([
+                        'content-type' => $request->getHeaderLine('Content-Type'),
+                        'supported-content-types' => $this->contentTypeNegotiator->getSupportedMediaTypes(),
+                    ]),
+                    $accept->getValue(),
                 );
             }
 
