@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\ApiHttp\Unit\Manager;
 
-use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
 use Chubbyphp\ApiHttp\Manager\ResponseManager;
+use Chubbyphp\HttpException\HttpException;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
 use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
@@ -172,12 +172,10 @@ final class ResponseManagerTest extends TestCase
         self::assertSame($response, $responseManager->createRedirect('https://google.com', 301));
     }
 
-    public function testCreateFromApiProblem(): void
+    public function testCreateFromHttpException(): void
     {
-        /** @var ApiProblemInterface|MockObject $apiProblem */
-        $apiProblem = $this->getMockByCalls(ApiProblemInterface::class, [
-            Call::create('getStatus')->with()->willReturn(405),
-            Call::create('getHeaders')->with()->willReturn(['Allow' => 'PATCH,PUT']),
+        $httpException = HttpException::createMethodNotAllowed([
+            'headers' => ['Allow' => 'PATCH,PUT'],
         ]);
 
         /** @var MockObject|StreamInterface $body */
@@ -199,13 +197,20 @@ final class ResponseManagerTest extends TestCase
 
         /** @var MockObject|SerializerInterface $serializer */
         $serializer = $this->getMockByCalls(SerializerInterface::class, [
-            Call::create('serialize')
-                ->with($apiProblem, 'application/json', null, '')
+            Call::create('encode')
+                ->with([
+                    'type' => 'https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.6',
+                    'status' => 405,
+                    'title' => 'Method Not Allowed',
+                    'headers' => [
+                        'Allow' => 'PATCH,PUT',
+                    ],
+                ], 'application/json')
                 ->willReturn('{"title":"Method Not Allowed"}'),
         ]);
 
         $responseManager = new ResponseManager($responseFactory, $serializer);
 
-        self::assertSame($response, $responseManager->createFromApiProblem($apiProblem, 'application/json'));
+        self::assertSame($response, $responseManager->createFromHttpException($httpException, 'application/json'));
     }
 }

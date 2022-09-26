@@ -26,9 +26,10 @@ A simple http handler implementation for API.
 ## Requirements
 
  * php: ^8.0
- * chubbyphp/chubbyphp-deserialization: ^3.4.1
+ * chubbyphp/chubbyphp-deserialization: ^3.5.1
+ * chubbyphp/chubbyphp-http-exception: ^1.0
  * chubbyphp/chubbyphp-negotiation: ^1.9
- * chubbyphp/chubbyphp-serialization: ^3.2
+ * chubbyphp/chubbyphp-serialization: ^3.3.1
  * psr/http-factory: ^1.0.1
  * psr/http-message: ^1.0.1
  * psr/http-server-middleware: ^1.0.1
@@ -39,38 +40,33 @@ A simple http handler implementation for API.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-api-http][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-api-http "^4.2"
+composer require chubbyphp/chubbyphp-api-http "^5.0"
 ```
 
 ## Usage
 
- * [ApiProblem (example)][2]
- * [AcceptAndContentTypeMiddlewareFactory][3]
- * [ApiExceptionMiddlewareFactory][4]
- * [RequestManagerFactory][5]
- * [ResponseManagerFactory][6]
- * [RequestManager][7]
- * [ResponseManager][8]
- * [AcceptAndContentTypeMiddleware][9]
- * [ApiExceptionMiddleware][10]
- * [ApiHttpServiceFactory][11]
- * [ApiHttpServiceProvider][12]
- * [ApiProblemMapping (example)][13]
+ * [AcceptAndContentTypeMiddlewareFactory][2]
+ * [ApiExceptionMiddlewareFactory][3]
+ * [RequestManagerFactory][4]
+ * [ResponseManagerFactory][5]
+ * [RequestManager][6]
+ * [ResponseManager][7]
+ * [AcceptAndContentTypeMiddleware][8]
+ * [ApiExceptionMiddleware][9]
+ * [ApiHttpServiceFactory][10]
 
 ## Copyright
 
 Dominik Zogg 2022
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-api-http
-[2]: doc/ApiProblem/ApiProblem.md
-[3]: doc/ServiceFactory/AcceptAndContentTypeMiddlewareFactory.md
-[4]: doc/ServiceFactory/ApiExceptionMiddlewareFactory.md
-[5]: doc/ServiceFactory/RequestManagerFactory.md
-[6]: doc/ServiceFactory/ResponseManagerFactory.md
-[7]: doc/Manager/RequestManager.md
-[8]: doc/Manager/ResponseManager.md
-[9]: doc/Middleware/AcceptAndContentTypeMiddleware.md
-[10]: doc/Middleware/ApiExceptionMiddleware.md
-[11]: doc/ServiceFactory/ApiHttpServiceFactory.md
-[12]: doc/ServiceProvider/ApiHttpServiceProvider.md
-[13]: doc/Serialization/ApiProblemMapping.md
+
+[2]: doc/ServiceFactory/AcceptAndContentTypeMiddlewareFactory.md
+[3]: doc/ServiceFactory/ApiExceptionMiddlewareFactory.md
+[4]: doc/ServiceFactory/RequestManagerFactory.md
+[5]: doc/ServiceFactory/ResponseManagerFactory.md
+[6]: doc/Manager/RequestManager.md
+[7]: doc/Manager/ResponseManager.md
+[8]: doc/Middleware/AcceptAndContentTypeMiddleware.md
+[9]: doc/Middleware/ApiExceptionMiddleware.md
+[10]: doc/ServiceFactory/ApiHttpServiceFactory.md

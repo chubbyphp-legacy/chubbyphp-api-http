@@ -3,10 +3,10 @@
 ```php
 <?php
 
-use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
 use Chubbyphp\ApiHttp\Factory\ResponseFactoryInterface;
 use Chubbyphp\ApiHttp\Manager\ResponseManager;
 use Chubbyphp\Deserialization\DeserializerInterface;
+use Chubbyphp\HttpException\HttpExceptionInterface;
 use Chubbyphp\Serialization\SerializerInterface;
 
 /** @var DeserializerInterface $deserializer */
@@ -39,11 +39,11 @@ $response = $responseManager->createRedirect(
     'https://www.google.com'
 );
 
-/** @var ApiProblemInterface $apiProblem */
-$apiProblem = ...;
+/** @var HttpExceptionInterface $httpException */
+$httpException = ...;
 
-$response = $responseManager->createFromApiProblem(
-    $apiProblem,
+$response = $responseManager->createFromHttpException(
+    $httpException,
     'application/json'
 );
 ```

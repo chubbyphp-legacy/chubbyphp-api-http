@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\ApiHttp\Manager;
 
-use Chubbyphp\ApiHttp\ApiProblem\ApiProblemInterface;
+use Chubbyphp\HttpException\HttpExceptionInterface;
 use Chubbyphp\Serialization\Normalizer\NormalizerContextInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -21,9 +21,8 @@ interface ResponseManagerInterface
 
     public function createRedirect(string $location, int $status = 307): ResponseInterface;
 
-    public function createFromApiProblem(
-        ApiProblemInterface $apiProblem,
+    public function createFromHttpException(
+        HttpExceptionInterface $httpException,
         string $accept,
-        ?NormalizerContextInterface $context = null
     ): ResponseInterface;
 }

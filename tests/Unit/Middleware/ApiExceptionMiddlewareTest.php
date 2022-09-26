@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\ApiHttp\Unit\Middleware;
 
-use Chubbyphp\ApiHttp\ApiProblem\ServerError\InternalServerError;
 use Chubbyphp\ApiHttp\Manager\ResponseManagerInterface;
 use Chubbyphp\ApiHttp\Middleware\ApiExceptionMiddleware;
+use Chubbyphp\HttpException\HttpExceptionInterface;
 use Chubbyphp\Mock\Argument\ArgumentCallback;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
@@ -135,12 +135,16 @@ final class ApiExceptionMiddlewareTest extends TestCase
 
         /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
-            Call::create('createFromApiProblem')
+            Call::create('createFromHttpException')
                 ->with(
-                    new ArgumentCallback(static function (InternalServerError $error): void {
-                        self::assertSame('runtime exception', $error->getDetail());
+                    new ArgumentCallback(static function (HttpExceptionInterface $httpException): void {
+                        self::assertSame('Internal Server Error', $httpException->getTitle());
 
-                        $backtrace = $error->getBacktrace();
+                        $data = $httpException->jsonSerialize();
+
+                        self::assertArrayHasKey('backtrace', $data);
+
+                        $backtrace = $data['backtrace'];
 
                         self::assertCount(2, $backtrace);
 
@@ -163,7 +167,6 @@ final class ApiExceptionMiddlewareTest extends TestCase
                         self::assertArrayHasKey('trace', $exception);
                     }),
                     'application/xml',
-                    null
                 )
                 ->willReturn($response),
         ]);
@@ -223,14 +226,17 @@ final class ApiExceptionMiddlewareTest extends TestCase
 
         /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
-            Call::create('createFromApiProblem')
+            Call::create('createFromHttpException')
                 ->with(
-                    new ArgumentCallback(static function (InternalServerError $error): void {
-                        self::assertNull($error->getDetail());
-                        self::assertNull($error->getBacktrace());
+                    new ArgumentCallback(static function (HttpExceptionInterface $httpException): void {
+                        self::assertSame(500, $httpException->getStatus());
+
+                        $data = $httpException->jsonSerialize();
+
+                        self::assertArrayNotHasKey('detail', $data);
+                        self::assertArrayNotHasKey('backtrace', $data);
                     }),
                     'application/xml',
-                    null
                 )
                 ->willReturn($response),
         ]);
@@ -290,14 +296,17 @@ final class ApiExceptionMiddlewareTest extends TestCase
 
         /** @var MockObject|ResponseManagerInterface $responseManager */
         $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
-            Call::create('createFromApiProblem')
+            Call::create('createFromHttpException')
                 ->with(
-                    new ArgumentCallback(static function (InternalServerError $error): void {
-                        self::assertNull($error->getDetail());
-                        self::assertNull($error->getBacktrace());
+                    new ArgumentCallback(static function (HttpExceptionInterface $httpException): void {
+                        self::assertSame(500, $httpException->getStatus());
+
+                        $data = $httpException->jsonSerialize();
+
+                        self::assertArrayNotHasKey('detail', $data);
+                        self::assertArrayNotHasKey('backtrace', $data);
                     }),
                     'application/xml',
-                    null
                 )
                 ->willReturn($response),
         ]);
