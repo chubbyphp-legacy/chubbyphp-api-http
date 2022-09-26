@@ -53,7 +53,6 @@ composer require chubbyphp/chubbyphp-api-http "^5.0"
  * [ResponseManager][7]
  * [AcceptAndContentTypeMiddleware][8]
  * [ApiExceptionMiddleware][9]
- * [ApiHttpServiceFactory][10]
 
 ## Copyright
 
@@ -69,4 +68,3 @@ Dominik Zogg 2022
 [7]: doc/Manager/ResponseManager.md
 [8]: doc/Middleware/AcceptAndContentTypeMiddleware.md
 [9]: doc/Middleware/ApiExceptionMiddleware.md
-[10]: doc/ServiceFactory/ApiHttpServiceFactory.md
