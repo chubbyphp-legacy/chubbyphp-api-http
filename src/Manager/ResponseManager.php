@@ -53,10 +53,7 @@ final class ResponseManager implements ResponseManagerInterface
         ;
 
         $data = $httpException->jsonSerialize();
-
-        foreach ($data['headers'] ?? [] as $name => $value) {
-            $response = $response->withHeader($name, $value);
-        }
+        $data['_type'] = 'apiProblem';
 
         $body = $this->serializer->encode($data, $accept);
 

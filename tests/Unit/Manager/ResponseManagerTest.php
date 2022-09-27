@@ -174,9 +174,7 @@ final class ResponseManagerTest extends TestCase
 
     public function testCreateFromHttpException(): void
     {
-        $httpException = HttpException::createMethodNotAllowed([
-            'headers' => ['Allow' => 'PATCH,PUT'],
-        ]);
+        $httpException = HttpException::createMethodNotAllowed(['allowedMethods' => ['PATCH', 'PUT']]);
 
         /** @var MockObject|StreamInterface $body */
         $body = $this->getMockByCalls(StreamInterface::class, [
@@ -186,7 +184,6 @@ final class ResponseManagerTest extends TestCase
         /** @var MockObject|Response $response */
         $response = $this->getMockByCalls(Response::class, [
             Call::create('withHeader')->with('Content-Type', 'application/problem+json')->willReturnSelf(),
-            Call::create('withHeader')->with('Allow', 'PATCH,PUT')->willReturnSelf(),
             Call::create('getBody')->with()->willReturn($body),
         ]);
 
@@ -202,9 +199,8 @@ final class ResponseManagerTest extends TestCase
                     'type' => 'https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.6',
                     'status' => 405,
                     'title' => 'Method Not Allowed',
-                    'headers' => [
-                        'Allow' => 'PATCH,PUT',
-                    ],
+                    'allowedMethods' => ['PATCH', 'PUT'],
+                    '_type' => 'apiProblem',
                 ], 'application/json')
                 ->willReturn('{"title":"Method Not Allowed"}'),
         ]);
