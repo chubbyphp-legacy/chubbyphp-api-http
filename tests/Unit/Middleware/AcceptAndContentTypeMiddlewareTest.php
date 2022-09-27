@@ -64,7 +64,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
                         $data = $httpException->jsonSerialize();
 
                         self::assertSame('application/xml', $data['accept']);
-                        self::assertSame(['application/json'], $data['supported-accepts']);
+                        self::assertSame(['application/json'], $data['supportedAccepts']);
                     }),
                     'application/json',
                 )
@@ -164,8 +164,8 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
 
                         $data = $httpException->jsonSerialize();
 
-                        self::assertSame('application/xml', $data['content-type']);
-                        self::assertSame(['application/json'], $data['supported-content-types']);
+                        self::assertSame('application/xml', $data['contentType']);
+                        self::assertSame(['application/json'], $data['supportedContentTypes']);
                     }),
                     'application/json',
                 )

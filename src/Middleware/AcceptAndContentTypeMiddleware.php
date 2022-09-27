@@ -25,14 +25,14 @@ final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (null === $accept = $this->acceptNegotiator->negotiate($request)) {
-            $supportedMediaTypes = $this->acceptNegotiator->getSupportedMediaTypes();
+            $supportedAccepts = $this->acceptNegotiator->getSupportedMediaTypes();
 
             return $this->responseManager->createFromHttpException(
                 HttpException::createNotAcceptable([
                     'accept' => $request->getHeaderLine('Accept'),
-                    'supported-accepts' => $supportedMediaTypes,
+                    'supportedAccepts' => $supportedAccepts,
                 ]),
-                $supportedMediaTypes[0],
+                $supportedAccepts[0],
             );
         }
 
@@ -42,8 +42,8 @@ final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
             if (null === $contentType = $this->contentTypeNegotiator->negotiate($request)) {
                 return $this->responseManager->createFromHttpException(
                     HttpException::createUnsupportedMediaType([
-                        'content-type' => $request->getHeaderLine('Content-Type'),
-                        'supported-content-types' => $this->contentTypeNegotiator->getSupportedMediaTypes(),
+                        'contentType' => $request->getHeaderLine('Content-Type'),
+                        'supportedContentTypes' => $this->contentTypeNegotiator->getSupportedMediaTypes(),
                     ]),
                     $accept->getValue(),
                 );
