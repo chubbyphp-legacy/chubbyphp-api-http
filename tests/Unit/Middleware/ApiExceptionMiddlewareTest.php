@@ -6,6 +6,7 @@ namespace Chubbyphp\Tests\ApiHttp\Unit\Middleware;
 
 use Chubbyphp\ApiHttp\Manager\ResponseManagerInterface;
 use Chubbyphp\ApiHttp\Middleware\ApiExceptionMiddleware;
+use Chubbyphp\HttpException\HttpException;
 use Chubbyphp\HttpException\HttpExceptionInterface;
 use Chubbyphp\Mock\Argument\ArgumentCallback;
 use Chubbyphp\Mock\Call;
@@ -84,7 +85,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
         $logger = $this->getMockByCalls(LoggerInterface::class, [
             Call::create('error')
                 ->with(
-                    'Exception',
+                    'Http Exception',
                     new ArgumentCallback(static function (array $context): void {
                         $backtrace = $context['backtrace'];
 
@@ -104,6 +105,68 @@ final class ApiExceptionMiddlewareTest extends TestCase
                         self::assertSame('LogicException', $exception['class']);
                         self::assertSame('logic exception', $exception['message']);
                         self::assertSame(10000, $exception['code']);
+                        self::assertArrayHasKey('file', $exception);
+                        self::assertArrayHasKey('line', $exception);
+                        self::assertArrayHasKey('trace', $exception);
+                    })
+                ),
+        ]);
+
+        $middleware = new ApiExceptionMiddleware($responseManager, true, $logger);
+
+        self::assertSame($response, $middleware->process($request, $requestHandler));
+    }
+
+    public function testWithHttpExceptionWithDebugWithLogger(): void
+    {
+        $httpException = HttpException::createNotFound();
+
+        /** @var MockObject|ServerRequestInterface $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('getAttribute')->with('accept', null)->willReturn('application/xml'),
+        ]);
+
+        /** @var MockObject|ResponseInterface $response */
+        $response = $this->getMockByCalls(ResponseInterface::class);
+
+        $requestHandler = new class($httpException) implements RequestHandlerInterface {
+            public function __construct(private HttpExceptionInterface $httpException)
+            {
+            }
+
+            public function handle(ServerRequestInterface $request): ResponseInterface
+            {
+                throw $this->httpException;
+            }
+        };
+
+        /** @var MockObject|ResponseManagerInterface $responseManager */
+        $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
+            Call::create('createFromHttpException')
+                ->with(
+                    new ArgumentCallback(static function (HttpExceptionInterface $givenhttpException) use ($httpException): void {
+                        self::assertSame($httpException, $givenhttpException);
+                    }),
+                    'application/xml',
+                )
+                ->willReturn($response),
+        ]);
+
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->getMockByCalls(LoggerInterface::class, [
+            Call::create('info')
+                ->with(
+                    'Http Exception',
+                    new ArgumentCallback(static function (array $context): void {
+                        $backtrace = $context['backtrace'];
+
+                        self::assertCount(1, $backtrace);
+
+                        $exception = array_shift($backtrace);
+
+                        self::assertSame(HttpException::class, $exception['class']);
+                        self::assertSame('Not Found', $exception['message']);
+                        self::assertSame(404, $exception['code']);
                         self::assertArrayHasKey('file', $exception);
                         self::assertArrayHasKey('line', $exception);
                         self::assertArrayHasKey('trace', $exception);
@@ -142,6 +205,10 @@ final class ApiExceptionMiddlewareTest extends TestCase
 
                         $data = $httpException->jsonSerialize();
 
+                        self::assertArrayHasKey('detail', $data);
+
+                        self::assertSame('runtime exception', $data['detail']);
+
                         self::assertArrayHasKey('backtrace', $data);
 
                         $backtrace = $data['backtrace'];
@@ -175,7 +242,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
         $logger = $this->getMockByCalls(LoggerInterface::class, [
             Call::create('error')
                 ->with(
-                    'Exception',
+                    'Http Exception',
                     new ArgumentCallback(static function (array $context): void {
                         $backtrace = $context['backtrace'];
 
@@ -246,7 +313,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
         $logger = $this->getMockByCalls(LoggerInterface::class, [
             Call::create('error')
                 ->with(
-                    'Exception',
+                    'Http Exception',
                     new ArgumentCallback(static function (array $context): void {
                         $backtrace = $context['backtrace'];
 

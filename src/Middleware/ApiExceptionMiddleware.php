@@ -6,6 +6,7 @@ namespace Chubbyphp\ApiHttp\Middleware;
 
 use Chubbyphp\ApiHttp\Manager\ResponseManagerInterface;
 use Chubbyphp\HttpException\HttpException;
+use Chubbyphp\HttpException\HttpExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -38,19 +39,14 @@ final class ApiExceptionMiddleware implements MiddlewareInterface
     {
         $backtrace = $this->backtrace($exception);
 
-        $this->logger->error('Exception', ['backtrace' => $backtrace]);
+        $httpException = $this->exceptionToHttpException($exception, $backtrace);
+
+        $logLevel = $httpException->getStatus() >= 500 ? 'error' : 'info';
+
+        $this->logger->{$logLevel}('Http Exception', ['backtrace' => $backtrace]);
 
         if (null === $accept = $request->getAttribute('accept')) {
             throw $exception;
-        }
-
-        if ($this->debug) {
-            $httpException = HttpException::createInternalServerError([
-                'detail' => $exception->getMessage(),
-                'backtrace' => $backtrace,
-            ]);
-        } else {
-            $httpException = HttpException::createInternalServerError();
         }
 
         return $this->responseManager->createFromHttpException($httpException, $accept);
@@ -74,5 +70,24 @@ final class ApiExceptionMiddleware implements MiddlewareInterface
         } while ($exception = $exception->getPrevious());
 
         return $exceptions;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $backtrace
+     */
+    private function exceptionToHttpException(\Throwable $exception, array $backtrace): HttpExceptionInterface
+    {
+        if ($exception instanceof HttpExceptionInterface) {
+            return $exception;
+        }
+
+        if (!$this->debug) {
+            return HttpException::createInternalServerError();
+        }
+
+        return HttpException::createInternalServerError([
+            'detail' => $exception->getMessage(),
+            'backtrace' => $backtrace,
+        ]);
     }
 }
