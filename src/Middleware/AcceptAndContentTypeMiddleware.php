@@ -25,27 +25,35 @@ final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (null === $accept = $this->acceptNegotiator->negotiate($request)) {
-            $supportedAccepts = $this->acceptNegotiator->getSupportedMediaTypes();
+            $supportedValues = $this->acceptNegotiator->getSupportedMediaTypes();
 
             return $this->responseManager->createFromHttpException(
-                HttpException::createNotAcceptable([
-                    'accept' => $request->getHeaderLine('Accept'),
-                    'supportedAccepts' => $supportedAccepts,
-                ]),
-                $supportedAccepts[0],
+                HttpException::createNotAcceptable(
+                    $this->aggregateData(
+                        'accept',
+                        $request->getHeaderLine('Accept'),
+                        $supportedValues,
+                    )
+                ),
+                $supportedValues[0],
             );
         }
 
-        $request = $request->withAttribute('accept', $accept->getValue());
+        $acceptValue = $accept->getValue();
+
+        $request = $request->withAttribute('accept', $acceptValue);
 
         if (\in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true)) {
             if (null === $contentType = $this->contentTypeNegotiator->negotiate($request)) {
                 return $this->responseManager->createFromHttpException(
-                    HttpException::createUnsupportedMediaType([
-                        'contentType' => $request->getHeaderLine('Content-Type'),
-                        'supportedContentTypes' => $this->contentTypeNegotiator->getSupportedMediaTypes(),
-                    ]),
-                    $accept->getValue(),
+                    HttpException::createUnsupportedMediaType(
+                        $this->aggregateData(
+                            'content-type',
+                            $request->getHeaderLine('Content-Type'),
+                            $this->contentTypeNegotiator->getSupportedMediaTypes()
+                        )
+                    ),
+                    $acceptValue,
                 );
             }
 
@@ -53,5 +61,24 @@ final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
         }
 
         return $handler->handle($request);
+    }
+
+    /**
+     * @param array<string> $supportedValues
+     *
+     * @return array<string, array<string>|string>
+     */
+    private function aggregateData(string $header, string $value, array $supportedValues): array
+    {
+        return [
+            'detail' => sprintf(
+                '%s %s, supportedValues: "%s"',
+                '' !== $value ? 'Not supported' : 'Missing',
+                $header,
+                implode('", ', $supportedValues)
+            ),
+            'value' => $value,
+            'supportedValues' => $supportedValues,
+        ];
     }
 }

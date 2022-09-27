@@ -32,6 +32,55 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
     {
         /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('getHeaderLine')->with('Accept')->willReturn(''),
+        ]);
+
+        /** @var MockObject|ResponseInterface $response */
+        $response = $this->getMockByCalls(ResponseInterface::class, []);
+
+        $requestHandler = new class() implements RequestHandlerInterface {
+            public function handle(ServerRequestInterface $request): ResponseInterface
+            {
+                TestCase::fail('should not be called');
+            }
+        };
+
+        /** @var AcceptNegotiatorInterface|MockObject $acceptNegotiator */
+        $acceptNegotiator = $this->getMockByCalls(AcceptNegotiatorInterface::class, [
+            Call::create('negotiate')->with($request)->willReturn(null),
+            Call::create('getSupportedMediaTypes')->with()->willReturn(['application/json']),
+        ]);
+
+        /** @var ContentTypeNegotiatorInterface|MockObject $contentTypeNegotiator */
+        $contentTypeNegotiator = $this->getMockByCalls(ContentTypeNegotiatorInterface::class, []);
+
+        /** @var MockObject|ResponseManagerInterface $responseManager */
+        $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
+            Call::create('createFromHttpException')
+                ->with(
+                    new ArgumentCallback(static function (HttpExceptionInterface $httpException): void {
+                        self::assertSame(406, $httpException->getStatus());
+
+                        $data = $httpException->jsonSerialize();
+
+                        self::assertSame('Missing accept, supportedValues: "application/json"', $data['detail']);
+                        self::assertSame('', $data['value']);
+                        self::assertSame(['application/json'], $data['supportedValues']);
+                    }),
+                    'application/json',
+                )
+                ->willReturn($response),
+        ]);
+
+        $middleware = new AcceptAndContentTypeMiddleware($acceptNegotiator, $contentTypeNegotiator, $responseManager);
+
+        self::assertSame($response, $middleware->process($request, $requestHandler));
+    }
+
+    public function testWithoutMatchingAccept(): void
+    {
+        /** @var MockObject|ServerRequestInterface $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('getHeaderLine')->with('Accept')->willReturn('application/xml'),
         ]);
 
@@ -63,8 +112,9 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
 
                         $data = $httpException->jsonSerialize();
 
-                        self::assertSame('application/xml', $data['accept']);
-                        self::assertSame(['application/json'], $data['supportedAccepts']);
+                        self::assertSame('Not supported accept, supportedValues: "application/json"', $data['detail']);
+                        self::assertSame('application/xml', $data['value']);
+                        self::assertSame(['application/json'], $data['supportedValues']);
                     }),
                     'application/json',
                 )
@@ -125,7 +175,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('withAttribute')->with('accept', 'application/json')->willReturnSelf(),
             Call::create('getMethod')->with()->willReturn('POST'),
-            Call::create('getHeaderLine')->with('Content-Type')->willReturn('application/xml'),
+            Call::create('getHeaderLine')->with('Content-Type')->willReturn(''),
         ]);
 
         /** @var MockObject|ResponseInterface $response */
@@ -140,7 +190,6 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
 
         /** @var MockObject|NegotiatedValueInterface $accept */
         $accept = $this->getMockByCalls(NegotiatedValueInterface::class, [
-            Call::create('getValue')->with()->willReturn('application/json'),
             Call::create('getValue')->with()->willReturn('application/json'),
         ]);
 
@@ -164,8 +213,67 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
 
                         $data = $httpException->jsonSerialize();
 
-                        self::assertSame('application/xml', $data['contentType']);
-                        self::assertSame(['application/json'], $data['supportedContentTypes']);
+                        self::assertSame('Missing content-type, supportedValues: "application/json"', $data['detail']);
+                        self::assertSame('', $data['value']);
+                        self::assertSame(['application/json'], $data['supportedValues']);
+                    }),
+                    'application/json',
+                )
+                ->willReturn($response),
+        ]);
+
+        $middleware = new AcceptAndContentTypeMiddleware($acceptNegotiator, $contentTypeNegotiator, $responseManager);
+
+        self::assertSame($response, $middleware->process($request, $requestHandler));
+    }
+
+    public function testWithoutMatchingContentType(): void
+    {
+        /** @var MockObject|ServerRequestInterface $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class, [
+            Call::create('withAttribute')->with('accept', 'application/json')->willReturnSelf(),
+            Call::create('getMethod')->with()->willReturn('POST'),
+            Call::create('getHeaderLine')->with('Content-Type')->willReturn('application/xml'),
+        ]);
+
+        /** @var MockObject|ResponseInterface $response */
+        $response = $this->getMockByCalls(ResponseInterface::class, []);
+
+        $requestHandler = new class() implements RequestHandlerInterface {
+            public function handle(ServerRequestInterface $request): ResponseInterface
+            {
+                TestCase::fail('should not be called');
+            }
+        };
+
+        /** @var MockObject|NegotiatedValueInterface $accept */
+        $accept = $this->getMockByCalls(NegotiatedValueInterface::class, [
+            Call::create('getValue')->with()->willReturn('application/json'),
+        ]);
+
+        /** @var AcceptNegotiatorInterface $acceptNegotiator */
+        $acceptNegotiator = $this->getMockByCalls(AcceptNegotiatorInterface::class, [
+            Call::create('negotiate')->with($request)->willReturn($accept),
+        ]);
+
+        /** @var ContentTypeNegotiatorInterface|MockObject $contentTypeNegotiator */
+        $contentTypeNegotiator = $this->getMockByCalls(ContentTypeNegotiatorInterface::class, [
+            Call::create('negotiate')->with($request)->willReturn(null),
+            Call::create('getSupportedMediaTypes')->with()->willReturn(['application/json']),
+        ]);
+
+        /** @var MockObject|ResponseManagerInterface $responseManager */
+        $responseManager = $this->getMockByCalls(ResponseManagerInterface::class, [
+            Call::create('createFromHttpException')
+                ->with(
+                    new ArgumentCallback(static function (HttpExceptionInterface $httpException): void {
+                        self::assertSame(415, $httpException->getStatus());
+
+                        $data = $httpException->jsonSerialize();
+
+                        self::assertSame('Not supported content-type, supportedValues: "application/json"', $data['detail']);
+                        self::assertSame('application/xml', $data['value']);
+                        self::assertSame(['application/json'], $data['supportedValues']);
                     }),
                     'application/json',
                 )
