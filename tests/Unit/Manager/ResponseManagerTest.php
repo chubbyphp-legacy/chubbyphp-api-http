@@ -199,6 +199,8 @@ final class ResponseManagerTest extends TestCase
                     'type' => 'https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.6',
                     'status' => 405,
                     'title' => 'Method Not Allowed',
+                    'detail' => null,
+                    'instance' => null,
                     'allowedMethods' => ['PATCH', 'PUT'],
                     '_type' => 'apiProblem',
                 ], 'application/json')

@@ -233,7 +233,8 @@ final class ApiExceptionMiddlewareTest extends TestCase
 
                         $data = $httpException->jsonSerialize();
 
-                        self::assertArrayNotHasKey('detail', $data);
+                        self::assertArrayHasKey('detail', $data);
+                        self::assertNull($data['detail']);
                         self::assertArrayNotHasKey('backtrace', $data);
                     }),
                     'application/xml',
@@ -303,7 +304,8 @@ final class ApiExceptionMiddlewareTest extends TestCase
 
                         $data = $httpException->jsonSerialize();
 
-                        self::assertArrayNotHasKey('detail', $data);
+                        self::assertArrayHasKey('detail', $data);
+                        self::assertNull($data['detail']);
                         self::assertArrayNotHasKey('backtrace', $data);
                     }),
                     'application/xml',
