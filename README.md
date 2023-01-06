@@ -56,7 +56,7 @@ composer require chubbyphp/chubbyphp-api-http "^5.0"
 
 ## Copyright
 
-Dominik Zogg 2022
+2023 Dominik Zogg
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-api-http
 
