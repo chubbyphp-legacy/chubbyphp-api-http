@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/chubbyphp/chubbyphp-api-http/workflows/CI/badge.svg?branch=master)](https://github.com/chubbyphp/chubbyphp-api-http/actions?query=workflow%3ACI)
 [![Coverage Status](https://coveralls.io/repos/github/chubbyphp/chubbyphp-api-http/badge.svg?branch=master)](https://coveralls.io/github/chubbyphp/chubbyphp-api-http?branch=master)
-[![Infection MSI](https://badge.stryker-mutator.io/github.com/chubbyphp/chubbyphp-api-http/master)](https://dashboard.stryker-mutator.io/reports/github.com/chubbyphp/chubbyphp-api-http/master)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fchubbyphp%2Fchubbyphp-api-http%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/chubbyphp/chubbyphp-api-http/master)[![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-api-http/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-api-http)
 [![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-api-http/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-api-http)
 [![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-api-http/downloads.png)](https://packagist.org/packages/chubbyphp/chubbyphp-api-http)
 [![Monthly Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-api-http/d/monthly)](https://packagist.org/packages/chubbyphp/chubbyphp-api-http)
@@ -25,22 +25,22 @@ A simple http handler implementation for API.
 
 ## Requirements
 
- * php: ^8.0
- * chubbyphp/chubbyphp-deserialization: ^3.5.1
- * chubbyphp/chubbyphp-http-exception: ^1.0.1
- * chubbyphp/chubbyphp-negotiation: ^1.9
- * chubbyphp/chubbyphp-serialization: ^3.3.1
- * psr/http-factory: ^1.0.1
- * psr/http-message: ^1.0.1
- * psr/http-server-middleware: ^1.0.1
- * psr/log: ^1.1.4|^2.0|^3.0
+ * php: ^8.1
+ * chubbyphp/chubbyphp-deserialization: ^4.0
+ * chubbyphp/chubbyphp-http-exception: ^1.1
+ * chubbyphp/chubbyphp-negotiation: ^2.0
+ * chubbyphp/chubbyphp-serialization: ^4.0
+ * psr/http-factory: ^1.0.2
+ * psr/http-message: ^1.1|^2.0
+ * psr/http-server-middleware: ^1.0.2
+ * psr/log: ^2.0|^3.0
 
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-api-http][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-api-http "^5.0"
+composer require chubbyphp/chubbyphp-api-http "^6.0"
 ```
 
 ## Usage

@@ -138,9 +138,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
         $response = $this->getMockByCalls(ResponseInterface::class, []);
 
         $requestHandler = new class($response) implements RequestHandlerInterface {
-            public function __construct(private ResponseInterface $response)
-            {
-            }
+            public function __construct(private ResponseInterface $response) {}
 
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
@@ -298,9 +296,7 @@ final class AcceptAndContentTypeMiddlewareTest extends TestCase
         $response = $this->getMockByCalls(ResponseInterface::class, []);
 
         $requestHandler = new class($response) implements RequestHandlerInterface {
-            public function __construct(private ResponseInterface $response)
-            {
-            }
+            public function __construct(private ResponseInterface $response) {}
 
             public function handle(ServerRequestInterface $request): ResponseInterface
             {

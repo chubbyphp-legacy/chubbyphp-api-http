@@ -10,27 +10,19 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class RequestManager implements RequestManagerInterface
 {
-    public function __construct(private DeserializerInterface $deserializer)
-    {
-    }
+    public function __construct(private DeserializerInterface $deserializer) {}
 
-    /**
-     * @param object|string $object
-     */
     public function getDataFromRequestQuery(
         ServerRequestInterface $request,
-        $object,
+        object|string $object,
         ?DenormalizerContextInterface $context = null
     ): object {
         return $this->deserializer->denormalize($object, $request->getQueryParams(), $context);
     }
 
-    /**
-     * @param object|string $object
-     */
     public function getDataFromRequestBody(
         ServerRequestInterface $request,
-        $object,
+        object|string $object,
         string $contentType,
         ?DenormalizerContextInterface $context = null
     ): object {

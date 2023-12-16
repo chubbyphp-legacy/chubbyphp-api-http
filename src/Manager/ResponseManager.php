@@ -15,8 +15,7 @@ final class ResponseManager implements ResponseManagerInterface
     public function __construct(
         private ResponseFactoryInterface $responseFactory,
         private SerializerInterface $serializer
-    ) {
-    }
+    ) {}
 
     public function create(
         object $object,

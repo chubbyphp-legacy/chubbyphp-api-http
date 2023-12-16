@@ -36,9 +36,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
         $response = $this->getMockByCalls(ResponseInterface::class);
 
         $requestHandler = new class($response) implements RequestHandlerInterface {
-            public function __construct(private ResponseInterface $response)
-            {
-            }
+            public function __construct(private ResponseInterface $response) {}
 
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
@@ -130,9 +128,7 @@ final class ApiExceptionMiddlewareTest extends TestCase
         $response = $this->getMockByCalls(ResponseInterface::class);
 
         $requestHandler = new class($httpException) implements RequestHandlerInterface {
-            public function __construct(private HttpExceptionInterface $httpException)
-            {
-            }
+            public function __construct(private HttpExceptionInterface $httpException) {}
 
             public function handle(ServerRequestInterface $request): ResponseInterface
             {

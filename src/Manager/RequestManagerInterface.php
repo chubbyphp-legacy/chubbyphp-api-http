@@ -9,21 +9,15 @@ use Psr\Http\Message\ServerRequestInterface;
 
 interface RequestManagerInterface
 {
-    /**
-     * @param object|string $object
-     */
     public function getDataFromRequestQuery(
         ServerRequestInterface $request,
-        $object,
+        object|string $object,
         ?DenormalizerContextInterface $context = null
     ): object;
 
-    /**
-     * @param object|string $object
-     */
     public function getDataFromRequestBody(
         ServerRequestInterface $request,
-        $object,
+        object|string $object,
         string $contentType,
         ?DenormalizerContextInterface $context = null
     ): object;

@@ -33,7 +33,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var MockObject|StreamInterface $body */
         $body = $this->getMockByCalls(StreamInterface::class, [
-            Call::create('write')->with($bodyString),
+            Call::create('write')->with($bodyString)->willReturn(\strlen($bodyString)),
         ]);
 
         /** @var MockObject|Response $response */
@@ -65,7 +65,7 @@ final class ResponseManagerTest extends TestCase
 
         /** @var MockObject|StreamInterface $body */
         $body = $this->getMockByCalls(StreamInterface::class, [
-            Call::create('write')->with($bodyString),
+            Call::create('write')->with($bodyString)->willReturn(\strlen($bodyString)),
         ]);
 
         /** @var MockObject|Response $response */
@@ -174,11 +174,13 @@ final class ResponseManagerTest extends TestCase
 
     public function testCreateFromHttpException(): void
     {
+        $bodyString = '{"title":"Method Not Allowed"}';
+
         $httpException = HttpException::createMethodNotAllowed(['allowedMethods' => ['PATCH', 'PUT']]);
 
         /** @var MockObject|StreamInterface $body */
         $body = $this->getMockByCalls(StreamInterface::class, [
-            Call::create('write')->with('{"title":"Method Not Allowed"}'),
+            Call::create('write')->with($bodyString)->willReturn(\strlen($bodyString)),
         ]);
 
         /** @var MockObject|Response $response */

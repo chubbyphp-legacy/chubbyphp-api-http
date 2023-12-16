@@ -19,8 +19,7 @@ final class AcceptAndContentTypeMiddleware implements MiddlewareInterface
         private AcceptNegotiatorInterface $acceptNegotiator,
         private ContentTypeNegotiatorInterface $contentTypeNegotiator,
         private ResponseManagerInterface $responseManager
-    ) {
-    }
+    ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
