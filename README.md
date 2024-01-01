@@ -56,7 +56,7 @@ composer require chubbyphp/chubbyphp-api-http "^6.0"
 
 ## Copyright
 
-2023 Dominik Zogg
+2024 Dominik Zogg
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-api-http
 
