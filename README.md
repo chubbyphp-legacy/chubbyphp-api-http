@@ -23,6 +23,8 @@
 
 A simple http handler implementation for API.
 
+DEPRECATED: No personal interest anymore and based on stats nobody seems to use it. Feel free to create an issue if you disagree.
+
 ## Requirements
 
  * php: ^8.1
